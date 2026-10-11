@@ -17,6 +17,7 @@
 
 | TaskID | Title | Description | Owner | Gated By |
 | --- | --- | --- | --- | --- |
+| [M8.15.1](tasks/m8_15_1_task_details.md) | Locating the changes of type on T2/R4 and T3/R5 | Locate the index changes bracketed by M8.15 on T2/R4 and T3/R5 at both mesh levels, classify them as genuine or structural, and test for changes of type using full-verdict guard readings. Frozen MIT locator and qualified M8.15.x instrument; no slot relation (row 6 ceiling), no persistence test, no MODELS.md cell movement, and no change to M8.7's gate | author-proposed and author-run, maintainer-adjudicated | registration and go ([#512](https://github.com/openwave-labs/openwave/discussions/512#discussioncomment-18415036)) |
 
 ## LATER (gated)
 
