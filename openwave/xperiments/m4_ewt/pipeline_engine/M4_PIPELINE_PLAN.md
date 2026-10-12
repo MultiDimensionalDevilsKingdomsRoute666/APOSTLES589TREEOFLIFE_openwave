@@ -796,9 +796,10 @@ Infrastructure only. No specific physics. Each item is a work unit.
 
     **`freq_drift` definition (2026-10-12).** Field-wide signal
     `s(t) = integral psi . (psi - psi_prev) dV`; upward zero-crossings
-    give `f = 1 / (2 * delta_t)`. Supersedes the earlier candidate
-    definitions (single-voxel probe, three-plane average), which are not
-    well-defined for a symmetric seed released from rest. Three
+    give `f = 1 / (2 * delta_t)`. The plan named `freq_drift` without a
+    definition; the `TrackerFields` signals (`freq_local` at a single
+    voxel, its three-plane average `freq_global`) are not well-defined
+    for a symmetric seed released from rest. Three
     limitations (reflection contamination, pipeline B, longitudinal-only)
     are recorded in the `StabilityMetrics` docstring.
 
@@ -948,11 +949,6 @@ This is the decision documented in Section 5. Work items:
       The naive form is a bug.
 
 ---
-
-**Resolved (2026-10-12).** `freq_drift` uses the field-wide
-signal above (see item 1.9). `localization`, `sphericity` and the
-placeholder `sol_lifetime` threshold stand as before.
-
 
 ## 7. Block 2 — Physics implementation
 
@@ -1201,6 +1197,10 @@ revisitable.
 Several candidates: lifetime, localization, sphericity, frequency
 stability. All are measured (item 1.9). The primary definition is
 author-gated.
+
+**Resolved (2026-10-12).** `freq_drift` uses the field-wide
+signal of item 1.9. `localization`, `sphericity` and the
+placeholder `sol_lifetime` threshold stand as before.
 
 ### Q6. Should the WC motion be continuous or discrete?
 

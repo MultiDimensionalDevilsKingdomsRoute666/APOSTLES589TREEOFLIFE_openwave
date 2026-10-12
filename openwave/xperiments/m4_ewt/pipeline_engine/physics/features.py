@@ -326,9 +326,9 @@ class StabilityMetrics:
         freq_now      -- most recent frequency measurement. Zero until
                          a period has been completed.
 
-    Frequency signal (definition C, corrected from the plan):
-        The plan (Section 9, Q5) lists freq_drift as a candidate metric
-        and leaves the definition author-gated. The implemented
+    Frequency signal (definition C, resolved 2026-10-12):
+        The plan (item 1.9, Section 9 Q5) names freq_drift as a candidate
+        metric without defining it. The implemented
         definition is a field-wide signal:
 
             s(t) = integral psi . (psi - psi_prev) dV
@@ -344,9 +344,9 @@ class StabilityMetrics:
             T_field  = 2 * delta_t           (s(t) has half the period)
             f_field  = 1 / T_field
 
-        This supersedes the plan's earlier candidate definitions (a
-        single-voxel probe, or a three-plane average), which are not
-        well-defined for a symmetric seed released from rest. The
+        The TrackerFields signals, freq_local read at a single voxel
+        and its three-plane average freq_global, are not well-defined
+        for a symmetric seed released from rest. The
         author (2026-10-12) selected definition C as the primary one;
         the plan is amended accordingly.
 

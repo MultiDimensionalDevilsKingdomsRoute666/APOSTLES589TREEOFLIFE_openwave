@@ -12,7 +12,7 @@ Computes five metrics into StabilityMetrics:
     freq_drift   = (freq_now - freq_ref) / freq_ref                [dimensionless]
     sol_lifetime = consecutive steps with localization > threshold [count]
 
-Frequency signal (definition C, corrected from the plan):
+Frequency signal (definition C, resolved 2026-10-12):
 
     s(t) = integral psi . (psi - psi_prev) dV
 
@@ -29,9 +29,9 @@ StabilityMetrics docstring for the full derivation and limitations
 
 The plan (Section 9, Q5) left the primary definition of "stability"
 author-gated and listed freq_drift as a candidate metric. Definition C
-is the author's chosen resolution, replacing the earlier candidates
-(single-voxel probe, three-plane average), which are not well-defined
-for a symmetric seed released from rest.
+is the author's chosen resolution. The TrackerFields signals (freq_local
+at a single voxel, its three-plane average freq_global) are not
+well-defined for a symmetric seed released from rest.
 
 The reference center for r_rms and G is nx * 0.5, the same convention
 as SeedPulse and SeedMultiCenter. WCState is optional (try_get, not
@@ -82,9 +82,10 @@ def _accumulate_field_moments(
     Accumulate mass (integral |psi|^2 dV) and quartic (integral |psi|^4 dV)
     over the full grid. Both are translation-invariant.
 
-    Uses ti.atomic_add because ti.ndrange is a parallel loop: a plain
-    += on the output scalar is a data race. The addends are cast to f64
-    explicitly, matching the field type.
+    ti.ndrange is a parallel loop. Taichi already makes += on a global
+    field atomic there (EnergyBudgetUpdate relies on it); ti.atomic_add
+    states it explicitly. The addends are cast to f64 explicitly,
+    matching the field type.
     """
     out_mass[None] = 0.0
     out_quartic[None] = 0.0

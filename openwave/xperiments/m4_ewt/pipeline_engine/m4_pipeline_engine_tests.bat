@@ -60,8 +60,8 @@ if errorlevel 1 (
 )
 echo.
 
-echo [run] openwave.xperiments.m4_ewt.pipeline_engine.physics._demo_k_sweep --grid 32 --steps 20
-python -m openwave.xperiments.m4_ewt.pipeline_engine.physics._demo_k_sweep --grid 32 --steps 20
+echo [run] openwave.xperiments.m4_ewt.pipeline_engine.physics._demo_k_sweep --grid 32 --steps 20 --out "%TEMP%\m4_k_sweep_smoke"
+python -m openwave.xperiments.m4_ewt.pipeline_engine.physics._demo_k_sweep --grid 32 --steps 20 --out "%TEMP%\m4_k_sweep_smoke"
 if errorlevel 1 (
     echo   *** FAIL: _demo_k_sweep ***
     set FAILED=1

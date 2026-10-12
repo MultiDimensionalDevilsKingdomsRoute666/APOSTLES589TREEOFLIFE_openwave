@@ -200,6 +200,7 @@ def _build_pipeline(
     wc_state=None,
     metric_threshold=0.5,
     extra_processors=(),
+    dx=1.0,
 ):
     """
     Build a minimal pipeline. Grid size inferred from seed_arr.
@@ -226,7 +227,7 @@ def _build_pipeline(
                 error_policy=ErrorPolicy.FAIL_FAST,
                 external_provides=tuple(external),
             )
-            self.add(AllocateWaveField(nx=n, ny=n, nz=n, dx=1.0))
+            self.add(AllocateWaveField(nx=n, ny=n, nz=n, dx=dx))
             self.add(_SeedCustom(seed_arr))
             if with_evolution:
                 self.add(ClearAccelerationProcessor())
@@ -264,8 +265,9 @@ def test_ipr_higher_for_delta_than_uniform():
     """
     A delta is more localized than a uniform field.
 
-    Mutation caught: IPR formula inverted (mass^2 / quartic), or
-    quartic read as mass.
+    Mutation caught: IPR formula inverted (mass^2 / quartic). Quartic
+    read as mass still ranks the delta first (1/3 against 1/8847);
+    the spreading test and the IPR-scale test catch it.
     """
     _ti_init()
     n = 32
@@ -288,8 +290,10 @@ def test_sphericity_high_for_sphere_low_for_line():
     A spherical Gaussian has sphericity close to 1; a line Gaussian has
     sphericity below 0.1.
 
-    Mutation caught: eigvalsh ordering reversed (lambda_max/lambda_min),
-    or the tensor axes swapped.
+    Mutation caught: eigvalsh ordering reversed (lambda_max/lambda_min).
+    Swapping tensor axes leaves the eigenvalues, and so sphericity,
+    unchanged; the off-diagonal terms are covered by the diagonal-line
+    test below.
     """
     _ti_init()
     n = 32
@@ -370,8 +374,8 @@ def test_spreading_field_localization_decreases():
     The plan's required test: 'spreading Gaussian -> localization
     decreases'.
 
-    Mutation caught: localization not updated between steps, or IPR
-    computed only once. Threshold is a soft bar; the qualitative check
+    Mutation caught: localization not updated between steps, IPR
+    computed only once, or sol_lifetime never reset. Threshold is a soft bar; the qualitative check
     is the plan's, not a specific number.
     """
     _ti_init()
@@ -401,6 +405,8 @@ def test_spreading_field_localization_decreases():
     m = ctx.data.require(StabilityMetrics)
     print(f"    localization spreading = {m.localization:.6f}  r_rms={m.r_rms:.3f}")
     assert m.localization < 0.9, m.localization
+    # The run ends below the 0.5 threshold, so the counter has reset.
+    assert m.sol_lifetime == 0, m.sol_lifetime
 
 
 # ======================================================================
@@ -521,6 +527,12 @@ def test_freq_drift_measures_oscillation():
     # After at least three crossings, freq_now differs from freq_ref and
     # freq_drift is nonzero. Catches the "assignment removed" mutation.
     assert m.freq_drift != 0.0, "freq_drift must be computed, not left at default"
+    # freq_now and freq_drift from the last two recorded crossings. Catches
+    # a sign flip in freq_drift, which the != 0 check above cannot see.
+    f_now_expected = 1.0 / (2.0 * (crossings[-1] - crossings[-2]))
+    drift_expected = (f_now_expected - f_expected) / f_expected
+    assert abs(m.freq_now - f_now_expected) / f_now_expected < 1e-9, (m.freq_now, f_now_expected)
+    assert abs(m.freq_drift - drift_expected) < 1e-9, (m.freq_drift, drift_expected)
 
 
 # ======================================================================
@@ -629,6 +641,222 @@ def test_stateless_guard_passes():
 
 
 # ======================================================================
+# Known-answer arenas (maintainer edit)
+# ======================================================================
+
+
+def _diagonal_line_gaussian(nx, ny, nz, sigma_long=4.0, sigma_trans=1.0, amp=1.0):
+    """
+    The line Gaussian of _line_gaussian, rotated 45 degrees in the x-y
+    plane. An axis-aligned field has zero off-diagonal gyration terms,
+    so only a rotated one can see them.
+    """
+    cx, cy, cz = nx / 2.0, ny / 2.0, nz / 2.0
+    i, j, k = np.meshgrid(np.arange(nx), np.arange(ny), np.arange(nz), indexing="ij")
+    u = ((i - cx) + (j - cy)) / math.sqrt(2.0)
+    v = ((i - cx) - (j - cy)) / math.sqrt(2.0)
+    w = k - cz
+    val = amp * np.exp(-(u**2) / (2.0 * sigma_long**2) - (v**2 + w**2) / (2.0 * sigma_trans**2))
+    arr = np.zeros((nx, ny, nz, 3), dtype=np.float32)
+    arr[..., 0] = val
+    return arr
+
+
+def _dirichlet_mode(n, m=(1, 1, 1)):
+    """Lowest dirichlet eigenmode of the 7-point Laplacian on n nodes per axis."""
+    i = np.arange(n)
+    sx, sy, sz = (np.sin(math.pi * mm * i / (n - 1)) for mm in m)
+    arr = np.zeros((n, n, n, 3), dtype=np.float32)
+    arr[..., 0] = sx[:, None, None] * sy[None, :, None] * sz[None, None, :]
+    return arr
+
+
+def test_sphericity_sees_off_diagonal_terms():
+    """
+    A line Gaussian along the x-y diagonal has the same sphericity as
+    the axis-aligned one, about sigma_trans^2 / sigma_long^2 = 1/16.
+
+    Mutation caught: the x-y gyration term dropped or built from the
+    wrong axis pair. Dropping all three off-diagonal terms gives
+    2/17 = 0.118 here, which the axis-aligned test cannot see because
+    its off-diagonal terms are zero by symmetry. The x-z and y-z terms
+    are covered by the rotated ellipsoid test below.
+    """
+    _ti_init()
+    n = 32
+    p, i = _build_pipeline(_diagonal_line_gaussian(n, n, n))
+    ctx = _run(p, i, max_steps=1)
+    assert ctx.diag.errors == [], ctx.diag.errors
+    sph = ctx.data.require(StabilityMetrics).sphericity
+    print(f"    sphericity diagonal line = {sph:.4f}")
+    assert abs(sph - 1.0 / 16.0) < 0.01, sph
+
+
+def test_rotated_ellipsoid_on_a_non_cubic_grid():
+    """
+    A Gaussian with three distinct widths (4, 2, 1.5), rotated off every
+    grid axis, on a 36 x 32 x 28 grid at dx = 0.5. |psi|^2 has widths
+    sigma_i / sqrt(2), so sphericity = (1.5 / 4)^2 = 0.140625 and
+    r_rms = sqrt((16 + 4 + 2.25) / 2), in grid units.
+
+    Mutation caught: the middle eigenvalue taken for the smallest (0.25),
+    any off-diagonal term dropped or built from the wrong axis pair, the
+    axes or the per-axis centers swapped (invisible on a cubic grid),
+    and dv dropped from r^2 but not from the mass.
+    """
+    _ti_init()
+    nx, ny, nz = 36, 32, 28
+    sigma = np.array([4.0, 2.0, 1.5])
+    a, b, c = 0.6, 0.9, 0.4
+    rot_z = np.array([[math.cos(a), -math.sin(a), 0.0], [math.sin(a), math.cos(a), 0.0], [0.0, 0.0, 1.0]])
+    rot_y = np.array([[math.cos(b), 0.0, math.sin(b)], [0.0, 1.0, 0.0], [-math.sin(b), 0.0, math.cos(b)]])
+    rot_x = np.array([[1.0, 0.0, 0.0], [0.0, math.cos(c), -math.sin(c)], [0.0, math.sin(c), math.cos(c)]])
+    rot = rot_z @ rot_y @ rot_x
+    i, j, k = np.meshgrid(np.arange(nx), np.arange(ny), np.arange(nz), indexing="ij")
+    d = np.stack([i - nx / 2.0, j - ny / 2.0, k - nz / 2.0], axis=-1)
+    body = d @ rot
+    arr = np.zeros((nx, ny, nz, 3), dtype=np.float32)
+    arr[..., 0] = np.exp(-0.5 * np.sum((body / sigma) ** 2, axis=-1))
+
+    class P(Pipeline):
+        def __init__(self):
+            super().__init__(error_policy=ErrorPolicy.FAIL_FAST, external_provides=(UnitSystem,))
+            self.add(AllocateWaveField(nx=nx, ny=ny, nz=nz, dx=0.5))
+            self.add(_SeedCustom(arr))
+            self.add(StabilityMetricsUpdate())
+
+    ctx = _run(P(), [NaturalUnitSystem()], max_steps=1)
+    assert ctx.diag.errors == [], ctx.diag.errors
+    m = ctx.data.require(StabilityMetrics)
+    sph_expected = (1.5 / 4.0) ** 2
+    r_expected = math.sqrt(float(np.sum(sigma**2)) / 2.0)
+    print(
+        f"    sphericity={m.sphericity:.6f} (expected {sph_expected:.6f})  "
+        f"r_rms={m.r_rms:.6f} (expected {r_expected:.6f})"
+    )
+    assert abs(m.sphericity - sph_expected) < 0.003, m.sphericity
+    assert abs(m.r_rms - r_expected) / r_expected < 1e-4, m.r_rms
+
+
+def test_ipr_of_a_delta_is_one_over_voxel_volume():
+    """
+    A single nonzero voxel has IPR = 1 / dv exactly: with |psi|^2 = q
+    there, mass is q dv and quartic q^2 dv, whatever q is. At dx = 0.5
+    that is 8.
+
+    Mutation caught: dv dropped from either moment. Every other test
+    runs at dx = 1, where dv = 1 and the omission is invisible.
+    """
+    _ti_init()
+    n = 16
+    dx = 0.5
+    p, i = _build_pipeline(_delta_at_center(n, n, n, val=1.0), dx=dx)
+    ctx = _run(p, i, max_steps=1)
+    assert ctx.diag.errors == [], ctx.diag.errors
+    ipr = ctx.data.require(StabilityMetrics).ipr
+    print(f"    ipr delta at dx={dx}: {ipr:.6f}  expected {1.0 / dx**3:.6f}")
+    assert abs(ipr - 1.0 / dx**3) < 1e-6, ipr
+
+
+def test_r_rms_matches_closed_form():
+    """
+    For an isotropic Gaussian psi of width sigma, |psi|^2 is a Gaussian
+    of width sigma / sqrt(2), so r_rms = sqrt(3 / 2) * sigma about its
+    center, which is the grid center here.
+
+    Mutation caught: r_rms not normalized by mass, set to zero, or taken
+    about a reference shifted from the grid center.
+    """
+    _ti_init()
+    n = 32
+    sigma = 3.0
+    p, i = _build_pipeline(_sphere_gaussian(n, n, n, sigma=sigma))
+    ctx = _run(p, i, max_steps=1)
+    assert ctx.diag.errors == [], ctx.diag.errors
+    r_rms = ctx.data.require(StabilityMetrics).r_rms
+    expected = math.sqrt(1.5) * sigma
+    print(f"    r_rms = {r_rms:.6f}  closed form = {expected:.6f}")
+    assert abs(r_rms - expected) / expected < 1e-4, (r_rms, expected)
+
+
+def test_freq_matches_eigenmode_frequency():
+    """
+    A single dirichlet eigenmode released from rest oscillates at a known
+    frequency: sin(omega dt / 2) = (c dt / 2) sqrt(lambda), with lambda
+    the 7-point Laplacian eigenvalue. freq_ref must match it, and
+    freq_drift must stay at zero, since one mode has one frequency.
+
+    The Gaussian-pulse test compares the processor with a recorder that
+    applies the same formula, so it pins the code to the docstring but
+    cannot check the formula itself. This test can.
+
+    Crossings are detected at step resolution, so each measured
+    interval carries up to one step of error: dt / delta_t, 0.75% here.
+    freq_ref is held to 1%, and freq_drift, a difference of two such
+    measurements, to 2%. A correct implementation can read a nonzero
+    freq_drift on a pure mode for this reason alone.
+
+    Mutation caught: the frequency formula off by any factor, and
+    t_last_crossing not advanced (freq_drift near -0.75).
+    """
+    _ti_init()
+    n = 24
+    dt = 0.1
+    p, i = _build_pipeline(_dirichlet_mode(n), with_evolution=True, with_boundary=True)
+    ctx = _run(p, i, dt=dt, max_steps=600)
+    assert ctx.diag.errors == [], ctx.diag.errors
+    m = ctx.data.require(StabilityMetrics)
+    lam = 3.0 * 4.0 * math.sin(math.pi / (2.0 * (n - 1))) ** 2
+    f_true = (2.0 / dt) * math.asin(0.5 * dt * math.sqrt(lam)) / (2.0 * math.pi)
+    print(
+        f"    freq_ref={m.freq_ref:.6f}  f_true={f_true:.6f}  "
+        f"freq_drift={m.freq_drift:.3e}"
+    )
+    assert abs(m.freq_ref - f_true) / f_true < 0.01, (m.freq_ref, f_true)
+    assert abs(m.freq_drift) < 0.02, m.freq_drift
+
+
+def test_wc_drift_reference_is_the_initial_position():
+    """
+    wc_drift is measured from the positions the WCs had before any step
+    ran, which this test knows independently: it built them.
+
+    The two active WCs drift by different amounts, and a third is
+    inactive.
+
+    Mutation caught: the reference captured in process() instead of
+    setup(), which reads the positions after the first motion step
+    (the bug the setup() capture exists to avoid), or re-captured each
+    step; the maximum taken instead of the mean; an inactive WC counted.
+    """
+    _ti_init()
+    n = 16
+    x0 = (8.0, 10.0, 6.0)
+    wcs = [
+        WC(x=x0[0], y=8.0, z=8.0),
+        WC(x=x0[1], y=8.0, z=8.0, velocity=(0.4, 0.0, 0.0)),
+        WC(x=x0[2], y=8.0, z=8.0, active=False),
+    ]
+    wc_state = WCState(centers=wcs)
+    extra = [WCMotionProcessor(rule=_ConstantAccelRule(0.5, 0.0, 0.0))]
+    p, i = _build_pipeline(
+        _sphere_gaussian(n, n, n, sigma=3.0),
+        wc_state=wc_state,
+        extra_processors=extra,
+    )
+    ctx = _run(p, i, dt=0.1, max_steps=5)
+    assert ctx.diag.errors == [], ctx.diag.errors
+    m = ctx.data.require(StabilityMetrics)
+    final = ctx.data.require(WCState).centers
+    active = [abs(wc.x - x) for wc, x in zip(final, x0) if wc.active]
+    expected = sum(active) / len(active)
+    print(f"    wc_drift={m.wc_drift:.6f}  from known start={expected:.6f}")
+    assert len(active) == 2 and active[0] != active[1], active
+    assert m.n_active_wc == 2, m.n_active_wc
+    assert abs(m.wc_drift - expected) < 1e-9, (m.wc_drift, expected)
+
+
+# ======================================================================
 # Runner
 # ======================================================================
 
@@ -646,6 +874,12 @@ def main() -> int:
         test_wc_drift_positive_with_moving_wcs,
         test_missing_grid_fails_at_build_time,
         test_stateless_guard_passes,
+        test_sphericity_sees_off_diagonal_terms,
+        test_rotated_ellipsoid_on_a_non_cubic_grid,
+        test_r_rms_matches_closed_form,
+        test_ipr_of_a_delta_is_one_over_voxel_volume,
+        test_freq_matches_eigenmode_frequency,
+        test_wc_drift_reference_is_the_initial_position,
     ]
     passed = 0
     for t in tests:
