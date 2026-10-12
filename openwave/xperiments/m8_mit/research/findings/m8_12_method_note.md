@@ -266,7 +266,7 @@ that it did not rely on it.
 | Out-of-room reads | solver_b read one of its own background-command outputs, in a folder holding only its own four files. Same class as M8.10 and M8.11, and nothing answer-bearing is reachable by that route |
 | Shell shapes outside the sandbox wrapper | solver_b used `time ./py …`; solver_a began one command with a `cd` into its own room and disclosed it. Every path touched is in-room |
 | Copy-out | one **disclosed redaction**: solver_b printed the absolute interpreter path into its return, and reported doing so. The maintainer replaced it in the landed copy and records the replacement here |
-| Leak sweep | no absolute path and no withheld term in any landed file |
+| Landed files | no absolute path and no withheld term in any landed file |
 
 ## 7. Provenance
 
