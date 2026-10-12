@@ -11,6 +11,7 @@ from .features import (
     PsiLongField,
     PsiTransField,
     PsiTripleBuffer,
+    StabilityMetrics,
     TrackerFields,
     WaveGrid,
     WaveSpeedField,
@@ -44,6 +45,7 @@ from .measure import AmplitudeTracker
 from .visualize import TaichiWindowProcessor
 from .seed import SeedBaseWave
 from .energy import EnergyBudgetUpdate
+from .stability import StabilityMetricsUpdate
 
 __all__ = [
     # wave centers
@@ -92,4 +94,6 @@ __all__ = [
     "WCMotionProcessor",
     "EnergyBudget",
     "EnergyBudgetUpdate",
+    "StabilityMetrics",
+    "StabilityMetricsUpdate",
 ]

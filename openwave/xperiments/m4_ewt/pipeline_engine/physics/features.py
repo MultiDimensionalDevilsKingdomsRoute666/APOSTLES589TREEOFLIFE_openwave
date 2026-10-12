@@ -9,7 +9,7 @@ says otherwise.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import taichi as ti
 
@@ -287,3 +287,122 @@ class EnergyBudget:
     @property
     def E_total(self) -> float:
         return self.E_kin + self.E_grad + self.E_deform
+
+
+@dataclass
+class StabilityMetrics:
+    """
+    Stability metrics feature (plan Section 6, item 1.9).
+
+    Populated by StabilityMetricsUpdate. Read by loggers and diagnostics.
+    Lengths are in grid units; the caller multiplies by WaveGrid.dx (or
+    UnitSystem.to_physical_length) for physical units.
+
+    Primary fields:
+        localization  -- dimensionless concentration. 1.0 at the first
+                         measurement, decreases if the field spreads,
+                         increases if it collapses. Defined as
+                         IPR / IPR_initial; the reference is captured
+                         once, on the first non-empty step.
+        sphericity    -- lambda_min / lambda_max of the mass-weighted
+                         gyration tensor, relative to the grid center.
+                         1.0 for a spherical field, 0.0 for a degenerate
+                         (line or plane) field.
+        wc_drift      -- mean Euclidean displacement of active wave
+                         centers from their initial positions, grid
+                         units. Zero when no WCState is in the pipeline.
+        freq_drift    -- (freq_now - freq_ref) / freq_ref. Zero until the
+                         first full field period is observed. See the
+                         "Frequency signal" section below.
+        sol_lifetime  -- consecutive steps with localization above a
+                         processor-configured threshold. Resets to 0
+                         when localization drops below it.
+
+    Diagnostic fields:
+        ipr, ipr_initial, r_rms, mass, n_active_wc -- as in earlier
+                         revisions of this class.
+        freq_ref      -- reference frequency, captured on the second
+                         upward crossing of s(t) (the first completed
+                         period). Zero if never captured.
+        freq_now      -- most recent frequency measurement. Zero until
+                         a period has been completed.
+
+    Frequency signal (definition C, resolved 2026-10-12):
+        The plan (item 1.9, Section 9 Q5) names freq_drift as a candidate
+        metric without defining it. The implemented
+        definition is a field-wide signal:
+
+            s(t) = integral psi . (psi - psi_prev) dV
+
+        s(t) is a signed scalar. For a field oscillating around zero at
+        angular frequency omega, s(t) is proportional to sin(2*omega*t)
+        plus a small DC offset (the offset scales as omega*dt and is
+        negligible for omega*dt << 1). The processor detects upward
+        zero-crossings of s(t) and derives the field frequency from
+        the interval between consecutive crossings:
+
+            delta_t  = time between consecutive upward crossings
+            T_field  = 2 * delta_t           (s(t) has half the period)
+            f_field  = 1 / T_field
+
+        The TrackerFields signals, freq_local read at a single voxel
+        and its three-plane average freq_global, are not well-defined
+        for a symmetric seed released from rest. The
+        author (2026-10-12) selected definition C as the primary one;
+        the plan is amended accordingly.
+
+    Known limitations (recorded so they are not read as results):
+        1. Reflection contamination. In dirichlet or reflecting
+           boundary modes, the outgoing wave reflects off the domain
+           edge and returns to the center. From the moment of first
+           return onward, s(t) is a superposition of the outgoing and
+           reflected components, and the measured frequency is not the
+           soliton's intrinsic frequency alone. The signal is
+           meaningful only in the pre-reflection window. A variant that
+           windows the signal or runs absorbing would remove this; the
+           current build does not.
+        2. Pipeline B (reflective vacuum). In the reflective pipeline
+           (plan Section 5.4), PsiLongField carries both the soliton
+           and its interaction with the base wave through the
+           scattering operator. The measured frequency is the
+           superposed signal, not the soliton alone.
+        3. Longitudinal-only. s(t) reads the field named by
+           field_type, default PsiLongField. A transverse (spin) signal
+           would need a second measurement and is not implemented.
+           freq_ref and freq_now are longitudinal-only.
+
+    Other limitation:
+        r_rms and the gyration tensor use the grid center as reference,
+        not the field's center of mass. A center-of-mass variant needs
+        a second kernel pass and is deferred. No test in the current
+        suite exercises an off-center field.
+
+    Internal zero-crossing state (updated each step, exposed for
+    diagnostics and tests):
+        s_prev           -- previous step's s(t), for crossing detection.
+        t_last_crossing  -- simulation time of the last upward crossing.
+                            -1.0 if no crossing has been recorded yet.
+    """
+
+    # Primary
+    localization: float = 0.0
+    sphericity: float = 0.0
+    wc_drift: float = 0.0
+    freq_drift: float = 0.0
+    sol_lifetime: int = 0
+
+    # Diagnostics
+    ipr: float = 0.0
+    ipr_initial: float = 0.0
+    r_rms: float = 0.0
+    mass: float = 0.0
+    n_active_wc: int = 0
+    freq_ref: float = 0.0
+    freq_now: float = 0.0
+
+    # Reference state, captured once
+    wc_initial_positions: list = field(default_factory=list)
+
+    # Internal zero-crossing state
+    s_prev: float = 0.0
+    t_last_crossing: float = -1.0

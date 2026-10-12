@@ -794,6 +794,15 @@ Infrastructure only. No specific physics. Each item is a work unit.
 - [ ] Add a test: static Gaussian -> `localization` stays constant;
       spreading Gaussian -> `localization` decreases.
 
+    **`freq_drift` definition (2026-10-12).** Field-wide signal
+    `s(t) = integral psi . (psi - psi_prev) dV`; upward zero-crossings
+    give `f = 1 / (2 * delta_t)`. The plan named `freq_drift` without a
+    definition; the `TrackerFields` signals (`freq_local` at a single
+    voxel, its three-plane average `freq_global`) are not well-defined
+    for a symmetric seed released from rest. Three
+    limitations (reflection contamination, pipeline B, longitudinal-only)
+    are recorded in the `StabilityMetrics` docstring.
+
 ### 1.10 — Experiment runner
 
 - [ ] Implement `ExperimentRunner`: takes a list of configuration dicts,
@@ -1188,6 +1197,10 @@ revisitable.
 Several candidates: lifetime, localization, sphericity, frequency
 stability. All are measured (item 1.9). The primary definition is
 author-gated.
+
+**Resolved (2026-10-12).** `freq_drift` uses the field-wide
+signal of item 1.9. `localization`, `sphericity` and the
+placeholder `sol_lifetime` threshold stand as before.
 
 ### Q6. Should the WC motion be continuous or discrete?
 
