@@ -9,7 +9,7 @@ says otherwise.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import taichi as ti
 
@@ -287,3 +287,79 @@ class EnergyBudget:
     @property
     def E_total(self) -> float:
         return self.E_kin + self.E_grad + self.E_deform
+
+@dataclass
+class StabilityMetrics:
+    """
+    Stability metrics feature (plan Section 6, item 1.9).
+
+    Populated by StabilityMetricsUpdate (not shipped in this change).
+    Read by loggers and diagnostics. Lengths are in grid units; the
+    caller multiplies by WaveGrid.dx (or UnitSystem.to_physical_length)
+    for physical units.
+
+    Primary fields:
+        localization  -- dimensionless concentration. 1.0 at the first
+                         measurement, decreases if the field spreads,
+                         increases if it collapses. The definition is
+                         IPR / IPR_initial (see below); the reference is
+                         captured once, on the first step the field is
+                         non-empty.
+        sphericity    -- lambda_min / lambda_max of the mass-weighted
+                         gyration tensor, relative to the grid center.
+                         1.0 for an isotropic (spherical) field, 0.0 for
+                         a degenerate (line or plane) field.
+        wc_drift      -- mean Euclidean displacement of active wave
+                         centers from their initial positions, grid
+                         units. Zero when no WCState is in the pipeline.
+        freq_drift    -- RESERVED, NOT COMPUTED. Always 0.0. The plan
+                         lists it as a candidate metric; no in-pipeline
+                         frequency measurement exists, and the primary
+                         definition of "stability" is author-gated
+                         (plan Section 9, Q5). The field is present so
+                         the contract matches the plan's item 1.9, and
+                         this docstring records that it carries no
+                         information today.
+        sol_lifetime  -- consecutive steps with localization above a
+                         processor-configured threshold. Resets to 0
+                         when localization drops below it.
+
+    Diagnostic fields:
+        ipr           -- raw inverse participation ratio, 1/volume.
+                         IPR = integral |psi|^4 dV / (integral |psi|^2 dV)^2
+        ipr_initial   -- reference IPR captured on the first non-empty
+                         step.
+        r_rms         -- sqrt(<r^2>) relative to the grid center, grid
+                         units. Not a center-of-mass radius; see the
+                         limitation note below.
+        mass          -- integral |psi|^2 dV. A conserved quantity for
+                         the wave equation; useful as a sanity check.
+        n_active_wc   -- number of active wave centers at this step.
+
+    Reference state:
+        wc_initial_positions -- list of (x, y, z) tuples, one per wave
+                                center, captured on the first call.
+                                Empty when no WCState was present.
+
+    Known limitation: r_rms and the gyration tensor use the grid center
+    as reference, not the field's center of mass. A center-of-mass
+    variant needs a second kernel pass and is deferred. No test in the
+    current suite exercises an off-center field.
+    """
+
+    # Primary
+    localization: float = 0.0
+    sphericity: float = 0.0
+    wc_drift: float = 0.0
+    freq_drift: float = 0.0  # reserved, not computed; see class docstring
+    sol_lifetime: int = 0
+
+    # Diagnostics
+    ipr: float = 0.0
+    ipr_initial: float = 0.0
+    r_rms: float = 0.0
+    mass: float = 0.0
+    n_active_wc: int = 0
+
+    # Reference state, captured once
+    wc_initial_positions: list = field(default_factory=list)

@@ -19,6 +19,7 @@ from openwave.xperiments.m4_ewt.pipeline_engine.physics.features import (
     PsiTripleBuffer,
     WaveGrid,
     WaveStats,
+    StabilityMetrics
 )
 
 # ---------------------------------------------------------------------------
@@ -106,6 +107,74 @@ def test_feature_bag_scalar_fields_are_independent():
     assert bag.require(EMCDensityField) is rho_field
     assert bag.require(EMCFluxField) is flux_field
 
+def test_stability_metrics_defaults_are_zero():
+    """
+    A fresh StabilityMetrics has every numeric field at zero.
+
+    Mutation caught: a default changed to a non-zero value, which would
+    make a pipeline that never writes the feature read as if it had
+    measured something.
+    """
+    m = StabilityMetrics()
+    assert m.localization == 0.0
+    assert m.sphericity == 0.0
+    assert m.wc_drift == 0.0
+    assert m.freq_drift == 0.0
+    assert m.sol_lifetime == 0
+    assert m.ipr == 0.0
+    assert m.ipr_initial == 0.0
+    assert m.r_rms == 0.0
+    assert m.mass == 0.0
+    assert m.n_active_wc == 0
+    assert m.wc_initial_positions == []
+
+
+def test_stability_metrics_wc_positions_not_shared():
+    """
+    wc_initial_positions is per-instance, not a shared class-level list.
+
+    Mutation caught: `field(default_factory=list)` replaced by `= []`.
+    That is the classic Python mutable-default bug: appending to one
+    instance's list would append to every other instance's list too.
+    The test constructs two instances, mutates one, and asserts the
+    other is unchanged.
+    """
+    a = StabilityMetrics()
+    b = StabilityMetrics()
+    a.wc_initial_positions.append((1.0, 2.0, 3.0))
+    assert len(a.wc_initial_positions) == 1
+    assert len(b.wc_initial_positions) == 0, b.wc_initial_positions
+
+
+def test_stability_metrics_is_not_a_field():
+    """
+    StabilityMetrics is not a PsiTripleBuffer subclass. It is a scalar
+    holder; FeatureBag must not confuse it with a vector field.
+
+    Mutation caught: the class inherits from PsiTripleBuffer, or a
+    subclass of it, which would let a downstream processor that
+    requires PsiLongField receive a StabilityMetrics instance through
+    the MRO keying.
+    """
+    assert not issubclass(StabilityMetrics, PsiTripleBuffer)
+
+
+def test_feature_bag_keys_stability_metrics_independently():
+    """
+    StabilityMetrics coexists with the other features under its own key.
+
+    Mutation caught: the class aliased to another dataclass (e.g. a
+    copy-paste that leaves two classes with the same name in the
+    module), so FeatureBag would overwrite one with the other.
+    """
+    bag = FeatureBag()
+    m = StabilityMetrics()
+    m.localization = 0.42
+    bag.set(m)
+    assert bag.require(StabilityMetrics) is m
+    # Distinct from the other non-field dataclasses
+    assert StabilityMetrics is not WaveGrid
+    assert StabilityMetrics is not WaveStats
 
 # ---------------------------------------------------------------------------
 # Allocation (Taichi)
@@ -166,6 +235,10 @@ def main() -> int:
         test_feature_bag_base_key_resolves_to_most_recent,
         test_feature_bag_scalar_fields_are_independent,
         test_allocation_provides_all_features,
+        test_stability_metrics_defaults_are_zero,
+        test_stability_metrics_wc_positions_not_shared,
+        test_stability_metrics_is_not_a_field,
+        test_feature_bag_keys_stability_metrics_independently
     ]
     passed = 0
     for t in tests:
