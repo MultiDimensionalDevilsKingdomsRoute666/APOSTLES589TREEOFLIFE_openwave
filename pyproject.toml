@@ -18,7 +18,7 @@ name = "OPENWAVE"
 # Rules: no zero padding (PEP 440 strips it, so "26.011" installs as "26.11" and stops matching
 # its own tag). No "v" here; that prefix belongs on the git tag alone. No letter suffix: PEP 440
 # reads "26.11b" as a beta that sorts BEFORE 26.11 and that pip skips by default.
-version = "26.11"
+version = "26.12"
 
 requires-python = ">=3.12"
 
