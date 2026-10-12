@@ -10,4 +10,4 @@ to study particle and force emergence. GPU-accelerated.
 # "26.011" would install as "26.11", silently unmatching its tag. No letter suffix: PEP 440 reads
 # "26.11b" as a beta, which sorts BEFORE 26.11 and is skipped by a default pip install. Keep this
 # in sync with pyproject.toml. See dev_docs/VERSION_MANAGEMENT.md.
-__version__ = "26.11"
+__version__ = "26.12"
