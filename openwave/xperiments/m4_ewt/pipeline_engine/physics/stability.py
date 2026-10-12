@@ -60,7 +60,6 @@ from ..pipeline import BaseProcessor, Stage
 from .features import PsiLongField, StabilityMetrics, WaveGrid
 from .wc_types import WCState
 
-
 # Placeholder threshold for the sol_lifetime counter. Any positive
 # value gives the same qualitative behaviour (localization starts at
 # 1.0 by construction). The specific number is not load-bearing; the
@@ -249,21 +248,24 @@ class StabilityMetricsUpdate(BaseProcessor):
         # is a legal configuration.
         wc_state = ctx.data.try_get(WCState)
         if wc_state is not None:
-            metrics.wc_initial_positions = [
-                (wc.x, wc.y, wc.z) for wc in wc_state.centers
-            ]
+            metrics.wc_initial_positions = [(wc.x, wc.y, wc.z) for wc in wc_state.centers]
 
     def process(self, ctx) -> None:
         grid = ctx.data.require(WaveGrid)
         field = ctx.data.require(self.field_type)
         metrics = ctx.data.require(StabilityMetrics)
 
-        dv = grid.dx ** 3
+        dv = grid.dx**3
 
         # Pass 1: mass and quartic (translation-invariant)
         _accumulate_field_moments(
-            field.psi, dv, grid.nx, grid.ny, grid.nz,
-            self._mass, self._quartic,
+            field.psi,
+            dv,
+            grid.nx,
+            grid.ny,
+            grid.nz,
+            self._mass,
+            self._quartic,
         )
         mass = float(self._mass[None])
         quartic = float(self._quartic[None])
@@ -274,11 +276,21 @@ class StabilityMetricsUpdate(BaseProcessor):
         cy = grid.ny * 0.5
         cz = grid.nz * 0.5
         _accumulate_gyration(
-            field.psi, cx, cy, cz, dv,
-            grid.nx, grid.ny, grid.nz,
+            field.psi,
+            cx,
+            cy,
+            cz,
+            dv,
+            grid.nx,
+            grid.ny,
+            grid.nz,
             self._r2,
-            self._xx, self._yy, self._zz,
-            self._xy, self._xz, self._yz,
+            self._xx,
+            self._yy,
+            self._zz,
+            self._xy,
+            self._xz,
+            self._yz,
         )
         r2_sum = float(self._r2[None])
 
@@ -334,8 +346,12 @@ class StabilityMetricsUpdate(BaseProcessor):
         # s(t) has half the field's period). See the module docstring for
         # the derivation and the class docstring for the limitations.
         _accumulate_freq_signal(
-            field.psi, field.psi_prev, dv,
-            grid.nx, grid.ny, grid.nz,
+            field.psi,
+            field.psi_prev,
+            dv,
+            grid.nx,
+            grid.ny,
+            grid.nz,
             self._s_signal,
         )
         s_now = float(self._s_signal[None])
@@ -350,9 +366,7 @@ class StabilityMetricsUpdate(BaseProcessor):
                     if metrics.freq_ref == 0.0:
                         metrics.freq_ref = f_measured
                     metrics.freq_now = f_measured
-                    metrics.freq_drift = (
-                        (metrics.freq_now - metrics.freq_ref) / metrics.freq_ref
-                    )
+                    metrics.freq_drift = (metrics.freq_now - metrics.freq_ref) / metrics.freq_ref
             metrics.t_last_crossing = t_now
 
         metrics.s_prev = s_now

@@ -19,7 +19,7 @@ from openwave.xperiments.m4_ewt.pipeline_engine.physics.features import (
     PsiTripleBuffer,
     WaveGrid,
     WaveStats,
-    StabilityMetrics
+    StabilityMetrics,
 )
 
 # ---------------------------------------------------------------------------
@@ -107,6 +107,7 @@ def test_feature_bag_scalar_fields_are_independent():
     assert bag.require(EMCDensityField) is rho_field
     assert bag.require(EMCFluxField) is flux_field
 
+
 def test_stability_metrics_defaults_are_zero():
     """
     A fresh StabilityMetrics has every numeric field at zero.
@@ -176,6 +177,7 @@ def test_feature_bag_keys_stability_metrics_independently():
     assert StabilityMetrics is not WaveGrid
     assert StabilityMetrics is not WaveStats
 
+
 # ---------------------------------------------------------------------------
 # Allocation (Taichi)
 # ---------------------------------------------------------------------------
@@ -238,7 +240,7 @@ def main() -> int:
         test_stability_metrics_defaults_are_zero,
         test_stability_metrics_wc_positions_not_shared,
         test_stability_metrics_is_not_a_field,
-        test_feature_bag_keys_stability_metrics_independently
+        test_feature_bag_keys_stability_metrics_independently,
     ]
     passed = 0
     for t in tests:

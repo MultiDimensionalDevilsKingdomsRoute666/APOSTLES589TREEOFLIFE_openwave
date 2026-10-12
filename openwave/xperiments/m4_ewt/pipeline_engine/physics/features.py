@@ -288,6 +288,7 @@ class EnergyBudget:
     def E_total(self) -> float:
         return self.E_kin + self.E_grad + self.E_deform
 
+
 @dataclass
 class StabilityMetrics:
     """

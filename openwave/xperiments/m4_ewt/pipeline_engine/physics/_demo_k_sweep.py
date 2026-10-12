@@ -56,7 +56,6 @@ from .units import NaturalUnitSystem, UnitSystem
 from .wc_factory import build_wc_state
 from .wc_types import WCState
 
-
 # Sweep parameters. Changing these changes what the sweep measures.
 # These are the defaults; --grid and --steps override them at runtime.
 _GRID = 64
@@ -103,7 +102,9 @@ def _run_one(K: int, out_dir: Path, *, grid: int, steps: int):
     wc_state = build_wc_state(
         K=K,
         geometry=_TOPOLOGY,
-        nx=grid, ny=grid, nz=grid,
+        nx=grid,
+        ny=grid,
+        nz=grid,
         wavelength=_WAVELENGTH,
         spacing=_SPACING,
     )
@@ -187,15 +188,21 @@ def _print_table(rows, *, grid: int, steps: int) -> None:
 def main() -> None:
     p = argparse.ArgumentParser(description="M4 K-sweep stability demo")
     p.add_argument(
-        "--grid", type=int, default=_GRID,
+        "--grid",
+        type=int,
+        default=_GRID,
         help="grid size (default from module constants)",
     )
     p.add_argument(
-        "--steps", type=int, default=_STEPS,
+        "--steps",
+        type=int,
+        default=_STEPS,
         help="steps per run (default from module constants)",
     )
     p.add_argument(
-        "--out", type=str, default=None,
+        "--out",
+        type=str,
+        default=None,
         help="output directory (default: <model_root>/data)",
     )
     args = p.parse_args()
@@ -211,10 +218,7 @@ def main() -> None:
     # Default output goes to the model's data/ folder, matching the
     # legacy instrumentation convention (m4_ewt/data/). parents[2] from
     # this file: [0]=physics/, [1]=pipeline_engine/, [2]=m4_ewt/.
-    out_dir = (
-        Path(args.out) if args.out
-        else Path(__file__).resolve().parents[2] / "data"
-    )
+    out_dir = Path(args.out) if args.out else Path(__file__).resolve().parents[2] / "data"
 
     print(f"Running K-sweep: K = {list(_K_VALUES)}, topology = '{_TOPOLOGY}'")
     print(f"Each run: grid={grid}^3, dt={_DT}, steps={steps}, seed radius={_SEED_RADIUS}")

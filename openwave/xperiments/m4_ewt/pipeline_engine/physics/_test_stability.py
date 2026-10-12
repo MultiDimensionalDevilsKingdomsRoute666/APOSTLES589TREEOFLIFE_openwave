@@ -135,8 +135,12 @@ class _RecordSignal(BaseProcessor):
         grid = ctx.data.require(WaveGrid)
         f = ctx.data.require(PsiLongField)
         _record_s_kernel(
-            f.psi, f.psi_prev, grid.dx ** 3,
-            grid.nx, grid.ny, grid.nz,
+            f.psi,
+            f.psi_prev,
+            grid.dx**3,
+            grid.nx,
+            grid.ny,
+            grid.nz,
             self._s,
         )
         self.history.append((ctx.sim.t, float(self._s[None])))
@@ -186,7 +190,7 @@ def _line_gaussian(nx, ny, nz, sigma_long=4.0, sigma_trans=1.0, amp=1.0):
     i, j, k = np.meshgrid(np.arange(nx), np.arange(ny), np.arange(nz), indexing="ij")
     r_long2 = (i - cx) ** 2
     r_trans2 = (j - cy) ** 2 + (k - cz) ** 2
-    val = amp * np.exp(-r_long2 / (2.0 * sigma_long ** 2) - r_trans2 / (2.0 * sigma_trans ** 2))
+    val = amp * np.exp(-r_long2 / (2.0 * sigma_long**2) - r_trans2 / (2.0 * sigma_trans**2))
     arr = np.zeros((nx, ny, nz, 3), dtype=np.float32)
     arr[..., 0] = val
     return arr
@@ -708,9 +712,15 @@ def test_rotated_ellipsoid_on_a_non_cubic_grid():
     nx, ny, nz = 36, 32, 28
     sigma = np.array([4.0, 2.0, 1.5])
     a, b, c = 0.6, 0.9, 0.4
-    rot_z = np.array([[math.cos(a), -math.sin(a), 0.0], [math.sin(a), math.cos(a), 0.0], [0.0, 0.0, 1.0]])
-    rot_y = np.array([[math.cos(b), 0.0, math.sin(b)], [0.0, 1.0, 0.0], [-math.sin(b), 0.0, math.cos(b)]])
-    rot_x = np.array([[1.0, 0.0, 0.0], [0.0, math.cos(c), -math.sin(c)], [0.0, math.sin(c), math.cos(c)]])
+    rot_z = np.array(
+        [[math.cos(a), -math.sin(a), 0.0], [math.sin(a), math.cos(a), 0.0], [0.0, 0.0, 1.0]]
+    )
+    rot_y = np.array(
+        [[math.cos(b), 0.0, math.sin(b)], [0.0, 1.0, 0.0], [-math.sin(b), 0.0, math.cos(b)]]
+    )
+    rot_x = np.array(
+        [[1.0, 0.0, 0.0], [0.0, math.cos(c), -math.sin(c)], [0.0, math.sin(c), math.cos(c)]]
+    )
     rot = rot_z @ rot_y @ rot_x
     i, j, k = np.meshgrid(np.arange(nx), np.arange(ny), np.arange(nz), indexing="ij")
     d = np.stack([i - nx / 2.0, j - ny / 2.0, k - nz / 2.0], axis=-1)
@@ -808,10 +818,7 @@ def test_freq_matches_eigenmode_frequency():
     m = ctx.data.require(StabilityMetrics)
     lam = 3.0 * 4.0 * math.sin(math.pi / (2.0 * (n - 1))) ** 2
     f_true = (2.0 / dt) * math.asin(0.5 * dt * math.sqrt(lam)) / (2.0 * math.pi)
-    print(
-        f"    freq_ref={m.freq_ref:.6f}  f_true={f_true:.6f}  "
-        f"freq_drift={m.freq_drift:.3e}"
-    )
+    print(f"    freq_ref={m.freq_ref:.6f}  f_true={f_true:.6f}  " f"freq_drift={m.freq_drift:.3e}")
     assert abs(m.freq_ref - f_true) / f_true < 0.01, (m.freq_ref, f_true)
     assert abs(m.freq_drift) < 0.02, m.freq_drift
 
