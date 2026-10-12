@@ -1,6 +1,6 @@
 # M8.15.1 method note: locating the changes of type on T2/R4 and T3/R5
 
-Task: [`tasks/m8_15_1_task_details.md`](../tasks/m8_15_1_task_details.md), governing SHA-256 `fc566c04…`, pre-registered in [#624](https://github.com/openwave-labs/openwave/pull/624), run on 2026-10-12 from the frozen locator at MIT `324fde3`, which reads the M8.15.x instrument at MIT `97a8c08`. The record is [`RECORD.md`](https://github.com/dmobius3/mode-identity-theory/blob/c4e2f7f6d0af8a4a041817070f66004d1a69fc47/files/framework/files/working/files/scripts/soft-slot-dynamics-m8-15x-target1/RECORD.md) beside the locator. Each bracket's index change is located, to the final intervals in § 4, and no change of type is. This note says why, against the frozen terms.
+Task: [`tasks/m8_15_1_task_details.md`](../tasks/m8_15_1_task_details.md), governing SHA-256 `fc566c04…`, pre-registered in [#624](https://github.com/openwave-labs/openwave/pull/624), run on 2026-10-12 from the frozen locator at MIT `324fde3`, which reads the M8.15.x instrument at MIT `97a8c08`. The record is [`RECORD.md`](https://github.com/dmobius3/mode-identity-theory/blob/c4e2f7f6d0af8a4a041817070f66004d1a69fc47/files/framework/files/working/files/scripts/soft-slot-dynamics-m8-15x-target1/RECORD.md) beside the locator. Each primary bracket's index change is located, to the final intervals in § 4. The secondary's is not: its steps join two solutions (§ 5.2). No change of type is located. This note says why, against the frozen terms.
 
 ## 1. Equations first
 
@@ -61,7 +61,7 @@ The links are pinned to MIT `324fde3` for the locator and `97a8c08` for the inst
 
 ## 3. The run
 
-- **Environment.** The driver records none of its own. The run machine's Python, numpy, scipy and platform, checked after the run, equal the instrument manifest's: Python 3.13.13, numpy 2.5.0, scipy 1.18.0, macOS 15.8 on arm64. The scripts pin one thread and fix the ARPACK starting vectors.
+- **Environment.** The driver records none of its own, and no environment check was recorded at the run. The instrument's manifest records the environment it was frozen in: Python 3.13.13, numpy 2.5.0, scipy 1.18.0, macOS 15.8 on arm64. The scripts pin one thread and fix the ARPACK starting vectors.
 - **Before the run:** ten checks passed at 2026-10-12T02:53:20Z, among them the instrument's files and `freeze_numbers.json` against its manifest, both `SHA256SUMS`, the terms against the merged file, and the guard on the real instrument.
 - **`FROZEN.json`** was written at 2026-10-12T02:53:20Z, before any target computation. It carries `freeze_numbers.json`'s values unchanged, the terms' SHA-256 and the go.
 - **The targets:** T2/R4 from 2026-10-12T02:53:21Z to 2026-10-12T04:13:52Z, then T3/R5 to 2026-10-12T09:21:13Z. Both exited normally, with no crash record.
@@ -74,13 +74,13 @@ Both ladder reruns reproduce M8.15's ladder exactly. [`RECORD.md`](https://githu
 
 | Bracket | Steps (final intervals) | The record's names | The adjudicated name (the maintainer's) |
 | --- | --- | --- | --- |
-| T2/R4, primary (16 to 22.6274) | level 3: Unresolved (structural subspace), 16.2589 to 16.3107<br>level 2: Unresolved (structural subspace), 16 to 16.8284 | no genuine crossing detected at level 3<br>an Unresolved step (structural subspace), at level 3<br>no genuine crossing detected at level 2<br>an Unresolved step (structural subspace), at level 2 | for adjudication |
-| T3/R5, primary (11.3137 to 16) | level 3: structural, 13.1534 to 13.1626; root 13.1609; `Δn(L)`, `Δn_S`, `Δh` = -1, -1, 0<br>level 3: Unresolved (structural subspace), 15.7803 to 15.7986<br>level 2: Unresolved (structural subspace), 15.7071 to 16 | no genuine crossing detected at level 3<br>a structural step, at level 3<br>an Unresolved step (structural subspace), at level 3<br>no genuine crossing detected at level 2<br>an Unresolved step (structural subspace), at level 2 | for adjudication |
-| T3/R5, secondary (22.6274 to 32) | level 3: Unresolved (no balanced reading end), 28.0276 to 28.0459<br>level 3: Unresolved (no balanced reading end), 28.467 to 28.4853<br>level 2: genuine, 31.9817 to 32; root 31.9934; `Δn(L)`, `Δn_S`, `Δh` = -1, 0, -1 | no genuine crossing detected at level 3<br>an Unresolved step (no balanced reading end), at level 3<br>an Unresolved step (no balanced reading end), at level 3<br>an index crossing located; the change of type remains unresolved (cross-level disagreement) | for adjudication |
+| T2/R4, primary (16 to 22.6274) | level 3: Unresolved (structural subspace), 16.2589 to 16.3107<br>level 2: Unresolved (structural subspace), 16 to 16.8284 | no genuine crossing detected at level 3<br>an Unresolved step (structural subspace), at level 3<br>no genuine crossing detected at level 2<br>an Unresolved step (structural subspace), at level 2 | level 3: "no genuine crossing detected at level 3", with an Unresolved step (structural subspace), 16.2589 to 16.3107<br>level 2: "no genuine crossing detected at level 2", with an Unresolved step (structural subspace), 16 to 16.8284 |
+| T3/R5, primary (11.3137 to 16) | level 3: structural, 13.1534 to 13.1626; root 13.1609; `Δn(L)`, `Δn_S`, `Δh` = -1, -1, 0<br>level 3: Unresolved (structural subspace), 15.7803 to 15.7986<br>level 2: Unresolved (structural subspace), 15.7071 to 16 | no genuine crossing detected at level 3<br>a structural step, at level 3<br>an Unresolved step (structural subspace), at level 3<br>no genuine crossing detected at level 2<br>an Unresolved step (structural subspace), at level 2 | level 3: "no genuine crossing detected at level 3", with a structural step, 13.1534 to 13.1626, root 13.1609, and an Unresolved step (structural subspace), 15.7803 to 15.7986<br>level 2: "no genuine crossing detected at level 2", with an Unresolved step (structural subspace), 15.7071 to 16 |
+| T3/R5, secondary (22.6274 to 32) | level 3: Unresolved (no balanced reading end), 28.0276 to 28.0459; on the second solution path (§ 5.2)<br>level 3: Unresolved (no balanced reading end), 28.467 to 28.4853; its ends lie on different solutions (§ 5.2)<br>level 2: recorded genuine, 31.9817 to 32; recorded root 31.9934; `Δn(L)`, `Δn_S`, `Δh` = -1, 0, -1; its ends lie on different solutions, so it is neither an index change nor a root on one branch (§ 5.2) | no genuine crossing detected at level 3<br>an Unresolved step (no balanced reading end), at level 3<br>an Unresolved step (no balanced reading end), at level 3<br>an index crossing located; the change of type remains unresolved (cross-level disagreement) | level 3: "no genuine crossing detected at level 3", with two Unresolved steps (no balanced reading end)<br>level 2: **not located**: the step's two ends lie on different solutions (§ 5.2). The record's name is reported beside it |
 
 - **No genuine step matched across levels in any bracket.** So no guard was read, and no change of type is located.
 - **Each primary bracket holds a located index change that stayed unclassified** (structural subspace). "No genuine crossing detected at level 3" and "at level 2" are read in the terms' sense: no step qualified as genuine under the registered tests, which does not exclude a genuine crossing.
-- **A naming difference between the code and the terms, on which no verdict rests.** The terms name the secondary "an index crossing located inside the Hyperbolic range", with no type claim. The frozen code gives that label only to steps matched across levels; an unmatched genuine step gets the primary's wording, "an index crossing located; the change of type remains unresolved", whatever its label. The secondary's adjudicated wording is the maintainer's.
+- **The secondary's level 2 is not named.** Its step joins two solutions (§ 5.2), so it is not an index change of `L` on a branch. Neither the record's name nor the terms' secondary label, "an index crossing located inside the Hyperbolic range", is given to it. The terms have no name for such a step: "not located" is the maintainer's description, not a frozen name. Where the code and the terms name the secondary differently, the terms govern; here the question is moot.
 - **The ceiling has no positive result to restrict.** The fast-spectrum search did not run in either target run: every ladder point balanced, and no guard was evaluated.
 
 ## 5. Findings after the run
@@ -90,15 +90,25 @@ Both ladder reruns reproduce M8.15's ladder exactly. [`RECORD.md`](https://githu
 - **The failing points.** At each primary unresolved candidate crossing, at both levels, the bisection's last midpoint, inside the final interval, fails the structural subspace check. It has two structural eigenvectors where four are required, and `n_S = 0` where both ends of the final interval have 2.
 - **The consequence.** Such a point cannot end a bisection, so each step is Unresolved. The counts at the final interval's ends differ by `Δn(L) = ±2`, `Δn_S = 0` and `Δh = ±2`, matching the registered index arithmetic. The analysis stopped before it formed the crossing set, so the class of the crossing eigenvectors is the open question.
 - **The slowest genuine pair at the failing points.**
-  - **T3/R5:** it is the crossing mode, real and small (`5.1×10⁻⁴` at level 3), with overlap 0.868 at level 3 and 0.892 at level 2. `n(B|G_tol)` falls there from 5 to 1 while the Krein count still balances, so the overlap may come from structural directions leaving the cluster, as well as from the crossing mode.
+  - **T3/R5:** it is the crossing mode, real and small at level 3 (`5.1×10⁻⁴`) and imaginary at level 2 (0.00471), with overlap 0.868 at level 3 and 0.892 at level 2. `n(B|G_tol)` falls there from 5 to 1 while the Krein count still balances, so the overlap may come from structural directions leaving the cluster, as well as from the crossing mode.
   - **T2/R4:** it is a different and much faster mode (imaginary, about 0.17), with overlap 0. At level 2's failing `ε`, level 3 reads 0.785. The record leaves open why.
 - **A reading, not established here:** where the crossing eigenvalue of `L` passes zero, the crossing mode and two structural directions are close to degenerate, so the static classification does not separate them there.
 
-### 5.2 The secondary's levels disagree
+### 5.2 The secondary's steps join two solutions
 
-- At level 3 the change comes in two steps near 28.03 and 28.47, inside a stretch where no evaluated point balances, and both are Unresolved (no balanced reading end).
-- At level 2 it is one genuine step, at 31.98 to 32.0.
-- The levels therefore disagree, and the secondary makes no type claim in any case.
+The maintainer's adjudication of #625 found this, and the records confirm it.
+
+- **Two solution paths.** Below 27.31 the run records one solution path at each level. Above it, it evaluated points on two:
+  - the ladder's path, on which one eigenvalue of `L` crosses zero between 27.31 and 28.485 at level 3, from −0.049 to +0.065. That crossing is the bracket's change of `n(L)` from 9 to 8;
+  - a second path, on which that eigenvalue turns back.
+- **How the run reached each.** The bracket's ends are the ladder's points. The grid chains point to point (`scan`), and the bisection reaches each midpoint by continuation from its current lower end (`bisect`), which is not always the point evaluated just before: 27.9727 at level 3 was reached from 27.8995, after 28.0459. At level 3 the bisection between 27.31 and 28.485 reached the second path from 27.90 up. At level 2 the grid reached it at 28.485 and stayed on it to 31.98.
+- **The switch, read from the solution's `m`.** Along one path, the steps of 0.018 land within `6×10⁻⁷` of a linear prediction from the two points before them, and the step of that size just before each switch within `10⁻⁷`. Across level 2's step from 31.9817 to the ladder's point at 32, `m` misses by `1.9×10⁻²`, and across level 3's step from 28.467 to 28.4853 by `2.8×10⁻³`. The counts jump with it: at level 2, `n(L)`, `k_r` and `k_i⁻` go from 9, 2 and 1 to 8, 3 and 0.
+- **What follows.**
+  - Level 2's step is not a crossing along one solution. Its `Δn(L) = −1` is the difference between two solutions at nearly the same `ε`, and its root interpolates between them. Every one of its checks passed, because no registered check compares the solutions at a step's two ends.
+  - Level 3's second step spans the same switch, and its first, 28.0276 to 28.0459, lies on the second path.
+  - The secondary's index change on the ladder's branch is therefore not located by this run. It lies between 27.31 and 28.485 at level 3, and between 27.31 and 32 at level 2, and no evaluated point of that branch falls inside either interval.
+  - The levels do not place one change far apart. Both show the same two paths, and the run switched between them at different `ε`.
+- **The primaries lie on one path,** failing midpoints included: at every primary step of 0.026 or less, `m` lands within `4×10⁻⁷` of the same prediction.
 
 ### 5.3 A correction on the record
 
@@ -114,16 +124,21 @@ The terms' § Standing says no recorded point of the M8.15.x qualification ran t
 
 ## 7. What this run does not verify
 
-- **A change of type on either branch.** The index changes are located; none is classified, and no guard was read.
+- **A change of type on either branch.** The primaries' index changes are located and stay unclassified, the secondary's is not located (§ 5.2), and no guard was read.
+- **Whether a step's two ends lie on one solution.** No registered check compares them, and the secondary shows the gap (§ 5.2).
+- **Whether the second path at the secondary bifurcates from the ladder's branch near 27.8.** The adjudication of #625 asks it.
 - **Anything outside the registered brackets,** and anything about persistence.
 - **The reading in § 5.1.** It is offered as an explanation of the failed checks, not as a result.
 
 ## 8. Audit record
 
 Two independent agents reviewed this note and the record against the frozen terms, the frozen locator and the run's records, before filing. One checked every classification against the frozen terms and code. The other re-derived the point counts, every final interval and the points that do not balance from the frozen grid and bisection rules, found each of the code map's links on the function it names, and re-swept the JSON records for the correction in § 5.3. Neither found a fatal problem. Their changes are folded in:
+
 - the custody of the seven records, and of the instrument's `SHA256SUMS` as it stood during the run, with the orchestration's hash;
 - each Unresolved step's counts at its final ends;
 - the slowest pair's eigenvalue beside its overlap, with the cluster count;
 - wording that keeps an Unresolved step's crossing identity open;
 - the record's names beside the adjudicated name, with the secondary's naming difference disclosed;
 - the definitions in § 1, and the correction landing as a commit of its own after the record.
+
+The maintainer's subsequent adjudication of #625 found the secondary's steps joining two solutions. § 4, § 5.2 and § 7 carry its result, § 5.1 its correction of the slowest pair at level 2, and § 3 no longer reports an environment check that the run did not record.
