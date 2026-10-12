@@ -293,65 +293,101 @@ class StabilityMetrics:
     """
     Stability metrics feature (plan Section 6, item 1.9).
 
-    Populated by StabilityMetricsUpdate (not shipped in this change).
-    Read by loggers and diagnostics. Lengths are in grid units; the
-    caller multiplies by WaveGrid.dx (or UnitSystem.to_physical_length)
-    for physical units.
+    Populated by StabilityMetricsUpdate. Read by loggers and diagnostics.
+    Lengths are in grid units; the caller multiplies by WaveGrid.dx (or
+    UnitSystem.to_physical_length) for physical units.
 
     Primary fields:
         localization  -- dimensionless concentration. 1.0 at the first
                          measurement, decreases if the field spreads,
-                         increases if it collapses. The definition is
-                         IPR / IPR_initial (see below); the reference is
-                         captured once, on the first step the field is
-                         non-empty.
+                         increases if it collapses. Defined as
+                         IPR / IPR_initial; the reference is captured
+                         once, on the first non-empty step.
         sphericity    -- lambda_min / lambda_max of the mass-weighted
                          gyration tensor, relative to the grid center.
-                         1.0 for an isotropic (spherical) field, 0.0 for
-                         a degenerate (line or plane) field.
+                         1.0 for a spherical field, 0.0 for a degenerate
+                         (line or plane) field.
         wc_drift      -- mean Euclidean displacement of active wave
                          centers from their initial positions, grid
                          units. Zero when no WCState is in the pipeline.
-        freq_drift    -- RESERVED, NOT COMPUTED. Always 0.0. The plan
-                         lists it as a candidate metric; no in-pipeline
-                         frequency measurement exists, and the primary
-                         definition of "stability" is author-gated
-                         (plan Section 9, Q5). The field is present so
-                         the contract matches the plan's item 1.9, and
-                         this docstring records that it carries no
-                         information today.
+        freq_drift    -- (freq_now - freq_ref) / freq_ref. Zero until the
+                         first full field period is observed. See the
+                         "Frequency signal" section below.
         sol_lifetime  -- consecutive steps with localization above a
                          processor-configured threshold. Resets to 0
                          when localization drops below it.
 
     Diagnostic fields:
-        ipr           -- raw inverse participation ratio, 1/volume.
-                         IPR = integral |psi|^4 dV / (integral |psi|^2 dV)^2
-        ipr_initial   -- reference IPR captured on the first non-empty
-                         step.
-        r_rms         -- sqrt(<r^2>) relative to the grid center, grid
-                         units. Not a center-of-mass radius; see the
-                         limitation note below.
-        mass          -- integral |psi|^2 dV. A conserved quantity for
-                         the wave equation; useful as a sanity check.
-        n_active_wc   -- number of active wave centers at this step.
+        ipr, ipr_initial, r_rms, mass, n_active_wc -- as in earlier
+                         revisions of this class.
+        freq_ref      -- reference frequency, captured on the second
+                         upward crossing of s(t) (the first completed
+                         period). Zero if never captured.
+        freq_now      -- most recent frequency measurement. Zero until
+                         a period has been completed.
 
-    Reference state:
-        wc_initial_positions -- list of (x, y, z) tuples, one per wave
-                                center, captured on the first call.
-                                Empty when no WCState was present.
+    Frequency signal (definition C, corrected from the plan):
+        The plan (Section 9, Q5) lists freq_drift as a candidate metric
+        and leaves the definition author-gated. The implemented
+        definition is a field-wide signal:
 
-    Known limitation: r_rms and the gyration tensor use the grid center
-    as reference, not the field's center of mass. A center-of-mass
-    variant needs a second kernel pass and is deferred. No test in the
-    current suite exercises an off-center field.
+            s(t) = integral psi . (psi - psi_prev) dV
+
+        s(t) is a signed scalar. For a field oscillating around zero at
+        angular frequency omega, s(t) is proportional to sin(2*omega*t)
+        plus a small DC offset (the offset scales as omega*dt and is
+        negligible for omega*dt << 1). The processor detects upward
+        zero-crossings of s(t) and derives the field frequency from
+        the interval between consecutive crossings:
+
+            delta_t  = time between consecutive upward crossings
+            T_field  = 2 * delta_t           (s(t) has half the period)
+            f_field  = 1 / T_field
+
+        This supersedes the plan's earlier candidate definitions (a
+        single-voxel probe, or a three-plane average), which are not
+        well-defined for a symmetric seed released from rest. The
+        author (2026-10-12) selected definition C as the primary one;
+        the plan is amended accordingly.
+
+    Known limitations (recorded so they are not read as results):
+        1. Reflection contamination. In dirichlet or reflecting
+           boundary modes, the outgoing wave reflects off the domain
+           edge and returns to the center. From the moment of first
+           return onward, s(t) is a superposition of the outgoing and
+           reflected components, and the measured frequency is not the
+           soliton's intrinsic frequency alone. The signal is
+           meaningful only in the pre-reflection window. A variant that
+           windows the signal or runs absorbing would remove this; the
+           current build does not.
+        2. Pipeline B (reflective vacuum). In the reflective pipeline
+           (plan Section 5.4), PsiLongField carries both the soliton
+           and its interaction with the base wave through the
+           scattering operator. The measured frequency is the
+           superposed signal, not the soliton alone.
+        3. Longitudinal-only. s(t) reads the field named by
+           field_type, default PsiLongField. A transverse (spin) signal
+           would need a second measurement and is not implemented.
+           freq_ref and freq_now are longitudinal-only.
+
+    Other limitation:
+        r_rms and the gyration tensor use the grid center as reference,
+        not the field's center of mass. A center-of-mass variant needs
+        a second kernel pass and is deferred. No test in the current
+        suite exercises an off-center field.
+
+    Internal zero-crossing state (updated each step, exposed for
+    diagnostics and tests):
+        s_prev           -- previous step's s(t), for crossing detection.
+        t_last_crossing  -- simulation time of the last upward crossing.
+                            -1.0 if no crossing has been recorded yet.
     """
 
     # Primary
     localization: float = 0.0
     sphericity: float = 0.0
     wc_drift: float = 0.0
-    freq_drift: float = 0.0  # reserved, not computed; see class docstring
+    freq_drift: float = 0.0
     sol_lifetime: int = 0
 
     # Diagnostics
@@ -360,6 +396,12 @@ class StabilityMetrics:
     r_rms: float = 0.0
     mass: float = 0.0
     n_active_wc: int = 0
+    freq_ref: float = 0.0
+    freq_now: float = 0.0
 
     # Reference state, captured once
     wc_initial_positions: list = field(default_factory=list)
+
+    # Internal zero-crossing state
+    s_prev: float = 0.0
+    t_last_crossing: float = -1.0

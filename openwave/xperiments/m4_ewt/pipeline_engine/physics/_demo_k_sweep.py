@@ -3,7 +3,7 @@ K-sweep demo for StabilityMetrics on the golden-angle topology.
 
 Runs six configurations (K = 2, 3, 5, 10, 11, 12) on the 'golden'
 wave-centre arrangement, evolves each for a fixed number of steps,
-and writes one CSV row per run.
+and writes one JSON document per sweep.
 
 This is NOT the B10a from the pipeline plan. B10a requires:
   - multiple topologies (golden + tetrahedron_10_locked + control)
@@ -20,7 +20,11 @@ Run headless from the project root:
 
     python -m openwave.xperiments.m4_ewt.pipeline_engine.physics._demo_k_sweep
 
-Output: out_k_sweep/sweep.csv and a printed table.
+Output: m4_ewt/data/k_sweep_golden.json and a printed table.
+
+The JSON has two top-level keys: "meta" (the sweep parameters) and
+"runs" (one dict per K). Same meta-plus-data shape as the legacy
+instrumentation in m4_ewt/data/.
 
 Note: no `from __future__ import annotations` here. Taichi kernel
 definitions (imported transitively through the physics layer) need
@@ -28,6 +32,7 @@ live type objects.
 """
 
 import argparse
+import json
 from pathlib import Path
 
 import taichi as ti
@@ -129,22 +134,32 @@ def _run_one(K: int, out_dir: Path, *, grid: int, steps: int):
         "r_rms": m.r_rms,
         "mass": m.mass,
         "ipr": m.ipr,
+        "freq_ref": m.freq_ref,
+        "freq_now": m.freq_now,
+        "freq_drift": m.freq_drift,
         "wc_drift": m.wc_drift,
         "n_active_wc": m.n_active_wc,
         "errors": len(ctx.diag.errors),
     }
 
 
-def _write_csv(rows, path: Path) -> None:
+def _write_json(rows, path: Path, meta: dict) -> None:
+    """
+    Write one sweep's rows to a single JSON document.
+
+    Structure:
+        meta  -- the parameters that produced the runs (topology, grid,
+                 steps, K values, boundary, unit system)
+        runs  -- one dict per K, with the metric values
+
+    Same convention as the legacy instrumentation (meta + data in one
+    file), so a reader can tell what configuration produced the
+    numbers without a separate sidecar.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
-    header = [
-        "K", "localization", "sphericity", "r_rms", "mass", "ipr",
-        "wc_drift", "n_active_wc", "errors",
-    ]
+    doc = {"meta": meta, "runs": rows}
     with open(path, "w", encoding="utf-8") as f:
-        f.write(",".join(header) + "\n")
-        for row in rows:
-            f.write(",".join(f"{row[h]}" for h in header) + "\n")
+        json.dump(doc, f, indent=2)
 
 
 def _print_table(rows, *, grid: int, steps: int) -> None:
@@ -154,7 +169,8 @@ def _print_table(rows, *, grid: int, steps: int) -> None:
     print("=" * 96)
     hdr = (
         f"{'K':>3}  {'localization':>14}  {'sphericity':>11}  "
-        f"{'r_rms':>8}  {'mass':>11}  {'ipr':>11}  {'n_wc':>5}"
+        f"{'r_rms':>8}  {'mass':>11}  {'ipr':>11}  "
+        f"{'freq_drift':>12}  {'n_wc':>5}"
     )
     print(hdr)
     print("-" * len(hdr))
@@ -163,7 +179,7 @@ def _print_table(rows, *, grid: int, steps: int) -> None:
             f"{row['K']:>3}  {row['localization']:>14.6e}  "
             f"{row['sphericity']:>11.4f}  {row['r_rms']:>8.3f}  "
             f"{row['mass']:>11.4e}  {row['ipr']:>11.4e}  "
-            f"{row['n_active_wc']:>5d}"
+            f"{row['freq_drift']:>12.4e}  {row['n_active_wc']:>5d}"
         )
     print("=" * 96)
 
@@ -180,19 +196,25 @@ def main() -> None:
     )
     p.add_argument(
         "--out", type=str, default=None,
-        help="output directory (default: ./out_k_sweep)",
+        help="output directory (default: <model_root>/data)",
     )
     args = p.parse_args()
 
     # Local bindings, not module-level mutation. Passing these down as
-    # arguments keeps the module constants immutable and the test-visible
+    # arguments keeps the module constants immutable and the visible
     # behaviour independent of how many times main() runs.
     grid = args.grid
     steps = args.steps
 
     ti.init(arch=ti.cpu, log_level=ti.WARN)
 
-    out_dir = Path(args.out) if args.out else (Path(__file__).resolve().parent / "out_k_sweep")
+    # Default output goes to the model's data/ folder, matching the
+    # legacy instrumentation convention (m4_ewt/data/). parents[2] from
+    # this file: [0]=physics/, [1]=pipeline_engine/, [2]=m4_ewt/.
+    out_dir = (
+        Path(args.out) if args.out
+        else Path(__file__).resolve().parents[2] / "data"
+    )
 
     print(f"Running K-sweep: K = {list(_K_VALUES)}, topology = '{_TOPOLOGY}'")
     print(f"Each run: grid={grid}^3, dt={_DT}, steps={steps}, seed radius={_SEED_RADIUS}")
@@ -210,9 +232,24 @@ def main() -> None:
 
     _print_table(rows, grid=grid, steps=steps)
 
-    csv_path = out_dir / "sweep.csv"
-    _write_csv(rows, csv_path)
-    print(f"\nCSV written to: {csv_path}")
+    meta = {
+        "sweep": "k_sweep_golden",
+        "topology": _TOPOLOGY,
+        "grid": grid,
+        "steps": steps,
+        "dt": _DT,
+        "wavelength": _WAVELENGTH,
+        "spacing": _SPACING,
+        "seed_radius": _SEED_RADIUS,
+        "k_values": list(_K_VALUES),
+        "boundary": "dirichlet",
+        "unit_system": "NaturalUnitSystem",
+        "notes": "Not B10a; see _demo_k_sweep.py module docstring.",
+    }
+
+    json_path = out_dir / "k_sweep_golden.json"
+    _write_json(rows, json_path, meta)
+    print(f"\nJSON written to: {json_path}")
 
 
 if __name__ == "__main__":

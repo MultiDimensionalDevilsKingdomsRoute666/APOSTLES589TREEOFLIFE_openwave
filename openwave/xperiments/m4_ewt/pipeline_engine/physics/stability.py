@@ -9,32 +9,43 @@ Computes five metrics into StabilityMetrics:
     G_ij         = <r_i r_j>, mass-weighted gyration tensor        [grid units^2]
     sphericity   = lambda_min / lambda_max of G                    [dimensionless]
     wc_drift     = mean |r_wc - r_wc_initial| over active WCs      [grid units]
+    freq_drift   = (freq_now - freq_ref) / freq_ref                [dimensionless]
     sol_lifetime = consecutive steps with localization > threshold [count]
 
-freq_drift is NOT computed (see StabilityMetrics docstring; the plan
-lists it as a candidate metric and the primary definition is
-author-gated). The field stays at 0.0.
+Frequency signal (definition C, corrected from the plan):
+
+    s(t) = integral psi . (psi - psi_prev) dV
+
+For a field oscillating around zero at angular frequency omega, s(t)
+is proportional to sin(2*omega*t) plus a small DC offset. The processor
+detects upward zero-crossings of s(t) and derives:
+
+    delta_t = time between consecutive upward crossings
+    f_field = 1 / (2 * delta_t)
+
+The factor of 2 is because s(t) has half the field's period. See the
+StabilityMetrics docstring for the full derivation and limitations
+(reflection contamination, pipeline B, longitudinal-only).
+
+The plan (Section 9, Q5) left the primary definition of "stability"
+author-gated and listed freq_drift as a candidate metric. Definition C
+is the author's chosen resolution, replacing the earlier candidates
+(single-voxel probe, three-plane average), which are not well-defined
+for a symmetric seed released from rest.
 
 The reference center for r_rms and G is nx * 0.5, the same convention
-as SeedPulse and SeedMultiCenter. A center-of-mass variant needs a
-second kernel pass and is deferred; no test currently exercises an
-off-center field.
-
-WCState is optional (try_get, not require). When absent, wc_drift
-stays 0.0 and n_active_wc stays 0, so a field-only pipeline is a
-legal configuration.
+as SeedPulse and SeedMultiCenter. WCState is optional (try_get, not
+require); a field-only pipeline is a legal configuration.
 
 The processor does not require UnitSystem: it measures in grid units
-and leaves the conversion to the caller. The plan's item 1.9 does not
-name UnitSystem as a dependency.
+and leaves the conversion to the caller.
 
 This processor holds Taichi fields on the instance (allocated in
 setup, reused in process), the same pattern as EnergyBudgetUpdate.
-The stateless guard (pipeline._stateless_guard) compares repr() of
-instance fields; Taichi's repr does not expose field contents, so the
-guard does not fire on writes inside process(). If Taichi ever
-changes this, both this processor and EnergyBudgetUpdate would need
-a different guard strategy.
+The stateless guard compares repr() of instance fields; Taichi's repr
+does not expose field contents, so the guard does not fire on writes
+inside process(). If Taichi ever changes this, both this processor and
+EnergyBudgetUpdate would need a different guard strategy.
 
 Note: no `from __future__ import annotations` here. Taichi kernel
 definitions need live type objects.
@@ -73,12 +84,7 @@ def _accumulate_field_moments(
 
     Uses ti.atomic_add because ti.ndrange is a parallel loop: a plain
     += on the output scalar is a data race. The addends are cast to f64
-    explicitly, matching the field type, since ti.atomic_add dispatches
-    on the value type.
-
-    Scope: full grid (all voxels), matching AmplitudeTracker._reduce.
-    The boundary shell is part of the state; excluding it would bias
-    the ratio for boundary-pinned fields.
+    explicitly, matching the field type.
     """
     out_mass[None] = 0.0
     out_quartic[None] = 0.0
@@ -131,6 +137,34 @@ def _accumulate_gyration(
         ti.atomic_add(out_xy[None], ti.cast(rx * ry * s * dv, ti.f64))
         ti.atomic_add(out_xz[None], ti.cast(rx * rz * s * dv, ti.f64))
         ti.atomic_add(out_yz[None], ti.cast(ry * rz * s * dv, ti.f64))
+
+
+@ti.kernel
+def _accumulate_freq_signal(
+    psi: ti.template(),
+    psi_prev: ti.template(),
+    dv: ti.f32,
+    nx: ti.i32,
+    ny: ti.i32,
+    nz: ti.i32,
+    out_s: ti.template(),
+):
+    """
+    Accumulate s(t) = integral psi . (psi - psi_prev) dV.
+
+    A signed scalar. For a field oscillating around zero at angular
+    frequency omega, s(t) is proportional to sin(2*omega*t) plus a
+    small DC offset (the offset scales as omega*dt and is negligible
+    for omega*dt << 1). Used for upward zero-crossing detection in
+    the freq_drift metric.
+
+    Uses ti.atomic_add for the same reason as the other two kernels.
+    """
+    out_s[None] = 0.0
+    for i, j, k in ti.ndrange(nx, ny, nz):
+        diff = psi[i, j, k] - psi_prev[i, j, k]
+        s = psi[i, j, k].dot(diff)
+        ti.atomic_add(out_s[None], ti.cast(s * dv, ti.f64))
 
 
 def _sphericity_from_gyration(xx, yy, zz, xy, xz, yz):
@@ -206,11 +240,12 @@ class StabilityMetricsUpdate(BaseProcessor):
         self._xy = ti.field(dtype=ti.f64, shape=())
         self._xz = ti.field(dtype=ti.f64, shape=())
         self._yz = ti.field(dtype=ti.f64, shape=())
+        self._s_signal = ti.field(dtype=ti.f64, shape=())
 
         # Capture wave-centre reference positions before any step runs.
         # WCState is provided through initial_features, which Runner
         # sets before pipeline.setup(). try_get: a field-only pipeline
-        # is a legal configuration and does not fail at build time.
+        # is a legal configuration.
         wc_state = ctx.data.try_get(WCState)
         if wc_state is not None:
             metrics.wc_initial_positions = [
@@ -293,7 +328,33 @@ class StabilityMetricsUpdate(BaseProcessor):
             metrics.wc_drift = 0.0
             metrics.n_active_wc = 0
 
-        # freq_drift is not computed. Left at the dataclass default (0.0).
+        # Pass 3: frequency signal s(t) = integral psi . (psi - psi_prev) dV.
+        # Upward zero-crossings give the field period (times two, because
+        # s(t) has half the field's period). See the module docstring for
+        # the derivation and the class docstring for the limitations.
+        _accumulate_freq_signal(
+            field.psi, field.psi_prev, dv,
+            grid.nx, grid.ny, grid.nz,
+            self._s_signal,
+        )
+        s_now = float(self._s_signal[None])
+        t_now = ctx.sim.t
+
+        if metrics.s_prev < 0.0 and s_now >= 0.0:
+            # Upward zero-crossing of s(t).
+            if metrics.t_last_crossing >= 0.0:
+                delta_t = t_now - metrics.t_last_crossing
+                if delta_t > 0.0:
+                    f_measured = 1.0 / (2.0 * delta_t)
+                    if metrics.freq_ref == 0.0:
+                        metrics.freq_ref = f_measured
+                    metrics.freq_now = f_measured
+                    metrics.freq_drift = (
+                        (metrics.freq_now - metrics.freq_ref) / metrics.freq_ref
+                    )
+            metrics.t_last_crossing = t_now
+
+        metrics.s_prev = s_now
 
     @staticmethod
     def _update_wc_drift(wc_state, metrics) -> None:
@@ -302,9 +363,7 @@ class StabilityMetricsUpdate(BaseProcessor):
         reference positions, captured in setup().
 
         Deactivated WCs are skipped (their position is stale).
-        zip() truncates at the shorter of the two sequences; a pipeline
-        that replaces the WCState centers list after setup (not a
-        supported configuration) measures drift over the overlap.
+        zip() truncates at the shorter of the two sequences.
         """
         drifts = []
         for wc, (x0, y0, z0) in zip(wc_state.centers, metrics.wc_initial_positions):

@@ -22,6 +22,7 @@ from .features import (
     BoundaryCondition,
     PsiLongField,
     StabilityMetrics,
+    WaveGrid,
 )
 from ..pipeline import (
     BaseProcessor,
@@ -53,6 +54,34 @@ def _ti_init():
 
 
 # ======================================================================
+# Test-only kernels
+# ======================================================================
+
+
+@ti.kernel
+def _record_s_kernel(
+    psi: ti.template(),
+    psi_prev: ti.template(),
+    dv: ti.f32,
+    nx: ti.i32,
+    ny: ti.i32,
+    nz: ti.i32,
+    out_s: ti.template(),
+):
+    """
+    Test-only: compute s(t) = integral psi . (psi - psi_prev) dV.
+    Identical to the production _accumulate_freq_signal, but defined
+    here so the test can compute the same quantity independently of
+    whatever the production kernel does.
+    """
+    out_s[None] = 0.0
+    for i, j, k in ti.ndrange(nx, ny, nz):
+        diff = psi[i, j, k] - psi_prev[i, j, k]
+        s = psi[i, j, k].dot(diff)
+        ti.atomic_add(out_s[None], ti.cast(s * dv, ti.f64))
+
+
+# ======================================================================
 # Fixtures
 # ======================================================================
 
@@ -74,6 +103,43 @@ class _SeedCustom(BaseProcessor):
         f = ctx.data.require(PsiLongField)
         f.psi.from_numpy(self.arr)
         f.psi_prev.from_numpy(self.arr)
+
+
+class _RecordSignal(BaseProcessor):
+    """
+    Test-only: record s(t) = integral psi.(psi - psi_prev) dV every step.
+
+    stateless=False because it accumulates a history. This is a test
+    fixture, not a production processor; the stateless rule (Z2) is
+    about runtime state on shipped processors, and the guard skips
+    processors that declare stateless=False.
+
+    Stage.MEASURE, order 5: runs before StabilityMetricsUpdate
+    (order 20). Both read the same field values (no processor mutates
+    psi or psi_prev between MEASURE processors in one step).
+    """
+
+    name = "_RecordSignal"
+    stage = Stage.MEASURE
+    order = 5
+    requires = (PsiLongField, WaveGrid)
+    stateless = False
+
+    def __init__(self):
+        self.history = []  # list of (t, s) tuples
+
+    def setup(self, ctx):
+        self._s = ti.field(dtype=ti.f64, shape=())
+
+    def process(self, ctx):
+        grid = ctx.data.require(WaveGrid)
+        f = ctx.data.require(PsiLongField)
+        _record_s_kernel(
+            f.psi, f.psi_prev, grid.dx ** 3,
+            grid.nx, grid.ny, grid.nz,
+            self._s,
+        )
+        self.history.append((ctx.sim.t, float(self._s[None])))
 
 
 class _ConstantAccelRule(WCDriftRule):
@@ -111,11 +177,10 @@ def _line_gaussian(nx, ny, nz, sigma_long=4.0, sigma_trans=1.0, amp=1.0):
     """
     Line-like field: Gaussian along x, narrower Gaussian in y and z.
 
-    The transverse Gaussian is what makes this line-like. Without it
-    (constant transverse profile), the transverse width comes from the
-    grid extent and the sphericity depends on grid size rather than on
-    the field shape. Expected sphericity ~= sigma_trans^2 / sigma_long^2
-    = 1/16 = 0.0625 for the default parameters.
+    The transverse Gaussian is what makes this line-like. Without it,
+    the transverse width comes from the grid extent and the sphericity
+    depends on grid size rather than on the field shape. Expected
+    sphericity ~= sigma_trans^2 / sigma_long^2 = 1/16 = 0.0625.
     """
     cx, cy, cz = nx / 2.0, ny / 2.0, nz / 2.0
     i, j, k = np.meshgrid(np.arange(nx), np.arange(ny), np.arange(nz), indexing="ij")
@@ -137,19 +202,11 @@ def _build_pipeline(
     extra_processors=(),
 ):
     """
-    Build a minimal pipeline. The grid size is inferred from seed_arr.
+    Build a minimal pipeline. Grid size inferred from seed_arr.
 
-    Hardcoding nx=32 while seeding a differently shaped array was a bug
-    in an earlier revision: Taichi 1.7.4 does not raise on from_numpy
-    with a mismatched shape, and the field ends up with unexpected
-    contents. Inferring the size from the seed makes the mismatch
-    impossible by construction.
-
-    UnitSystem is always included in external_provides. The
-    StabilityMetricsUpdate processor does not need it (it measures in
-    grid units), but LaplacianProcessor does, and including it
-    unconditionally keeps the fixture uniform across the evolution and
-    non-evolution cases.
+    UnitSystem is always in external_provides: StabilityMetricsUpdate
+    does not need it, but LaplacianProcessor does, and including it
+    unconditionally keeps the fixture uniform.
     """
     n = int(seed_arr.shape[0])
     assert seed_arr.shape == (n, n, n, 3), seed_arr.shape
@@ -271,6 +328,9 @@ def test_empty_field_reports_zeros():
     assert m.sphericity == 0.0
     assert m.localization == 0.0
     assert m.sol_lifetime == 0
+    assert m.freq_ref == 0.0
+    assert m.freq_now == 0.0
+    assert m.freq_drift == 0.0
 
 
 # ======================================================================
@@ -344,30 +404,123 @@ def test_spreading_field_localization_decreases():
 
 
 # ======================================================================
-# Reserved field
+# Frequency drift (definition C)
 # ======================================================================
 
 
-def test_freq_drift_is_zero_reserved():
+def test_freq_drift_static_field_stays_zero():
     """
-    freq_drift is not computed. Stays at 0.0 across a run, no matter
-    the field configuration.
+    A static field has psi == psi_prev at every step, so s(t) = 0
+    everywhere and no zero-crossings are detected. freq_ref, freq_now
+    and freq_drift stay at 0.
 
-    If a future change starts computing freq_drift, this test fires and
-    the docstrings in StabilityMetrics and StabilityMetricsUpdate must
-    be updated in the same change.
+    Mutation caught: the zero-crossing detection fires on the
+    degenerate s(t) == 0 case (e.g. s_prev < 0 changed to s_prev <= 0).
+    The exact equality check on the far side (s_now >= 0) is not
+    exercised here; the s(t) oscillation test below covers that.
     """
     _ti_init()
     n = 32
-    p, i = _build_pipeline(
-        _sphere_gaussian(n, n, n, sigma=4.0),
-        with_evolution=True,
-        with_boundary=True,
-    )
-    ctx = _run(p, i, dt=0.2, max_steps=10)
+    # No UPDATE processors: field is static.
+    p, i = _build_pipeline(_sphere_gaussian(n, n, n, sigma=4.0))
+    ctx = _run(p, i, max_steps=20)
     assert ctx.diag.errors == [], ctx.diag.errors
     m = ctx.data.require(StabilityMetrics)
+    assert m.freq_ref == 0.0, m.freq_ref
+    assert m.freq_now == 0.0, m.freq_now
     assert m.freq_drift == 0.0, m.freq_drift
+
+
+def test_freq_drift_measures_oscillation():
+    """
+    A Gaussian pulse under wave evolution oscillates; s(t) crosses zero
+    on each half period, the processor captures freq_ref on the second
+    crossing, and subsequent crossings update freq_now and freq_drift.
+
+    Independent numpy reference: the test records s(t) at every step
+    with _RecordSignal, finds upward crossings independently, and
+    compares freq_ref against 1/(2 * delta_t) from the recorded
+    crossings. This is the only assertion that catches a factor-of-two
+    error in the frequency formula, which a positive-check alone would
+    not.
+
+    Mutation caught:
+        M1  the halving 1/(2*delta_t) removed   -> freq_ref is 2x the
+            independent value, the comparison fails
+        M2  freq_ref capture removed            -> freq_ref stays 0,
+            the comparison fails
+        M3  s_prev = s_now removed              -> at most one crossing,
+            numpy finds several, comparison fails
+        M6  freq_drift assignment removed       -> freq_drift == 0,
+            the != 0 assertion fails
+
+    Known non-detected mutations (documented so a reviewer does not
+    report them as regressions):
+        - s_prev < 0.0  ->  s_prev <= 0.0: s(t) is a continuous signal
+          and is exactly 0 only at t=0 (the released-from-rest step);
+          the strict and non-strict comparisons agree on every other
+          step.
+        - t_last_crossing >= 0.0  ->  > 0.0: the first crossing occurs
+          at t > 0 for any non-degenerate seed; the boundary at
+          exactly t=0 is never tested.
+    """
+    _ti_init()
+    n = 48
+    recorder = _RecordSignal()
+
+    class P(Pipeline):
+        def __init__(self):
+            super().__init__(
+                error_policy=ErrorPolicy.FAIL_FAST,
+                external_provides=(UnitSystem, BoundaryCondition),
+            )
+            self.add(AllocateWaveField(nx=n, ny=n, nz=n, dx=1.0))
+            self.add(_SeedCustom(_sphere_gaussian(n, n, n, sigma=4.0)))
+            self.add(ClearAccelerationProcessor())
+            self.add(LaplacianProcessor())
+            self.add(LeapfrogProcessor())
+            self.add(BoundaryProcessor(field_type=PsiLongField))
+            self.add(recorder)
+            self.add(StabilityMetricsUpdate())
+
+    ctx = _run(
+        P(),
+        [NaturalUnitSystem(), BoundaryCondition("dirichlet")],
+        dt=0.2,
+        max_steps=200,
+    )
+    assert ctx.diag.errors == [], ctx.diag.errors
+    m = ctx.data.require(StabilityMetrics)
+
+    # Independent numpy reference: find upward crossings of s(t) in the
+    # recorded history.
+    crossings = []
+    for j in range(1, len(recorder.history)):
+        _, s_prev = recorder.history[j - 1]
+        t_now, s_now = recorder.history[j]
+        if s_prev < 0.0 and s_now >= 0.0:
+            crossings.append(t_now)
+
+    print(
+        f"    freq_ref={m.freq_ref:.6e}  freq_now={m.freq_now:.6e}  "
+        f"freq_drift={m.freq_drift:.6e}"
+    )
+    print(f"    crossings found: {len(crossings)}  first three: {crossings[:3]}")
+
+    assert len(crossings) >= 3, f"expected >= 3 crossings, got {len(crossings)}"
+    delta_t = crossings[1] - crossings[0]
+    f_expected = 1.0 / (2.0 * delta_t)
+    print(f"    independent numpy reference freq_ref = {f_expected:.6e}")
+
+    assert m.freq_ref > 0.0, m.freq_ref
+    assert m.freq_now > 0.0, m.freq_now
+    assert math.isfinite(m.freq_drift), m.freq_drift
+    # The independent comparison. Catches the factor-of-two mutation.
+    rel_err = abs(m.freq_ref - f_expected) / f_expected
+    assert rel_err < 1e-9, (m.freq_ref, f_expected, rel_err)
+    # After at least three crossings, freq_now differs from freq_ref and
+    # freq_drift is nonzero. Catches the "assignment removed" mutation.
+    assert m.freq_drift != 0.0, "freq_drift must be computed, not left at default"
 
 
 # ======================================================================
@@ -487,7 +640,8 @@ def main() -> int:
         test_empty_field_reports_zeros,
         test_static_field_localization_constant,
         test_spreading_field_localization_decreases,
-        test_freq_drift_is_zero_reserved,
+        test_freq_drift_static_field_stays_zero,
+        test_freq_drift_measures_oscillation,
         test_no_wcstate_reports_zero_drift,
         test_wc_drift_positive_with_moving_wcs,
         test_missing_grid_fails_at_build_time,

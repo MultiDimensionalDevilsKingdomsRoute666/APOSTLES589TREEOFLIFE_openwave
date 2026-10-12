@@ -794,6 +794,14 @@ Infrastructure only. No specific physics. Each item is a work unit.
 - [ ] Add a test: static Gaussian -> `localization` stays constant;
       spreading Gaussian -> `localization` decreases.
 
+    **`freq_drift` definition (2026-10-12).** Field-wide signal
+    `s(t) = integral psi . (psi - psi_prev) dV`; upward zero-crossings
+    give `f = 1 / (2 * delta_t)`. Supersedes the earlier candidate
+    definitions (single-voxel probe, three-plane average), which are not
+    well-defined for a symmetric seed released from rest. Three
+    limitations (reflection contamination, pipeline B, longitudinal-only)
+    are recorded in the `StabilityMetrics` docstring.
+
 ### 1.10 — Experiment runner
 
 - [ ] Implement `ExperimentRunner`: takes a list of configuration dicts,
@@ -940,6 +948,11 @@ This is the decision documented in Section 5. Work items:
       The naive form is a bug.
 
 ---
+
+**Resolved (2026-10-12).** `freq_drift` uses the field-wide
+signal above (see item 1.9). `localization`, `sphericity` and the
+placeholder `sol_lifetime` threshold stand as before.
+
 
 ## 7. Block 2 — Physics implementation
 
