@@ -26,6 +26,8 @@ set TESTS=^
  openwave.xperiments.m4_ewt.pipeline_engine.physics._test_wc_reflector ^
  openwave.xperiments.m4_ewt.pipeline_engine.physics._test_motion ^
  openwave.xperiments.m4_ewt.pipeline_engine.physics._test_energy_budget ^
+ openwave.xperiments.m4_ewt.pipeline_engine.physics._test_stability ^
+ openwave.xperiments.m4_ewt.pipeline_engine.physics._demo_k_sweep ^
  openwave.xperiments.m4_ewt.pipeline_engine._check_dimensional_literals ^
  openwave.xperiments.m4_ewt.pipeline_engine._smoke_test
 
