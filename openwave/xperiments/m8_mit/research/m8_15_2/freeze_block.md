@@ -7,7 +7,7 @@ The items the pre-registration fixes at the freeze (§ THE FREEZE, THE GUARD AND
 - **SHA-256 of [`tasks/m8_15_2_task_details.md`](../tasks/m8_15_2_task_details.md):** `c6da782b43bc13d256f445d822d6c1456d71b42a4b5771b054d0c6b344dd4e4d`, which governs.
 - The same hash is in a dated note in § VI of the author's parent page, MIT [`soft-slot-branches.md`](https://github.com/dmobius3/mode-identity-theory/blob/9eab6740eaa254db07a3606b4b64f5a58b5dea0d/files/framework/files/working/files/soft-slot-branches.md) (`9eab674`).
 - **A delta on M8.15.1's terms.** Every rule they do not change governs here. M8.15.1's governing text is its filed pre-registration, [`tasks/m8_15_1_task_details.md`](../tasks/m8_15_1_task_details.md) as filed at `dcc63851`: SHA-256 `fc566c0406fef33d0f2a4ef2540fc6ce841191d292e5767de28d13b617156dbf`, the file's first 39,375 bytes.
-- **What the filing changed.** The terms were drafted as this file. Both review units confirmed its first version, one of them after five wording changes, which the second version takes. The filed text is the second version with five substitutions, the locator v2's freeze commit written into two links and three code spans, and nothing else.
+- **What the filing changed.** The terms were drafted as this file. Both review units reviewed its first version, one of them asking for five wording changes, and both confirmed the second, which takes them. The filed text is the second version with five substitutions, the locator v2's freeze commit written into two links and three code spans, and nothing else.
 
 ## The locator v2
 
