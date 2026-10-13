@@ -17,7 +17,7 @@
 
 | TaskID | Title | Description | Owner | Gated By |
 | --- | --- | --- | --- | --- |
-| [M8.15.2](tasks/m8_15_2_task_details.md) | Locating through the avoided crossing on T2/R4 and T3/R5 | Locate the two primary index changes M8.15.1 left unclassified on T2/R4 and T3/R5: bisect on `n(L)` through the structural-subspace failure, classify between clean ends with a solution-continuity check, and test for changes of type at the guard readings. A delta on M8.15.1's terms; frozen MIT locator v2; no slot relation (row 6 ceiling), no persistence test, no MODELS.md cell movement, no change to M8.7's gate | author-proposed and author-run, maintainer-adjudicated | registration and go ([#512](https://github.com/openwave-labs/openwave/discussions/512#discussioncomment-18415036)) |
+| [M8.15.2](tasks/m8_15_2_task_details.md) | Locating through the avoided crossing on T2/R4 and T3/R5 | Locate the two primary index changes M8.15.1 left unclassified on T2/R4 and T3/R5: bisect on `n(L)` through the structural-subspace failure, classify between clean ends with a solution-continuity check, and test for changes of type at the guard readings. A delta on M8.15.1's terms; frozen MIT locator v2; no slot relation (row 6 ceiling), no persistence test, no MODELS.md cell movement, no change to M8.7's gate | author-proposed and author-run, maintainer-adjudicated | the maintainer's adjudication of the run ([method note](findings/m8_15_2_method_note.md)) |
 
 ## LATER (gated)
 
