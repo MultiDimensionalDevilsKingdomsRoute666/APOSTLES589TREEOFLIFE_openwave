@@ -89,7 +89,7 @@ Based on analysis of `L1_field_grid.py` and `L1_wave_engine.py`, OpenWave requir
 
 1. **GPU compute saturation** - 90%+ utilization may cause race conditions
 2. **Thermal throttling** - GPU reducing clocks under sustained load
-3. **Memory pressure/leaks** - Accumulating issues at higher loads
+3. **Memory pressure / unreleased allocations** - Accumulating issues at higher loads
 4. **Metal backend limits** - Possible buffer or dispatch limits (unconfirmed)
 5. **Numerical precision** - FP32 accumulation errors (unconfirmed)
 6. **Hardware-specific** - May work on beefier systems

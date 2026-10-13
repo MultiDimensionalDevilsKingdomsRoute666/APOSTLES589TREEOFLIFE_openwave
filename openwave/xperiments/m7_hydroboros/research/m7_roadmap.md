@@ -104,7 +104,7 @@ M7.21 published the drafted 21-cell HydroBoros column into repo-root [`MODELS.md
 
 | TaskID | Task title | Description | Validation gate |
 | --- | --- | --- | --- |
-| [M7.21](tasks/m7_21_models_column.md) | complete + govern the MODELS.md column | published the 21-cell HydroBoros column into repo-root [`MODELS.md`](../../../../MODELS.md), reordered M5·M6·M7·M4 per the ✅+⚠️ rule; This published the results-so-far honestly (0✅/8⚠️/13🚧)<!-- count:historical --> | ✅ DONE (2026-07-18, [record](tasks/m7_21_models_column.md)): all 21 cells carry an honest, script-backed icon; the M7 column is live in MODELS.md as the 3rd column; doc-checker clean, no cross-repo leak |
+| [M7.21](tasks/m7_21_models_column.md) | complete + govern the MODELS.md column | published the 21-cell HydroBoros column into repo-root [`MODELS.md`](../../../../MODELS.md), reordered M5·M6·M7·M4 per the ✅+⚠️ rule; This published the results-so-far honestly (0✅/8⚠️/13🚧)<!-- count:historical --> | ✅ DONE (2026-07-18, [record](tasks/m7_21_models_column.md)): all 21 cells carry an honest, script-backed icon; the M7 column is live in MODELS.md as the 3rd column; doc-checker clean, no cross-repo content |
 
 The M5 prescription that governed every cell (the column is now published):
 

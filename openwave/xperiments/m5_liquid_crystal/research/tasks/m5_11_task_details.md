@@ -154,7 +154,7 @@ The SO(3) commitment (neutrino oscillation = the δ-0 / axis-2↔3 swing of `M =
 
 - ✅ **The rotation-group question (this issue) is answered:** a *pure* single SO(3) forces θ₁₃ = 0; the measured θ₁₃ ≈ 8.5° is the **size of the required second coupled rotation** (toward the SU(3)-like quark structure). But it is **small** — the other three observables sit at their pure-SO(3) values. **SO(3) is the leading structure, broken by a small θ₁₃ rotation.**
 - ✅ **The δ_CP = 180° platform prediction is CONSISTENT** (NuFIT 6.0 best fit ~177°). Sharp falsifier: JUNO/DUNE settling δ_CP far from 180° (e.g. ~270°) would kill the pure-SO(3) route.
-- 🔶 **Electron 0.28% clock (Duda, 2108.07896):** the projection-geometry framework `E_obs/E_pure = 1 + f_off` gives 0.28% ⟺ f_off ≈ 0.0028. The naive sin²θ₁₃ leakage (2.2%) is ~8× too big → the electron clock is **~8× more tightly projected** than the free neutrino (sensible for a bound, phase-locked clock). Structural match to Duda's reading; the specific number = the dynamical follow-up.
+- 🔶 **Electron 0.28% clock (Duda, 2108.07896):** the projection-geometry framework `E_obs/E_pure = 1 + f_off` gives 0.28% ⟺ f_off ≈ 0.0028. The naive sin²θ₁₃ admixture (2.2%) is ~8× too big → the electron clock is **~8× more tightly projected** than the free neutrino (sensible for a bound, phase-locked clock). Structural match to Duda's reading; the specific number = the dynamical follow-up.
 
 ### Issues / blockers
 

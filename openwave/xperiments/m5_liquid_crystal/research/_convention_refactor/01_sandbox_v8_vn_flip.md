@@ -76,7 +76,7 @@ numbers reproduced; only relabeled plane/axis identifiers and sub-1e-25 reorder 
 | v8 root + chain | `2a`, `2c1`, `2b`, `2b2`, `2c0`, `2f`, `2d`, `2cb`, `2f2`, `2f3`, `2e` | flipped + gates PASS / golden numbers bit-identical (`2a` C=-678.05; `2c1` machine-precision; `2f` F1a -48.8408; `2e` H 66.6→57.9; `2d` onset 1300, align 0.889 = documented) |
 | v8 consumers (no edit) | `2g`, `1_topo_charge`, `2c2_gui_repro` | pure engine/kernel consumers, run clean index-0 |
 | v8 boundary (engine-importers, the real bug) | `1_headless_check`, `2cb2_signed_gui_repro` | 8 failing checks now PASS; `M[0,0]==g`, spatial spectrum clean of g |
-| v6 boundary | `m5_6_5c_prod_scale` | `[:3,:3]->[1:4,1:4]`: spatial spectrum (1,δ,0), g no longer leaks (Tr² 64→1.08) |
+| v6 boundary | `m5_6_5c_prod_scale` | `[:3,:3]->[1:4,1:4]`: spatial spectrum (1,δ,0), g no longer enters (Tr² 64→1.08) |
 | v8 already-index-0 | `1_4x4_promotion` | verified PASS (was written index-0) |
 | vn roots | `2q_delta_scaling`, `2r_electron_id` | D4 flip + planes + `W[...,:3,0]->[...,1:4,1]`; gates bit-identical |
 | vn own-site | `2s`, `2i`, `2l`, `2m`(no own), `2p` | `2s` spin-1/2 machine-exact; `2i` align 0.962; `2l` c₀=65.09; `2p` G4 generators, pairing 1.000000 |

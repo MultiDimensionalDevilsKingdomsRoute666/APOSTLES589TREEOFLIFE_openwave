@@ -66,7 +66,7 @@ claims; if the numbers land somewhere else, that IS the result (the M6 lesson).
 | Weighted-measure errors near the cone (\|f\| → 0) fake convergence | ≥ 3 resolutions + extrapolation required; audit uses a different discretization family |
 | A zero mode masquerades as "first positive" (or vice versa) at finite resolution | the spec asks for the lowest 6 eigenvalues INCLUDING any ≤ 0, so the positive level is identified from the full low spectrum |
 | The seam (gluing) condition is mis-signed, shifting the anti-periodic sector | audit re-derives the seam handling independently; C1's W-independence on the narrow grid is itself a sensitive detector |
-| Independence leak (agent finds the claims in the repo) | agents instructed to read NO markdown; the author's paper lives only in the session scratchpad, not the repo |
+| Independence breach (agent finds the claims in the repo) | agents instructed to read NO markdown; the author's paper lives only in the session scratchpad, not the repo |
 
 ### Sub-experiments
 

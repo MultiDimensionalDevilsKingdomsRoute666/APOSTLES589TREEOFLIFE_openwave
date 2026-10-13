@@ -248,7 +248,7 @@ Independent agent, own implementations (eigenvalue-route V4, plain-FD curvatures
 | Claim | Verdict | Auditor's key numbers |
 | --- | --- | --- |
 | C-A P0 sign gap | ✅ CONFIRMED | own-V4 gap 0.129607 (0.941%); u_eta gap exactly 0; the odd-p cross-term analytic formula reproduces the gap to 6.7e-13; own vs imported energy rel 3.9e-16 |
-| C-B P1 slide | ✅ CONFIRMED | E(it) strictly monotone all 48 points; own r50/r90 8/32 → 15/51, core-ball 0.517 → 0.202; boundary-band energy 0.32% (NOT pin leakage: the spreading is interior) |
+| C-B P1 slide | ✅ CONFIRMED | E(it) strictly monotone all 48 points; own r50/r90 8/32 → 15/51, core-ball 0.517 → 0.202; boundary-band energy 0.32% (NOT spill into the pinned boundary band: the spreading is interior) |
 | C-C P2 runaway | 🔶 PARTIAL: instability CONFIRMED, "unbounded below" REFUTED | endpoint R values match to 2e-16 and the descent is monotone (not dt-instability), BUT ray probes turn upward (V4 ~ amp^8 vs Q2 ~ amp^4) and the Ω = 0.25 endpoint is near-stationary (rel 1.6e-5): a deep FINITE well ~10 orders down. §§ 6 wording corrected accordingly |
 | C-D P3 roton dip | ✅ CONFIRMED | plain-FD, own mode construction, two envelopes (r_env 15/25): minimum at n = 2 (k ≈ 0.098) in both |
 | C-E negative time-mixing curvature | ✅ CONFIRMED | energy-level FD boost01 −0.385642 (vs complex-step −0.3856411: 6-digit agreement by an independent method); own random time-mix −0.401, block-diag +3.5e5 |

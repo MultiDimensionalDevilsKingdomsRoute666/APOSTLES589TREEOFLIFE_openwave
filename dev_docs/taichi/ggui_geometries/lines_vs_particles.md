@@ -59,7 +59,7 @@ After MacBook reboot, the performance issue **completely disappeared**. Both `sc
 
 ### Possible Causes
 
-1. **Metal driver memory leak** - GPU memory fragmentation from previous sessions
+1. **Metal driver memory not released** - GPU memory fragmentation from previous sessions
 2. **Thermal throttling** - GPU overheating from extended simulation runs
 3. **Background processes** - Other applications using GPU resources
 4. **GPU cache corruption** - Metal shader cache or pipeline state issues

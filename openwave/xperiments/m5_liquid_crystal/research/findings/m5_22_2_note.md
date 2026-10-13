@@ -69,7 +69,7 @@ Both variants on the pre-registered target set ([`m5_22_2_dive_all.json`](../dat
 
 ## 4. The beta-decay probe (✅ measured: NO decay in 20 runs; the honest negative)
 
-The protocol: endpoint → kick (masked to the free interior, shell exact; GK gates re-verified here: symmetry deviation and shell leak both 0.0e+00) → damped leapfrog evolve (3000 steps, dt = 0.025 GL1-verified, absorbing sponge at r > 0.8·half so the rings at r ≈ 16 sit undamped) → FIRE to the product basin. Targets: the census neutron-analog P-1 (the ring-antiring pair, the author's bineutron candidate) and the pp-control cousin (the second ring-antiring basin, E = 15.047). Expected channels (the author, 2026-08-02): n → p + e + ν; bineutron → p + n + e, or 2n.
+The protocol: endpoint → kick (masked to the free interior, shell exact; GK gates re-verified here: symmetry deviation and shell change both 0.0e+00) → damped leapfrog evolve (3000 steps, dt = 0.025 GL1-verified, absorbing sponge at r > 0.8·half so the rings at r ≈ 16 sit undamped) → FIRE to the product basin. Targets: the census neutron-analog P-1 (the ring-antiring pair, the author's bineutron candidate) and the pp-control cousin (the second ring-antiring basin, E = 15.047). Expected channels (the author, 2026-08-02): n → p + e + ν; bineutron → p + n + e, or 2n.
 
 | Kick | E_inj (P-1 / cousin) | Endpoint |
 | --- | --- | --- |

@@ -142,8 +142,8 @@ of carrying a target, and every part gets a MECHANICAL audit rather than a judgm
 | Part | Content rule | Audit |
 | --- | --- | --- |
 | the frozen protocol | a verbatim copy of the repository file | `diff` against the repository; identity is the whole audit |
-| the group/data input | raw inputs only, no derived annotations, no labels, dimensions, or precomputed values | run the checks from the packet alone (closure counts, exact norms, a leakage scan for the derived-object vocabulary), each mutation-tested so no green line is a line that cannot fail |
-| the task file | operational instructions only; its mathematical content is generic identities, never values | read against the leakage vocabulary; committed so the record shows what the room was told |
+| the group/data input | raw inputs only, no derived annotations, no labels, dimensions, or precomputed values | run the checks from the packet alone (closure counts, exact norms, a withheld-vocabulary scan for the derived-object vocabulary), each mutation-tested so no green line is a line that cannot fail |
+| the task file | operational instructions only; its mathematical content is generic identities, never values | read against the withheld vocabulary; committed so the record shows what the room was told |
 
 **Generators, not closures.** Hand over the seed, not the built object: an input the
 implementer must construct from makes the construction gate a check that can fail, where
@@ -314,7 +314,7 @@ Every entry below happened during the first exercise; the standard exists becaus
 | 2 | the launch shell arriving with the platform importable and the repo named in the prompt | live at launch | § 3.2 verify commands |
 | 3 | the user-global instruction file summarized as "nothing relevant" while naming the repository | block A re-read | § 3.3, disclose and read the summary skeptically |
 | 4 | prepared artifacts (task file, audit script, prompt) living only in session state | planning review | § 4, commit before the room opens |
-| 5 | the audit's leakage check silently skipped when an earlier format check aborted | the audit's own mutation suite | § 4, leakage scan computed first, appended unconditionally |
+| 5 | the audit's withheld-vocabulary check silently skipped when an earlier format check aborted | the audit's own mutation suite | § 4, withheld-vocabulary scan computed first, appended unconditionally |
 | 6 | a 15-minute "stall" that was an unsurfaced permission prompt | during the run | § 6 stall row |
 | 7 | the implementation printing the room's absolute path into committed output | copy-out | § 4 task-file small print; § 7 redaction rule |
 | 8 | the byte-identity double run writing to session temp space against an absolute "writes only inside the room" statement | transcript check | § 7, disclosed session-temp writes |

@@ -132,7 +132,7 @@ hedgehog, disclination-masked:
 | --- | --- |
 | **`C_μν` SOURCES the twist** | The `C_μν` piece of `J_μ` is a ψ-independent source `S_μ=−32Σ_ν C_μν•P_ν`. At ψ=0: `max\|force\|` = **0.74 with `C_μν`, exactly 0.000 with `C=0`**; from ψ=0 the twist grows to 0.127 with `C` and stays **0.000** without. The biaxial hedgehog cannot sit static at ψ=0 — it drives its own twist. |
 | **restoring / mass** | a seeded twist grows then oscillates around a balance (bounded, `0.12→0.22→0.17`); the massless M5.5.2 bump (`C=0`) had no restoring force. The mass scale tracks `‖C‖ ~ 1/r²`. |
-| **conservation** | the FULL Hamiltonian `H=Σ(Kψ_t²+U)` drifts **0.76%** over 1500 steps (conservative). The ψ-sector energy grows +131% — NOT a drift: it's the `C`-drive pumping energy from the background curvature into the twist. (0.76% is non-tiny because the system is driven + disclination-masked; some leakage at the active-region Dirichlet boundary.) |
+| **conservation** | the FULL Hamiltonian `H=Σ(Kψ_t²+U)` drifts **0.76%** over 1500 steps (conservative). The ψ-sector energy grows +131% — NOT a drift: it's the `C`-drive pumping energy from the background curvature into the twist. (0.76% is non-tiny because the system is driven + disclination-masked; some loss at the active-region Dirichlet boundary.) |
 
 **Interpretation (flagged, not claimed):** `C_μν≠0` ⇒ ψ=0 is not a static solution ⇒ the defect
 intrinsically oscillates. This is the *no-static-soliton / time-periodic* principle made dynamical

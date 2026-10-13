@@ -653,7 +653,7 @@ Frequency spikes correlate with RMS amplitude dips (wave beating). When construc
 
 3. **Stress testing**
    - 100,000+ timestep runs
-   - Memory leak monitoring over extended periods
+   - Memory growth monitoring over extended periods
 
 4. **Fractal logic for wave generation (Research)**
    - Fractal algorithms ensure no sudden changes in tonality or tempo

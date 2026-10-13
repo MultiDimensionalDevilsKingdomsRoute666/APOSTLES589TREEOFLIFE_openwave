@@ -278,9 +278,9 @@ step still ran and is still recorded: the chain from delivery to room has to be 
 whether or not it moved.
 
 **2026-07-31, block A. The mutation suite caught a defect in the audit, not in the packet.**
-The leakage check ran last and was skipped whenever an earlier format check aborted the
+The withheld-vocabulary check ran last and was skipped whenever an earlier format check aborted the
 sequence, so a stray key carrying a target reddened the audit for the wrong reason. Fixed by
-computing the leakage scan first and appending it unconditionally. Worth carrying into the
+computing the withheld-vocabulary scan first and appending it unconditionally. Worth carrying into the
 standard: the mutation suite earned its place by failing something.
 
 **2026-07-31, block B. The Python environment is part of the room, and the plan never said
