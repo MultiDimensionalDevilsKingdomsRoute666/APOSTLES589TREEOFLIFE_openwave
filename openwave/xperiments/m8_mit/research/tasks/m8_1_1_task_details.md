@@ -105,7 +105,7 @@ Withheld from every agent: the words the claims turn on (McKay, Galois, rho, the
 the author), every claimed constant (4/R², 36/R², the affine coefficients, the rational
 rho and charge values, the virtual character and its augmentation), and every theorem
 number. Agents write into the scratchpad, never the repo, so no repository markdown can
-leak a target; the designer copies the scripts into `research/scripts/` unmodified at
+expose a target; the designer copies the scripts into `research/scripts/` unmodified at
 FINISH.
 
 No-search rule: every computed number is reported; nothing is tuned toward the claims; if
@@ -171,7 +171,7 @@ NOT verify the differential-geometric identifications that give those numbers th
 | Floating-point rank estimates fake an invariant subspace | invariant dimensions are computed as exact character sums AND as SVD ranks with a stated tolerance; disagreement is a reportable defect |
 | Exact rationals silently become floats, hiding a small discrepancy | exact arithmetic is required wherever a claim is a rational number, with the exact value reported alongside any decimal |
 | Only 2I is exercised, so a "unique exception" claim goes untested | the specs require the full ADE list (cyclic, binary dihedral, 2T, 2O, 2I), so uniqueness is measured, not assumed |
-| Independence leak through the repository | agents write to the session scratchpad and are instructed to open no repository file; the papers never enter the repo |
+| Independence breach through the repository | agents write to the session scratchpad and are instructed to open no repository file; the papers never enter the repo |
 
 ### Definition of done (finalized at go)
 

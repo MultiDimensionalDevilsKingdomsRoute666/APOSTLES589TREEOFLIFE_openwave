@@ -41,7 +41,7 @@ They agree row-by-row except the `U_e3` corner (0 vs 0.148) — the reactor angl
 
 > *Does neutrino oscillation stay in a single SO(3) rotation, or must it leave SO(3) for a second coupled rotation (toward the SU(3)-like quark structure)?*
 
-**Answer: it needs a second rotation, but a SMALL one.** A *pure* single SO(3) rotation forces θ₁₃ = 0; the measured θ₁₃ ≈ 8.5° is therefore the **size of the required second coupled rotation**. But it is small (`sin²θ₁₃ ≈ 0.022` leakage), and the three other observables (θ₂₃ maximal, θ₁₂ tri-maximal, δ_CP ≈ 180°) all sit at their pure-SO(3) values. So:
+**Answer: it needs a second rotation, but a SMALL one.** A *pure* single SO(3) rotation forces θ₁₃ = 0; the measured θ₁₃ ≈ 8.5° is therefore the **size of the required second coupled rotation**. But it is small (`sin²θ₁₃ ≈ 0.022` admixture), and the three other observables (θ₂₃ maximal, θ₁₂ tri-maximal, δ_CP ≈ 180°) all sit at their pure-SO(3) values. So:
 
 - **SO(3) is the LEADING structure** of neutrino mixing (3 of 4 observables at their SO(3) values).
 - It is **broken by a small θ₁₃ ≈ 8.5° rotation** — the toe-hold of the SU(3)-like coupled structure that is full-strength in the quark/CKM sector.
@@ -59,7 +59,7 @@ Projection-geometry framework: `E_obs / E_pure = 1 + f_off`, where `f_off` is th
 
 | Check | Result |
 | --- | --- |
-| Naive estimate (if the electron leaked like the neutrino θ₁₃) | `sin²θ₁₃ ≈ 0.022` = **2.2%** — about **8× too big** |
+| Naive estimate (if the electron mixed like the neutrino θ₁₃) | `sin²θ₁₃ ≈ 0.022` = **2.2%** — about **8× too big** |
 | Reading | the electron clock is **~8× more tightly projected** than the freely-oscillating neutrino — physically sensible for a **bound, phase-locked clock** vs a free oscillation |
 | Status | **structural match** to Duda's picture (3 tendencies → 1 projected DOF → small excess); the **specific 0.28%** needs the electron defect's *measured* off-primary-axis energy fraction (the dynamical follow-up) |
 

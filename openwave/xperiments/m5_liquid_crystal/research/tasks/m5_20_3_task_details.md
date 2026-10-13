@@ -188,7 +188,7 @@ Usage Cap Triggered: NO
 
 | # | Result | Status |
 | --- | --- | --- |
-| 1 | The true-L instrument (free EL of the purely-quartic verified L, per-cell spectral solve, exact leak bookkeeping); GC0a-e at complex-step precision (4e-16 to 7e-18) | ✅ measured |
+| 1 | The true-L instrument (free EL of the purely-quartic verified L, per-cell spectral solve, exact null-projection bookkeeping); GC0a-e at complex-step precision (4e-16 to 7e-18) | ✅ measured |
 | 2 | **THE HEADLINE: the free-EL IVP is ill-posed; every regularization blows up in finite time, E → −∞: his pre-named BVP branch fires.** Rank-5-exact K(M); 98.6% null-force at rest; the roundoff-seeded boost-sector exponential (σ = 6.31-80.9/t, the t* law); audit-confirmed incl. independent RK4 + Tikhonov | ✅ measured |
 | 3 | The topological charge NEVER unwinds through the blowup (q = 0.500 exact; canonical stack unwound 10/10) | ✅ measured |
 | 4 | G-CORE: (g, 1, a, a) with a = 0.1269 = 0.85 × δ/2 from free minimization, box-independent 4e-10 | ✅ measured |
