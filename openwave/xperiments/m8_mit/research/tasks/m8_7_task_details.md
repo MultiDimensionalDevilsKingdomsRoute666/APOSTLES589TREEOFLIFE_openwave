@@ -38,7 +38,7 @@ S³/2I is not a box, so the port is a design task, not a copy:
 | --- | --- |
 | Rendering chart | draw a fundamental domain of the 120-fold quotient; or a stereographic projection of S³ with the identification indicated; or an embedded slice/tour |
 | The Möbius edge + cone structure | must be visibly represented (it carries the model's Λ story), not clipped away by the chart |
-| Defect visualization | reuse M5's defect-line/glyph machinery where the M8.4 dynamics produces defects; new glyphs for representation-theoretic labels if needed |
+| Defect visualization | reuse M5's defect-line/glyph machinery if a future validated M8 dynamics produces defects; new glyphs for representation-theoretic labels if needed |
 
 ### Suggested definition of done
 
