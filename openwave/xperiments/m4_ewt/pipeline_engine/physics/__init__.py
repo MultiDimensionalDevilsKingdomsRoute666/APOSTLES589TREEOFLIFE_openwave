@@ -96,4 +96,7 @@ __all__ = [
     "EnergyBudgetUpdate",
     "StabilityMetrics",
     "StabilityMetricsUpdate",
+    "WaveGrid",
+    "WaveStats",
+    "RunSeed"
 ]
