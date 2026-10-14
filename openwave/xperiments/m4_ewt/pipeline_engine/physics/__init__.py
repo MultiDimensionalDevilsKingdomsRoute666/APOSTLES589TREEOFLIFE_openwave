@@ -98,5 +98,5 @@ __all__ = [
     "StabilityMetricsUpdate",
     "WaveGrid",
     "WaveStats",
-    "RunSeed"
+    "RunSeed",
 ]

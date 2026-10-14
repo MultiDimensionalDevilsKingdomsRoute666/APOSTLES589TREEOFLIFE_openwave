@@ -56,7 +56,6 @@ from .pipeline import Pipeline
 from .runner import IRunner
 from .sinks import ILogSink
 
-
 # Allowed values for ExperimentRunner.on_error. A string is used rather
 # than an enum because the two policies are the two branches of a single
 # try/except; adding a third would need its own branch, and that is the

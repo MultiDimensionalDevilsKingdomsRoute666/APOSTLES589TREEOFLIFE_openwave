@@ -249,6 +249,7 @@ class BoundaryCondition:
         if self.r_domain <= 0.0:
             raise ValueError(f"BoundaryCondition: r_domain must be > 0, got {self.r_domain}")
 
+
 @dataclass(frozen=True)
 class RunSeed:
     """
@@ -271,7 +272,9 @@ class RunSeed:
     future stochastic processor) read from this feature. This item only
     establishes the transport and the convention.
     """
+
     value: int = 0
+
 
 @dataclass
 class EnergyBudget:

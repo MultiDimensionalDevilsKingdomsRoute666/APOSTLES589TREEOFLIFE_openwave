@@ -18,7 +18,6 @@ from .experiments import ExperimentConfig, ExperimentRunner, ExperimentSummary
 from .pipeline import Pipeline
 from .sinks import InMemorySink
 
-
 # ======================================================================
 # Mock IRunner
 # ======================================================================
@@ -241,8 +240,17 @@ def test_runner_factory_called_once_per_config():
     calls = []
 
     class _TinyMock:
-        def run(self, pipeline, *, name, params=None, output_dir="out",
-                dt=1.0, max_steps, initial_features=None):
+        def run(
+            self,
+            pipeline,
+            *,
+            name,
+            params=None,
+            output_dir="out",
+            dt=1.0,
+            max_steps,
+            initial_features=None,
+        ):
             return Context(
                 run=RunContext(name=name, output_dir=Path(output_dir)),
                 params=Params(params),

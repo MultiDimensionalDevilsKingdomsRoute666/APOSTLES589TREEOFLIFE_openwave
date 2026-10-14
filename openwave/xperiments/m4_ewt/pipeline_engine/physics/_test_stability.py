@@ -862,6 +862,7 @@ def test_wc_drift_reference_is_the_initial_position():
     assert m.n_active_wc == 2, m.n_active_wc
     assert abs(m.wc_drift - expected) < 1e-9, (m.wc_drift, expected)
 
+
 def test_experiment_runner_with_real_pipeline():
     """
     Integration: ExperimentRunner driving real Taichi pipelines.
@@ -932,9 +933,7 @@ def test_experiment_runner_with_real_pipeline():
     )
 
     assert len(summaries) == 2
-    assert all(not s.crashed for s in summaries), [
-        s.errors for s in summaries if s.crashed
-    ]
+    assert all(not s.crashed for s in summaries), [s.errors for s in summaries if s.crashed]
     assert all("localization" in s.metrics for s in summaries)
     assert all("mass" in s.metrics for s in summaries)
     assert all(s.duration_s > 0.0 for s in summaries)
@@ -945,6 +944,7 @@ def test_experiment_runner_with_real_pipeline():
         f"    two configs ran; "
         f"localization = {[round(s.metrics['localization'], 4) for s in summaries]}"
     )
+
 
 # ======================================================================
 # Runner
