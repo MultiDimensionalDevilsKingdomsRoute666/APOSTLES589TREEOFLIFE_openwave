@@ -23,7 +23,7 @@ Design rules:
 """
 
 from .contracts import ScatteringOperatorInterface, SourceTermInterface
-
+from .experiments import ExperimentConfig, ExperimentRunner, ExperimentSummary
 from .context import (
     Context,
     Diagnostics,
@@ -75,4 +75,7 @@ __all__ = [
     "Runner",
     "ScatteringOperatorInterface",
     "SourceTermInterface",
+    "ExperimentConfig",
+    "ExperimentRunner",
+    "ExperimentSummary",
 ]

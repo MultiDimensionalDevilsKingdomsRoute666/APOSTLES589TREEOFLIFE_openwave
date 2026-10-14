@@ -179,7 +179,6 @@ class RunContext:
 
     name: str
     output_dir: Path = Path("out")
-    seed: int = 0
 
 
 @dataclass

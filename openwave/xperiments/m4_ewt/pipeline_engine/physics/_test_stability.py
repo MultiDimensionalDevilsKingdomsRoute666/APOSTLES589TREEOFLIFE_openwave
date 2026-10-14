@@ -863,6 +863,89 @@ def test_wc_drift_reference_is_the_initial_position():
     assert abs(m.wc_drift - expected) < 1e-9, (m.wc_drift, expected)
 
 
+def test_experiment_runner_with_real_pipeline():
+    """
+    Integration: ExperimentRunner driving real Taichi pipelines.
+
+    Two configs, small grid, few steps. Checks that the sweep completes
+    (no crashes), that each summary carries the expected metric keys,
+    and that per-config freshness holds (each config gets its own
+    pipeline instance through the factory).
+
+    This is the smallest test that would catch a regression in the
+    integration between ExperimentRunner and a real physics pipeline
+    (e.g. a factory that reuses a pipeline, or a summarize that reads
+    the wrong feature). It does not pin numbers; the metric correctness
+    lives in the tests above.
+    """
+    from ..experiments import ExperimentConfig, ExperimentRunner
+    from ..runner import Runner
+    from ..sinks import InMemorySink
+
+    _ti_init()
+    n = 16
+    pipeline_ids = []
+
+    def _make_cfg(marker: int) -> ExperimentConfig:
+        return ExperimentConfig(
+            name=f"c{marker}",
+            params={"marker": marker},
+            initial_features=(
+                NaturalUnitSystem(),
+                BoundaryCondition("dirichlet"),
+            ),
+            dt=0.1,
+            max_steps=3,
+        )
+
+    def _make_pipeline(cfg):
+        class P(Pipeline):
+            def __init__(self):
+                super().__init__(
+                    error_policy=ErrorPolicy.FAIL_FAST,
+                    external_provides=(UnitSystem, BoundaryCondition),
+                )
+                self.add(AllocateWaveField(nx=n, ny=n, nz=n, dx=1.0))
+                self.add(_SeedCustom(_sphere_gaussian(n, n, n, sigma=3.0)))
+                self.add(StabilityMetricsUpdate())
+
+        p = P()
+        pipeline_ids.append(id(p))
+        return p
+
+    def _summarize(ctx):
+        m = ctx.data.require(StabilityMetrics)
+        return {
+            "localization": m.localization,
+            "mass": m.mass,
+            "sphericity": m.sphericity,
+        }
+
+    er = ExperimentRunner(
+        runner_factory=lambda sinks: Runner(sinks),
+        sinks_factory=lambda cfg: {"session": InMemorySink()},
+    )
+    summaries = er.run_sweep(
+        pipeline_factory=_make_pipeline,
+        configs=[_make_cfg(1), _make_cfg(2)],
+        summarize=_summarize,
+        output_dir="out_test",
+    )
+
+    assert len(summaries) == 2
+    assert all(not s.crashed for s in summaries), [s.errors for s in summaries if s.crashed]
+    assert all("localization" in s.metrics for s in summaries)
+    assert all("mass" in s.metrics for s in summaries)
+    assert all(s.duration_s > 0.0 for s in summaries)
+    # Per-config freshness: two distinct pipeline instances.
+    assert len(pipeline_ids) == 2
+    assert pipeline_ids[0] != pipeline_ids[1]
+    print(
+        f"    two configs ran; "
+        f"localization = {[round(s.metrics['localization'], 4) for s in summaries]}"
+    )
+
+
 # ======================================================================
 # Runner
 # ======================================================================
@@ -887,6 +970,7 @@ def main() -> int:
         test_ipr_of_a_delta_is_one_over_voxel_volume,
         test_freq_matches_eigenmode_frequency,
         test_wc_drift_reference_is_the_initial_position,
+        test_experiment_runner_with_real_pipeline,
     ]
     passed = 0
     for t in tests:

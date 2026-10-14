@@ -250,6 +250,32 @@ class BoundaryCondition:
             raise ValueError(f"BoundaryCondition: r_domain must be > 0, got {self.r_domain}")
 
 
+@dataclass(frozen=True)
+class RunSeed:
+    """
+    Deterministic seed for this run.
+
+    Carried in the FeatureBag rather than in RunContext because it is a
+    value a processor reads, not a run identity field. A processor that
+    draws randomness declares requires=(RunSeed,) and reads
+    ctx.data.require(RunSeed).value. A pipeline that does not draw
+    randomness never sees it and does not fail at build time.
+
+    A single integer. Processors that need independent random streams
+    derive them (e.g. numpy.random.SeedSequence(value).spawn()) rather
+    than declaring multiple seeds.
+
+    Missing RunSeed means "no seed provided": a processor that requires
+    it fails at Pipeline.build() with the standard PipelineError.
+
+    Item 1.19 makes existing random draws (build_wc_state and any
+    future stochastic processor) read from this feature. This item only
+    establishes the transport and the convention.
+    """
+
+    value: int = 0
+
+
 @dataclass
 class EnergyBudget:
     """
