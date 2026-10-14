@@ -71,7 +71,6 @@ _K = 10
 _DT = 0.2
 
 
-
 # ======================================================================
 # Kernels
 # ======================================================================
@@ -98,11 +97,13 @@ def _warp_xy_plane(
         j = mj * stride
         a = psi[i, j, k_fixed].norm()
         z_base = ti.cast(k_fixed, ti.f32) / max_dim
-        verts[mi * my + mj] = ti.Vector([
-            ti.cast(i, ti.f32) / max_dim,
-            ti.cast(j, ti.f32) / max_dim,
-            z_base + a * inv_peak * warp,
-        ])
+        verts[mi * my + mj] = ti.Vector(
+            [
+                ti.cast(i, ti.f32) / max_dim,
+                ti.cast(j, ti.f32) / max_dim,
+                z_base + a * inv_peak * warp,
+            ]
+        )
         colors[mi * my + mj] = gradient_color(a * inv_peak, wave_menu)
 
 
@@ -156,11 +157,19 @@ class WireframeViz(WindowedProcessor):
         inv_peak = 1.0 / float(self._peak[None])
 
         _warp_xy_plane(
-            field.psi, self._verts, self._cols,
+            field.psi,
+            self._verts,
+            self._cols,
             self._k_fixed,
-            grid.nx, grid.ny,
-            self._mx, self._my, self._stride,
-            self._max_dim, self.warp, inv_peak, self.wave_menu,
+            grid.nx,
+            grid.ny,
+            self._mx,
+            self._my,
+            self._stride,
+            self._max_dim,
+            self.warp,
+            inv_peak,
+            self.wave_menu,
         )
 
         try:
@@ -183,9 +192,6 @@ class WireframeViz(WindowedProcessor):
 # ======================================================================
 
 
-
-
-
 def main() -> None:
     p = argparse.ArgumentParser(description="M4 golden K=10 wireframe viz")
     p.add_argument("--grid", type=int, default=64)
@@ -201,7 +207,9 @@ def main() -> None:
     wc_state = build_wc_state(
         K=_K,
         geometry=_TOPOLOGY,
-        nx=args.grid, ny=args.grid, nz=args.grid,
+        nx=args.grid,
+        ny=args.grid,
+        nz=args.grid,
         wavelength=_WAVELENGTH,
         spacing=_SPACING,
     )
@@ -209,8 +217,9 @@ def main() -> None:
     pipeline = make_linear_wave_pipeline(
         grid=args.grid,
         extra_measure=(
-            WireframeViz(cam=tuple(args.cam), stride=args.stride,
-                         warp=args.warp, wave_menu=args.wave_menu),
+            WireframeViz(
+                cam=tuple(args.cam), stride=args.stride, warp=args.warp, wave_menu=args.wave_menu
+            ),
         ),
     )
     initial = [NaturalUnitSystem(), BoundaryCondition("dirichlet"), wc_state]

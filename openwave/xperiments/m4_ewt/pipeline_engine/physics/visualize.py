@@ -116,6 +116,7 @@ def _render_slice(
         else:
             img[px, py] = ti.Vector([0.0, 0.0, 0.0])
 
+
 class WindowedProcessor(BaseProcessor):
     """
     Base class for GGUI 3D scene processors.
@@ -131,11 +132,11 @@ class WindowedProcessor(BaseProcessor):
     Neither hook is optional; a subclass that does not override one
     raises NotImplementedError at the point the hook is invoked.
 
-    The base takes only what every scene needs: camera, universe size, 
+    The base takes only what every scene needs: camera, universe size,
     tick spacing, and the show_axis flag. Everything else lives on the subclass.
 
-    render_module is for tests: pass a mock to avoid calling the real 
-    openwave.i_o.render.init_UI in setup() (which opens a window). 
+    render_module is for tests: pass a mock to avoid calling the real
+    openwave.i_o.render.init_UI in setup() (which opens a window).
     In production, leave it None; setup() imports the real module.
     """
 
@@ -162,6 +163,7 @@ class WindowedProcessor(BaseProcessor):
         render = self._render_module_override
         if render is None:
             from openwave.i_o import render as _render
+
             render = _render
         self._render = render
         render.init_UI(self.universe_size, self.tick_spacing, self.cam)
@@ -180,12 +182,8 @@ class WindowedProcessor(BaseProcessor):
 
     def setup_scene(self, ctx) -> None:
         """One-time hook. Override in subclasses."""
-        raise NotImplementedError(
-            f"{type(self).__name__} must implement setup_scene(ctx)"
-        )
+        raise NotImplementedError(f"{type(self).__name__} must implement setup_scene(ctx)")
 
     def draw(self, ctx) -> None:
         """Per-step hook. Override in subclasses."""
-        raise NotImplementedError(
-            f"{type(self).__name__} must implement draw(ctx)"
-        )
+        raise NotImplementedError(f"{type(self).__name__} must implement draw(ctx)")

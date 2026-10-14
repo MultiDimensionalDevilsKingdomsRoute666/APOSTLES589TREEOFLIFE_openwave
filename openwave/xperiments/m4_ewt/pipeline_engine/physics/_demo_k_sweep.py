@@ -77,6 +77,7 @@ _SEED_RADIUS = 4.0
 _K_VALUES = (2, 3, 5, 10, 11, 12)
 _TOPOLOGY = "golden"
 
+
 def _make_pipeline(cfg: ExperimentConfig) -> Pipeline:
     """Fresh pipeline per config. Grid from the config's params."""
     grid = int(cfg.params["grid"])

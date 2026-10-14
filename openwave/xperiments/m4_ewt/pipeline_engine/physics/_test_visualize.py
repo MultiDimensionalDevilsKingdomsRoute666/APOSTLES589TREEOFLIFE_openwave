@@ -22,7 +22,6 @@ from ..pipeline import ErrorPolicy, Pipeline, Stage
 from ..runner import Runner
 from ..sinks import InMemorySink
 
-
 _TI_INITIALIZED = False
 
 
@@ -55,9 +54,7 @@ class _FakeRender:
         self.calls = []
 
     def init_UI(self, universe_size, tick_spacing, cam):
-        self.calls.append(
-            ("init_UI", tuple(universe_size), float(tick_spacing), tuple(cam))
-        )
+        self.calls.append(("init_UI", tuple(universe_size), float(tick_spacing), tuple(cam)))
 
     def init_scene(self, show_axis):
         self.calls.append(("init_scene", bool(show_axis)))
@@ -76,7 +73,7 @@ class _Tracking(WindowedProcessor):
 
     name = "Tracking"
     requires = (WaveGrid,)
-    stateless = False   # history counters on the instance
+    stateless = False  # history counters on the instance
 
     def __init__(self, **kw):
         super().__init__(**kw)

@@ -17,7 +17,6 @@ import taichi as ti
 
 from .utils.viz_utils import find_peak, gradient_color, mesh_indices
 
-
 _TI_INITIALIZED = False
 
 

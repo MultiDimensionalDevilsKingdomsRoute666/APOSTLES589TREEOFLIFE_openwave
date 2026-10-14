@@ -28,7 +28,6 @@ from .units import NaturalUnitSystem, UnitSystem
 from .wc_factory import build_wc_state
 from .wc_types import WCState
 
-
 _TI_INITIALIZED = False
 
 
@@ -46,9 +45,13 @@ _SPACING = 12.0
 
 def _wc_state(K=2):
     return build_wc_state(
-        K=K, geometry="golden",
-        nx=_GRID, ny=_GRID, nz=_GRID,
-        wavelength=_WAVELENGTH, spacing=_SPACING,
+        K=K,
+        geometry="golden",
+        nx=_GRID,
+        ny=_GRID,
+        nz=_GRID,
+        wavelength=_WAVELENGTH,
+        spacing=_SPACING,
     )
 
 
@@ -142,6 +145,7 @@ def test_missing_unitsystem_raises_at_first_use():
         return
     raise AssertionError("expected KeyError naming UnitSystem")
 
+
 def test_missing_boundary_condition_raises_at_first_use():
     """
     Removing BoundaryCondition from initial_features does not fail at
@@ -189,6 +193,7 @@ def test_missing_wcstate_raises_at_first_use():
         assert "WCState" in str(e), str(e)
         return
     raise AssertionError("expected KeyError naming WCState")
+
 
 # ======================================================================
 # Parameters forwarded to the constructed processors
@@ -242,7 +247,7 @@ class _Recorder(BaseProcessor):
 
     name = "Recorder"
     stage = Stage.MEASURE
-    order = 25   # after StabilityMetricsUpdate (20)
+    order = 25  # after StabilityMetricsUpdate (20)
 
     def process(self, ctx):
         pass
@@ -260,10 +265,8 @@ def test_nonlinear_terms_added_before_leapfrog():
     marker = _Marker()
     p = make_linear_wave_pipeline(grid=_GRID, nonlinear_terms=(marker,))
     assert marker in p._all, "marker not in pipeline"
-    p.build()   # triggers the sort
-    update_order = [
-        x for x in p._by_stage[Stage.UPDATE]
-    ]
+    p.build()  # triggers the sort
+    update_order = [x for x in p._by_stage[Stage.UPDATE]]
     marker_idx = update_order.index(marker)
     leapfrog_idx = next(
         i for i, x in enumerate(update_order) if type(x).__name__ == "LeapfrogProcessor"
@@ -286,8 +289,7 @@ def test_extra_measure_added_after_stability():
     measure_order = p._by_stage[Stage.MEASURE]
     rec_idx = measure_order.index(rec)
     track_idx = next(
-        i for i, x in enumerate(measure_order)
-        if isinstance(x, StabilityMetricsUpdate)
+        i for i, x in enumerate(measure_order) if isinstance(x, StabilityMetricsUpdate)
     )
     assert rec_idx > track_idx, (rec_idx, track_idx)
 
@@ -324,6 +326,7 @@ def test_default_rule_is_noop():
     """
     p = make_linear_wave_pipeline(grid=_GRID)
     from .motion import WCMotionProcessor as _WM
+
     motion = [x for x in p._all if isinstance(x, _WM)]
     assert len(motion) == 1
     assert isinstance(motion[0].rule, NoOpRule), type(motion[0].rule)

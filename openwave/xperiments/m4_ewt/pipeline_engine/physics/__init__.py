@@ -47,7 +47,6 @@ from .visualize import TaichiWindowProcessor, WindowedProcessor
 from .seed import SeedBaseWave
 from .energy import EnergyBudgetUpdate
 
-
 __all__ = [
     # wave centers
     "WC",

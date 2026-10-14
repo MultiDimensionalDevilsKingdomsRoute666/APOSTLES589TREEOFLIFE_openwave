@@ -84,11 +84,13 @@ def gradient_color(t: ti.f32, palette: ti.i32):
     if palette == 1:
         out = ti.Vector([1.0, 0.4 + 0.6 * tc, 0.0])
     elif palette == 2:
-        out = ti.Vector([
-            ti.min(1.0, 2.0 * tc),
-            ti.min(1.0, ti.max(0.0, 2.0 * tc - 0.5)),
-            ti.min(1.0, ti.max(0.0, 2.0 * tc - 1.0)),
-        ])
+        out = ti.Vector(
+            [
+                ti.min(1.0, 2.0 * tc),
+                ti.min(1.0, ti.max(0.0, 2.0 * tc - 0.5)),
+                ti.min(1.0, ti.max(0.0, 2.0 * tc - 1.0)),
+            ]
+        )
     else:
         out = ti.Vector([0.2, 0.4 + 0.6 * tc, 1.0])
     return out
