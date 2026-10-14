@@ -30,7 +30,7 @@ them.
 | [8](#lesson-8--force-emergence-coulomb-maxwell-magnetism-gravity) | [Force emergence: Coulomb, Maxwell, magnetism, gravity](#lesson-8--force-emergence-coulomb-maxwell-magnetism-gravity) | Coulomb (static topology, 1/d) ↔ Maxwell (dynamic tilts); electric (`∇·n̂`) / magnetic (`∇×n̂`) / gravitational (boosts); *EM orthogonality E⊥B in the tensor field*; magnetic moment; *magnetism as a dynamical correction to Coulomb (Feynman) vs* permanent-magnet static B with no moving charge |
 | [9](#lesson-9--seeing-it-the-visualization-map) | [Seeing it: the visualization map](#lesson-9--seeing-it-the-visualization-map) | glyphs (direction=`n̂`, size, color), `flux_mesh`, `warp_mesh` scalar vs vector, granule positions, WAVE_MENU channels; *+ apolar `n̂≡−n̂` gauge sign-flip caveat* |
 | [10](#lesson-10--handedness-chirality--composite-particles) | [Handedness, chirality & composite particles](#lesson-10--handedness-chirality--composite-particles) | the finale: **handedness/chirality** (traversal sign CW/CCW = ±; matter/antimatter; neutrino helicity; biaxial `π₁=Q₈` quaternion classes) + **composite particles** (15a); *seeds in L2 (ellipse handedness) + L4 (topology charge sign)* |
-| [11](#lesson-11--where-the-waves-live-m5m6-only) | [CAPSTONE: Where the waves live (M5/M6 only)](#lesson-11--where-the-waves-live-m5m6-only) | the "wave existential crisis": wave-first inception (EWT) vs topology-first reality; the **emergence ledger** (substrate / matter / **force** / **EM waves** / **time — proper + shared**) — each a row, *none* sourced by a base wave; the two jobs of the wave (radiated = settled; pilot = open); *what radiates from the clock? — accelerating-charge / excess-oscillation-leak (open)*; scope = M5/M6 only (M1–M4 are wave-native) |
+| [11](#lesson-11--where-the-waves-live-m5m6-only) | [CAPSTONE: Where the waves live (M5/M6 only)](#lesson-11--where-the-waves-live-m5m6-only) | the "wave existential crisis": wave-first inception (EWT) vs topology-first reality; the **emergence ledger** (substrate / matter / **force** / **EM waves** / **time — proper + shared**) — each a row, *none* sourced by a base wave; the two jobs of the wave (radiated = settled; pilot = open); *what radiates from the clock? — accelerating-charge / excess-oscillation-emission (open)*; scope = M5/M6 only (M1–M4 are wave-native) |
 
 ---
 
@@ -992,7 +992,7 @@ The Frank elastic is *part of* `H` (the gradient piece). `H` is what's **conserv
 > feature that only `H` sees. The director `n̂ = r̂` is spherically symmetric and smooth along z, so the
 > director-only Frank energy misses it. Now press Evolve PDE and the headline split appears: **`H`
 > stays contained** (conserved + `V` pins the *amplitude*) while **Frank *dissipates*** (the
-> *orientation* disperses — `V` confines amplitude **not** orientation, M5.6.5c / M5.7.2). That leak
+> *orientation* disperses — `V` confines amplitude **not** orientation, M5.6.5c / M5.7.2). That loss
 > of the orientation energy *is* the M5.7 free-defect dispersal — the reason a stable 3D particle needs
 > the 4D clock (L7).
 
@@ -1358,7 +1358,7 @@ recomputing `energyH` around the candidate lepton is a clean **acceptance check*
 
 | What M5.8 changes | Why |
 | --- | --- |
-| energy **stops dispersing** | the 4D clock stabilizes orientation → the M5.7.2 Frank-leak stops; stable, not diluting |
+| energy **stops dispersing** | the 4D clock stabilizes orientation → the M5.7.2 Frank-energy loss stops; stable, not diluting |
 | field **relaxes off the gauge-fixed seed** | the straight-z rod is the *seed's* construction, not dynamical — the true configuration reshapes it |
 | the clock **time-averages** the structure | a winding frame precesses / smears a static feature (a spinning-top's axially-symmetric blur) |
 
@@ -1935,7 +1935,7 @@ Map that onto a defect:
 | Source state | Radiates? | Why |
 | --- | --- | --- |
 | Defect at rest, ground-state clock | **No** | static director field → static E/B; the bare `clock_twist` is a *stationary* internal phase (like a quantum stationary state with no oscillating dipole) — this is *why* a ground-state particle / orbiting electron doesn't spiral in |
-| Defect accelerating / transitioning / carrying **excess** `(A, ω)` above ground | **Yes** | the excess sheds as radiation when the defect de-excites/decoheres — your "excess intrinsic oscillation leaking out as EM" |
+| Defect accelerating / transitioning / carrying **excess** `(A, ω)` above ground | **Yes** | the excess sheds as radiation when the defect de-excites/decoheres — your "excess intrinsic oscillation radiating out as EM" |
 
 So **radiation from excited defects** is a natural candidate for the *radiated* job: the EM thrown
 off by an excited defect clock shedding its `(A, ω)` excess as it de-excites.

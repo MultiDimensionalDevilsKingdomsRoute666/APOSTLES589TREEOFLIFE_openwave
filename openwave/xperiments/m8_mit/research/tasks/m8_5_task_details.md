@@ -198,7 +198,7 @@ wanted; the audit still runs from the packet alone, per
 [`../../../../../dev_docs/tasks/t4_task_details.md`](../../../../../dev_docs/tasks/t4_task_details.md).
 
 **Landing map for the block A packet commit** (committed before the room opens, so the
-timestamp predates the run; contents subject to the block A leakage scan):
+timestamp predates the run; contents subject to the block A withheld-vocabulary scan):
 
 | Artifact | Repo destination |
 | --- | --- |
@@ -223,7 +223,7 @@ Exact arithmetic throughout, no tolerance anywhere.
 | center | exactly `{+1, −1}` |
 | element-order census | 1, 1, 20, 30, 24, 20, 24 at orders 1, 2, 3, 4, 5, 6, 10 |
 | central quotient | order 60, profile 1, 15, 20, 24 at orders 1, 2, 3, 5 |
-| leakage scan | no label, dimension, distance or character vocabulary; no key outside the declared set |
+| withheld-vocabulary scan | no label, dimension, distance or character vocabulary; no key outside the declared set |
 
 The element-order census is the audit's addition rather than a restatement of the author's
 gates. A center of order 2 over a quotient with the `A₅` profile is also satisfied by the
@@ -238,7 +238,7 @@ theorem.
 author's report states the same packet hash, the same closure order, and its four gates true.
 The two runs agree, and they are not fully independent in method: both work exactly over
 `Q(φ)` through `fractions.Fraction`, which the packet format effectively forces. The checks
-differ, which is where the value is: the element-order census and the leakage scan are the
+differ, which is where the value is: the element-order census and the withheld-vocabulary scan are the
 maintainer side only, and the author's report carries an environment record the audit does not.
 
 **The room, as sealed before launch.** Four files, nothing else:

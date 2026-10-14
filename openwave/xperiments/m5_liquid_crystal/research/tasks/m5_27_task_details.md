@@ -4,7 +4,7 @@
 
 ## TASK PLANNING (2026-07-24)
 
-**Scope**: Phase A of the § 2c phasing ONLY: the prescribed uniform background χ = A·cos(ω̄t), coupled by driving the V4 spectral targets (g → g + κχ), run on the verified-L η stack as the staged 4×4 (spatial block + time-time entry live; the (0,i) mixed block projected out per step, its leak norm logged AND its removed energy booked in the ledger). Deliverables: the lock-or-not verdict map (Arnold tongue), the J and μ re-reads under drive, the drive-power ledger, the eigenvalue-excursion read (§ 6b U3), the boost test, and a conditional Kapitza-window arm. Phase B (dynamical χ) stays out of scope (§ 2c).
+**Scope**: Phase A of the § 2c phasing ONLY: the prescribed uniform background χ = A·cos(ω̄t), coupled by driving the V4 spectral targets (g → g + κχ), run on the verified-L η stack as the staged 4×4 (spatial block + time-time entry live; the (0,i) mixed block projected out per step, its removed-component norm logged AND its removed energy booked in the ledger). Deliverables: the lock-or-not verdict map (Arnold tongue), the J and μ re-reads under drive, the drive-power ledger, the eigenvalue-excursion read (§ 6b U3), the boost test, and a conditional Kapitza-window arm. Phase B (dynamical χ) stays out of scope (§ 2c).
 
 **Definition of done** (freezes the § 9 draft at "go"):
 

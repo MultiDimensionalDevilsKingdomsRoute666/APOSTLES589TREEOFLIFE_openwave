@@ -21,7 +21,7 @@
 | # | Risk | Route |
 | --- | --- | --- |
 | 1 | DOCX equation-extraction fidelity (the textutil trap already hit once on v4) | machine-checkable: cross-check the sheet's equations against the pandoc extraction AND the canonical § 2 lineage; note the extraction tool per equation |
-| 2 | Email-only provenance leaking into public docs | policy: public anchors only; the local `_PROVENANCE_NOTES.md` is never cited (privacy scoping rule) |
+| 2 | Email-only provenance reaching public docs | policy: public anchors only; the local `_PROVENANCE_NOTES.md` is never cited (privacy scoping rule) |
 | 3 | "Characterize v4" sliding into refuting v4 (scope creep) | scope pin: characterization = day-checkable facts; refutation-grade claims are out of scope, route to M6.5-class work |
 | 4 | Boundedness verdict depends on assumptions (λ > 0, ρ_n bounded compact support) | state assumptions explicitly in the verdict; the audit checks the assumption set |
 | 5 | The physical H/Q target arithmetic assumed, not derived | derive e_nat = sqrt(4πα) in the sheet and verify 0.511/0.30282 = 1.6875 numerically in the script |
