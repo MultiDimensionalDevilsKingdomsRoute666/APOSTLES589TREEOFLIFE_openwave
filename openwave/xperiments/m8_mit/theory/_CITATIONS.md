@@ -13,7 +13,8 @@ gitignored-file inventory as papers are pulled down for tasks (filenames follow
 
 Identifier policy per [`ONBOARDING_MODELS.md`](../../../../ONBOARDING_MODELS.md) section 3.4
 (never fabricate): the first 10 Zenodo DOIs below were machine-verified resolving on
-2026-07-21, and the 11th, the M8.1.2 subject paper, on 2026-09-09.
+2026-07-21, and the 11th, the M8.1.2 subject paper, on 2026-09-09; the Euclid card's concept
+DOI, added beside its v1, resolved on 2026-10-14.
 SSRN blocks automated checks, so SSRN IDs are transcribed from the author's registry and
 marked `(author registry)`; treat them as author-attested until first use.
 
@@ -29,19 +30,19 @@ M8.1.2 subject paper registered when that task was proposed.
 | Shatto | 2025 Dec | Λ Constant, Axis Aligned: CMB Anomalies from Topology | Zenodo; DOI [10.5281/zenodo.18092169](https://doi.org/10.5281/zenodo.18092169) |
 | Shatto | 2026 Jan | Λ Ground Mode of the Cosmic Boundary | Zenodo; DOI [10.5281/zenodo.18307314](https://doi.org/10.5281/zenodo.18307314) |
 | Shatto | 2026 Jan | The Waltz: Λ Note to Einstein's Field Equations | Zenodo; DOI [10.5281/zenodo.18176445](https://doi.org/10.5281/zenodo.18176445) |
-| Shatto | 2026 Jan | Λ Constant, H₀ Local: Hubble Tension as Phase Field | Zenodo; DOI [10.5281/zenodo.18363693](https://doi.org/10.5281/zenodo.18363693) |
+| Shatto | 2026 Jan | Λ Stationary, H₀ Local: A Phase-Lattice Correspondence for the Hubble Tension | Zenodo; DOI [10.5281/zenodo.18363693](https://doi.org/10.5281/zenodo.18363693) |
 | Shatto | 2026 Feb | Yang-Mills Mass Gap on the Poincaré Homology Sphere | Zenodo; DOI [10.5281/zenodo.18463584](https://doi.org/10.5281/zenodo.18463584) |
 | Shatto | 2026 Feb | The Spectrum: Particle Mass Generation from Spectral Geometry on S³/2I | Zenodo; DOI [10.5281/zenodo.18603975](https://doi.org/10.5281/zenodo.18603975) |
 | Shatto | 2026 Feb | α Fine Structure: Λ Minimum Step to Mode Identity | Zenodo; DOI [10.5281/zenodo.18484780](https://doi.org/10.5281/zenodo.18484780) |
 | Shatto | 2026 Mar | Spectral Inaccessibility of Individual L-Function Zeros for Intrinsic Natural Operators on S³/2I | SSRN [6850939](https://ssrn.com/abstract=6850939) (author registry) |
 | Shatto | 2026 May | Apparent Phantom Crossing as Template Bias: A Bounded-Clock Deformation of ΛCDM | SSRN [6804058](https://ssrn.com/abstract=6804058) (author registry) |
 | Shatto | 2026 Jun | Twisted Quantum Modes on a Conic Möbius Band: Bound States, Holonomy, and a Stable First Positive Level | SSRN [6968741](https://ssrn.com/abstract=6968741) (author registry); the M8.1 gate paper |
-| Shatto | 2026 Jun | Coexact Spectral Gaps from McKay Distance for Flat Bundles on Homogeneous Spherical Space Forms | SSRN [6968698](https://ssrn.com/abstract=6968698) (author registry) |
-| Shatto | 2026 Jun | Epoch-dependent Acceleration Scale from Bounded Topology: Predictions for High-redshift Galactic Dynamics | SSRN [6933958](https://ssrn.com/abstract=6933958) (author registry) |
-| Shatto | 2026 Jun | Euclid DR1: A Pre-Registered Contender Showdown | Zenodo; DOI [10.5281/zenodo.20563048](https://doi.org/10.5281/zenodo.20563048) |
+| Shatto | 2026 Jun | Coexact Spectral Gaps and McKay Distance for Flat Bundles on Homogeneous Spherical Space Forms | SSRN [6968698](https://ssrn.com/abstract=6968698) (author registry) |
+| Shatto | 2026 Jun | An Epoch-dependent Acceleration Scale from Bounded Topology: Predictions for High-redshift Galactic Dynamics | SSRN [6933958](https://ssrn.com/abstract=6933958) (author registry) |
+| Shatto | 2026 Jun | Euclid DR1: A Pre-Registered Contender Showdown | Zenodo; DOI [10.5281/zenodo.20563048](https://doi.org/10.5281/zenodo.20563048) (v1); concept DOI [10.5281/zenodo.20563047](https://doi.org/10.5281/zenodo.20563047), as the author's registry and the card itself give it |
 | Shatto | 2026 Jun | a₀(z) Coherence-Scale SPARC Pipeline (pre-registered; documented negative of record) | Zenodo; DOI [10.5281/zenodo.20271702](https://doi.org/10.5281/zenodo.20271702) |
 | Shatto | 2026 Jul | An Affine Rho-Index Conversion and the Galois Pair on the Poincaré Homology Sphere | SSRN [7129118](https://ssrn.com/abstract=7129118) (author registry) |
-| Shatto | 2026 Sep | The Surviving Ray: channel selection for a cubic self-interaction on S³/2I | Zenodo; DOI [10.5281/zenodo.22681502](https://doi.org/10.5281/zenodo.22681502) (version DOI, v1); the M8.1.2 subject paper |
+| Shatto | 2026 Sep | The Surviving Ray: channel selection for a cubic self-interaction on S³/2I | Zenodo; DOI [10.5281/zenodo.22681502](https://doi.org/10.5281/zenodo.22681502) (version DOI, v1); the M8.1.2 subject paper. Its second version, retitled "The Surviving Ray: the spin-3 coupling point that S³/2I selects, and its critical geometry", is SSRN [7515378](https://ssrn.com/abstract=7515378) (author registry, since 2026-09-24) |
 
 Note on venues: all entries are preprints (Zenodo / SSRN), none refereed; this is recorded
 per the [`ONBOARDING_MODELS.md`](../../../../ONBOARDING_MODELS.md) red-flag checklist sourcing row and

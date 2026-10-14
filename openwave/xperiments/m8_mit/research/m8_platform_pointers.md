@@ -45,7 +45,7 @@ guidance on what a compact-arena port must avoid.
 | [M5 background](../../m5_liquid_crystal/research/m5_background.md) | the narrative map: point defects as leptons, vortex strings as quarks, knots as baryons |
 | [`compute_winding_number`](../../m5_liquid_crystal/engine3_observables.py) + [`m5_1_winding.py`](../../m5_liquid_crystal/research/scripts/m5_1_winding.py) | topological charge as an integral, the thing MIT's group-theoretic charge assignment is NOT yet; porting this to S³/2I is how the two notions get compared |
 | [M5 seed catalog](../../m5_liquid_crystal/xparameters/) | the concrete defect seeds (`_topo_*.py`: canonical 4D, uniaxial, biaxial, charged ring, dressed): worked examples of "how to seed a defect configuration" that an S³/2I port will need equivalents of |
-| The M8-specific question | which defect sectors exist at all on S³/2I (π₂ and π₃ of the target space RESTRICTED to the quotient's symmetry), and whether the anti-periodic (double-cover) boundary condition creates sectors flat space does not have. Genuinely new ground: no existing column has run a compact-quotient arena (OQ5 in [`m8_theory_canonical.md`](m8_theory_canonical.md)) |
+| The M8-specific question | which defect sectors exist at all on S³/2I (π₂ and π₃ of the target space RESTRICTED to the quotient's symmetry), and whether the anti-periodic (double-cover) boundary condition creates sectors flat space does not have. Genuinely new ground: M8's own runs are the first on a compact-quotient arena (the M8.5 grid backend; the finite-element solver of M8.15 to M8.15.2), and none has asked this question (OQ5 in [`m8_theory_canonical.md`](m8_theory_canonical.md)) |
 
 ## 4. Clock + stability insights (the platform's measured lessons for a background-clock model)
 
@@ -68,14 +68,20 @@ guidance on what a compact-arena port must avoid.
 
 ## 6. Quotient-manifold simulation engineering (task M8.5)
 
-No existing column runs a curved compact arena, so this is new infrastructure. Two
-routes, both viable; prototype before committing.
+Before M8, no column ran a curved compact arena, so this was new infrastructure. Two
+routes were planned at scaffold time; the status paragraphs below record how each ended
+and what has run since.
 
 **Status 2026-08-31.** Route (a) was built and adjudicated (`M85B-ADJ-07`) and its dynamics
 substrate did NOT qualify for the M8.4 observables; see
 [`findings/m8_4_closeout.md`](findings/m8_4_closeout.md). Route (b) was never built as a
 simulation backend, only as character-averaging certification machinery, so its dynamics evidence
 was never gathered. It is now M8.5-C, target-free, with its qualification protocol FILED 2026-08-28 and frozen at merge ([protocol](findings/m8_5c_protocol.md)); attempt A1 terminated without adjudication 2026-08-29 on a frozen-arm defect ([addendum 1](findings/m8_5c_protocol.md), [record](m8_5c/a1/)); the derived successor [M8.5-C2](findings/m8_5c2_protocol.md) is FILED 2026-08-29 and frozen at merge. Its attempt C2-A1 was commissioned, terminated 2026-08-30 on unit misconduct that destroyed the output ledger's integrity, filed byte-identical ([record](m8_5c2/a1/), [#508](https://github.com/openwave-labs/openwave/pull/508)), and the ruling ([#506](https://github.com/openwave-labs/openwave/issues/506)) adjudicated `M8.5-C2-FAILED`, instrument-attributed STOP-QUAL ([addendum 1](findings/m8_5c2_protocol.md)). The spectral route is closed, and the M8.4 reopening path closed with the verdict.
+
+**Status 2026-10-14.** The quotient simulations since are the author's: M8.15 ran on a pinned
+finite-element solver for the slot bundles under the frozen slot action, and M8.15.1 and
+M8.15.2 on its qualified revision, the M8.15.x instrument
+([`m8_roadmap.md`](m8_roadmap.md#done)).
 
 | Route | How | Trade-offs |
 | --- | --- | --- |
