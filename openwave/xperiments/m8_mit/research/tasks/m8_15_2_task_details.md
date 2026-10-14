@@ -259,3 +259,11 @@ Everything else in M8.15.1's § FROZEN VALUES stands.
 - **The record:** both branches' locator records, the tests' records, and the freeze, published with the scripts and a reproduction route.
 - **Adjudication** is the maintainer's, under the naming above, with its ceiling.
 - **What does not move:** no M8.15 or M8.15.1 record is reread, and no type outside the registered primary brackets is claimed.
+
+## Dated note, 2026-10-14: after the verdict
+
+Everything above this heading is the filed pre-registration, byte for byte: its 35,057 bytes are a prefix of this file and hash to the governing `c6da782b…`.
+
+The maintainer adjudicated the run on [#632](https://github.com/openwave-labs/openwave/pull/632#pullrequestreview-5511519208), and the roadmap's Done row states that verdict. On T3/R5 a change of type is located between the registered guard readings, under clause 3's qualifier (§ NAMING), with the continuity check's limit beside it; the method note gives both in full. On T2/R4 the levels disagree, and no change of type is located. The author's dated notes record it on MIT, at the foot of the run's [`RECORD.md`](https://github.com/dmobius3/mode-identity-theory/blob/1591b8604d2f739e70734b402d80df4439ed8ef8/files/framework/files/working/files/scripts/soft-slot-dynamics-m8-15-2/RECORD.md) and in [The Soft-Slot Branches, § VI](https://github.com/dmobius3/mode-identity-theory/blob/1591b8604d2f739e70734b402d80df4439ed8ef8/files/framework/files/working/files/soft-slot-branches.md#vi-what-stays-open).
+
+**A correction to § THE FREEZE, THE GUARD AND THE RUN, item 3.** It says that M8.15.2's guard "never reads the instrument's own `FROZEN.json`". A target run does read that file: the driver takes `r_f`, `δ_lev` and `s₂` from it through the instrument's `frozen_numbers`, as the approval of [#630](https://github.com/openwave-labs/openwave/pull/630#pullrequestreview-5504798464) records. The run's pre-run check pinned the file to the SHA-256 M8.15.1's record gives it, and its values to `freeze_numbers.json`, and the post-run check found it unchanged. No rule, threshold or verdict rests on the sentence.

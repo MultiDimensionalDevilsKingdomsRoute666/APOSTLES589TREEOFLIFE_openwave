@@ -4,7 +4,7 @@ The items the pre-registration fixes at the freeze (§ THE FREEZE, THE GUARD AND
 
 ## The terms
 
-- **SHA-256 of [`tasks/m8_15_2_task_details.md`](../tasks/m8_15_2_task_details.md):** `c6da782b43bc13d256f445d822d6c1456d71b42a4b5771b054d0c6b344dd4e4d`, which governs.
+- **SHA-256 of [`tasks/m8_15_2_task_details.md`](../tasks/m8_15_2_task_details.md):** `c6da782b43bc13d256f445d822d6c1456d71b42a4b5771b054d0c6b344dd4e4d`, which governs. Since 2026-10-14 the file carries a dated note after the terms, so this is the hash of its first 35,057 bytes, the file as merged at `1e8a6e2b`.
 - The same hash is in a dated note in § VI of the author's parent page, MIT [`soft-slot-branches.md`](https://github.com/dmobius3/mode-identity-theory/blob/9eab6740eaa254db07a3606b4b64f5a58b5dea0d/files/framework/files/working/files/soft-slot-branches.md) (`9eab674`).
 - **A delta on M8.15.1's terms.** Every rule they do not change governs here. M8.15.1's governing text is its filed pre-registration, [`tasks/m8_15_1_task_details.md`](../tasks/m8_15_1_task_details.md) as filed at `dcc63851`: SHA-256 `fc566c0406fef33d0f2a4ef2540fc6ce841191d292e5767de28d13b617156dbf`, the file's first 39,375 bytes.
 - **What the filing changed.** The terms were drafted as this file. Both review units reviewed its first version, one of them asking for five wording changes, and both confirmed the second, which takes them. The filed text is the second version with five substitutions, the locator v2's freeze commit written into two links and three code spans, and nothing else.
@@ -70,7 +70,7 @@ The items the pre-registration fixes at the freeze (§ THE FREEZE, THE GUARD AND
   | `out/orientations.json` | `21b1f19161058da22a074acdc12150c8650ce60c7cdc9a86bc6622fc452290a1` |
 
 - **The environment,** as the manifest records it: Python 3.13.13 (conda-forge), numpy 2.5.0, scipy 1.18.0, macOS-15.8-arm64-arm-64bit-Mach-O, one thread for every BLAS (`OMP_NUM_THREADS`, `OPENBLAS_NUM_THREADS`, `VECLIB_MAXIMUM_THREADS`, `MKL_NUM_THREADS` all 1), ARPACK starting vectors from the seed `271828`. The instrument is deterministic under the frozen environment; bit-for-bit agreement on other machines is not promised.
-- **The guard file of M8.15.1,** the instrument's `m8_15x_solver/out/FROZEN.json`, written before M8.15.1's run, is never read by the locator v2. M8.15.2 has its own.
+- **The guard file of M8.15.1,** the instrument's `m8_15x_solver/out/FROZEN.json`, written before M8.15.1's run, is never read by the locator v2. M8.15.2 has its own. **Corrected (2026-10-14):** a target run does read it, through the instrument's `frozen_numbers`, as the task's dated note records.
 
 ## The numbers
 
