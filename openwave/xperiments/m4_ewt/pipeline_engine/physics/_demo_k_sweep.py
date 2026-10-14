@@ -32,7 +32,10 @@ distinct from a measured zero).
 
 The sweep runs through ExperimentRunner (plan item 1.10) so the
 per-config pipeline and sinks are fresh, and a config that raises is
-recorded as a crashed row without stopping the sweep.
+recorded as a crashed row without stopping the sweep. The demo exits
+with code 1 when any row is crashed, so a CI or .bat wrapper sees the
+failure; on_error="continue" is for producing a full table, not for
+hiding the crash.
 
 Note: no `from __future__ import annotations` here. Taichi kernel
 definitions (imported transitively through the physics layer) need
@@ -41,30 +44,21 @@ live type objects.
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 import taichi as ti
 
 from ..experiments import ExperimentConfig, ExperimentRunner, ExperimentSummary
-from ..pipeline import ErrorPolicy, Pipeline
+from ..pipeline import Pipeline
 from ..runner import Runner
 from ..sinks import InMemorySink
 
-from .allocator import AllocateWaveField
-from .seed import SeedMultiCenter
-from .evolution import (
-    ClearAccelerationProcessor,
-    LaplacianProcessor,
-    LeapfrogProcessor,
-)
-from .boundary import BoundaryProcessor
-from .motion import NoOpRule, WCMotionProcessor
-from .stability import StabilityMetricsUpdate
-from .features import BoundaryCondition, PsiLongField, RunSeed, StabilityMetrics
-from .units import NaturalUnitSystem, UnitSystem
-from .wc_factory import build_wc_state
-from .wc_types import WCState
+from .features import BoundaryCondition, RunSeed, StabilityMetrics
 from .presets import make_linear_wave_pipeline
+from .units import NaturalUnitSystem
+from .wc_factory import build_wc_state
+
 
 # Sweep parameters. Changing these changes what the sweep measures.
 # These are the defaults; --grid and --steps override them at runtime.
@@ -76,16 +70,6 @@ _SPACING = 12.0
 _SEED_RADIUS = 4.0
 _K_VALUES = (2, 3, 5, 10, 11, 12)
 _TOPOLOGY = "golden"
-
-
-def _make_pipeline(cfg: ExperimentConfig) -> Pipeline:
-    """Fresh pipeline per config. Grid from the config's params."""
-    grid = int(cfg.params["grid"])
-    return make_linear_wave_pipeline(
-        grid=grid,
-        seed_radius=_SEED_RADIUS,
-        metric_threshold=0.5,
-    )
 
 
 def _make_config(K: int, *, grid: int, steps: int) -> ExperimentConfig:
@@ -123,9 +107,13 @@ def _make_config(K: int, *, grid: int, steps: int) -> ExperimentConfig:
 
 
 def _make_pipeline(cfg: ExperimentConfig) -> Pipeline:
-    """Fresh pipeline per config. Grid comes from the config's params."""
+    """Fresh pipeline per config. Grid from the config's params."""
     grid = int(cfg.params["grid"])
-    return KSweepPipeline(grid=grid)
+    return make_linear_wave_pipeline(
+        grid=grid,
+        seed_radius=_SEED_RADIUS,
+        metric_threshold=0.5,
+    )
 
 
 def _summarize(ctx) -> dict:
@@ -232,7 +220,7 @@ def _print_table(summaries, *, grid: int, steps: int) -> None:
     print("=" * 96)
 
 
-def main() -> None:
+def main() -> int:
     p = argparse.ArgumentParser(description="M4 K-sweep stability demo")
     p.add_argument(
         "--grid",
@@ -274,8 +262,8 @@ def main() -> None:
     configs = [_make_config(K, grid=grid, steps=steps) for K in _K_VALUES]
 
     # Sweep driver: fresh pipeline, sinks, and runner per config.
-    # on_error="continue": a config that raises is recorded as a
-    # crashed row without stopping the sweep.
+    # on_error="continue" so a single bad config does not abort the
+    # sweep; the exit code below still reports any crash.
     er = ExperimentRunner(
         runner_factory=lambda sinks: Runner(sinks),
         sinks_factory=lambda cfg: {"session": InMemorySink()},
@@ -316,6 +304,15 @@ def main() -> None:
     _write_json(summaries, json_path, meta)
     print(f"\nJSON written to: {json_path}")
 
+    # Non-zero exit when any config crashed. on_error="continue" keeps
+    # the sweep going so the table is complete, but a crashed run is a
+    # failure and callers (CI, .bat) must see it.
+    crashed_count = sum(1 for s in summaries if s.crashed)
+    if crashed_count > 0:
+        print(f"\n{crashed_count} of {len(summaries)} configs crashed.")
+        return 1
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
