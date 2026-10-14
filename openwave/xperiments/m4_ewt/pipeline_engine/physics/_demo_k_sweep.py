@@ -64,6 +64,7 @@ from .features import BoundaryCondition, PsiLongField, RunSeed, StabilityMetrics
 from .units import NaturalUnitSystem, UnitSystem
 from .wc_factory import build_wc_state
 from .wc_types import WCState
+from .presets import make_linear_wave_pipeline
 
 # Sweep parameters. Changing these changes what the sweep measures.
 # These are the defaults; --grid and --steps override them at runtime.
@@ -76,29 +77,14 @@ _SEED_RADIUS = 4.0
 _K_VALUES = (2, 3, 5, 10, 11, 12)
 _TOPOLOGY = "golden"
 
-
-class KSweepPipeline(Pipeline):
-    """
-    One run: allocate, seed multi-center from WCState, evolve, measure.
-
-    WCMotionProcessor(NoOpRule) is included so WCState is present in
-    the pipeline and wc_drift is a measured zero, not the fallback
-    default (n_active_wc == 0). NoOpRule does not move the centres.
-    """
-
-    def __init__(self, *, grid: int, metric_threshold: float = 0.5):
-        super().__init__(
-            error_policy=ErrorPolicy.FAIL_FAST,
-            external_provides=(UnitSystem, BoundaryCondition, WCState),
-        )
-        self.add(AllocateWaveField(nx=grid, ny=grid, nz=grid, dx=1.0))
-        self.add(SeedMultiCenter(radius=_SEED_RADIUS))
-        self.add(ClearAccelerationProcessor())
-        self.add(LaplacianProcessor())
-        self.add(LeapfrogProcessor())
-        self.add(BoundaryProcessor(field_type=PsiLongField))
-        self.add(WCMotionProcessor(rule=NoOpRule()))
-        self.add(StabilityMetricsUpdate(localization_threshold=metric_threshold))
+def _make_pipeline(cfg: ExperimentConfig) -> Pipeline:
+    """Fresh pipeline per config. Grid from the config's params."""
+    grid = int(cfg.params["grid"])
+    return make_linear_wave_pipeline(
+        grid=grid,
+        seed_radius=_SEED_RADIUS,
+        metric_threshold=0.5,
+    )
 
 
 def _make_config(K: int, *, grid: int, steps: int) -> ExperimentConfig:

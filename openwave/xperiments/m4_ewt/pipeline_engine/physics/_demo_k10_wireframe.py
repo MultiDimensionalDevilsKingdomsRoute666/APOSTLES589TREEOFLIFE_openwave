@@ -62,6 +62,7 @@ from .units import NaturalUnitSystem, UnitSystem
 from .wc_factory import build_wc_state
 from .wc_types import WCState
 from ..utils.viz_utils import find_peak, gradient_color, mesh_indices
+from .presets import make_linear_wave_pipeline
 
 _WAVELENGTH = 12.0
 _SPACING = 12.0
@@ -182,21 +183,7 @@ class WireframeViz(WindowedProcessor):
 # ======================================================================
 
 
-class K10VizPipeline(Pipeline):
-    def __init__(self, *, grid, cam, stride, warp, wave_menu):
-        super().__init__(
-            error_policy=ErrorPolicy.FAIL_FAST,
-            external_provides=(UnitSystem, BoundaryCondition, WCState),
-        )
-        self.add(AllocateWaveField(nx=grid, ny=grid, nz=grid, dx=1.0))
-        self.add(SeedMultiCenter(radius=4.0))
-        self.add(ClearAccelerationProcessor())
-        self.add(LaplacianProcessor())
-        self.add(LeapfrogProcessor())
-        self.add(BoundaryProcessor(field_type=PsiLongField))
-        self.add(WCMotionProcessor(rule=NoOpRule()))
-        self.add(StabilityMetricsUpdate(localization_threshold=0.5))
-        self.add(WireframeViz(cam=cam, stride=stride, warp=warp, wave_menu=wave_menu))
+
 
 
 def main() -> None:
@@ -219,9 +206,12 @@ def main() -> None:
         spacing=_SPACING,
     )
 
-    pipeline = K10VizPipeline(
-        grid=args.grid, cam=tuple(args.cam),
-        stride=args.stride, warp=args.warp, wave_menu=args.wave_menu,
+    pipeline = make_linear_wave_pipeline(
+        grid=args.grid,
+        extra_measure=(
+            WireframeViz(cam=tuple(args.cam), stride=args.stride,
+                         warp=args.warp, wave_menu=args.wave_menu),
+        ),
     )
     initial = [NaturalUnitSystem(), BoundaryCondition("dirichlet"), wc_state]
 
