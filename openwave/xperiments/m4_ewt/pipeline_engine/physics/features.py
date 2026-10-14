@@ -249,7 +249,7 @@ class BoundaryCondition:
         if self.r_domain <= 0.0:
             raise ValueError(f"BoundaryCondition: r_domain must be > 0, got {self.r_domain}")
 
-dataclass(frozen=True)
+@dataclass(frozen=True)
 class RunSeed:
     """
     Deterministic seed for this run.
