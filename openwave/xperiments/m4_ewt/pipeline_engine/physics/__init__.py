@@ -46,6 +46,7 @@ from .measure import AmplitudeTracker
 from .visualize import TaichiWindowProcessor, WindowedProcessor
 from .seed import SeedBaseWave
 from .energy import EnergyBudgetUpdate
+from .stability import StabilityMetricsUpdate
 
 __all__ = [
     # wave centers

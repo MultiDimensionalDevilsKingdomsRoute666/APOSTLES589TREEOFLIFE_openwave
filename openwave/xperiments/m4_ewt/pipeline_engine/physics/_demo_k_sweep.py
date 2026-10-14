@@ -59,7 +59,6 @@ from .presets import make_linear_wave_pipeline
 from .units import NaturalUnitSystem
 from .wc_factory import build_wc_state
 
-
 # Sweep parameters. Changing these changes what the sweep measures.
 # These are the defaults; --grid and --steps override them at runtime.
 _GRID = 64

@@ -71,10 +71,11 @@ def gradient_color(t: ti.f32, palette: ti.i32):
     """
     Colour from a normalized scalar t, clipped to [0, 1].
 
-    palette:
-        1 -> orange (dark -> bright)
-        2 -> ironbow (dark red -> orange -> yellow -> white)
-        3 -> blueprint (light blue -> white)
+    palette (endpoints as RGB at t = 0 and t = 1):
+        1 -> orange to yellow, (1, 0.4, 0) -> (1, 1, 0)
+        2 -> ironbow, black -> dark red -> orange -> yellow -> white,
+             (0, 0, 0) -> (1, 1, 1)
+        3 -> blueprint, blue to cyan, (0.2, 0.4, 1) -> (0.2, 1, 1)
         any other value falls through to blueprint.
 
     Returns a 3-vector in [0, 1] per channel.

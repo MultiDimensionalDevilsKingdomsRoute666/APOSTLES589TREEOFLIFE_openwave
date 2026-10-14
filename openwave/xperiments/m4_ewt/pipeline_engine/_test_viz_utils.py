@@ -23,7 +23,9 @@ _TI_INITIALIZED = False
 def _ti_init():
     global _TI_INITIALIZED
     if not _TI_INITIALIZED:
-        ti.init(arch=ti.cpu, log_level=ti.ERROR)
+        # debug=True turns on Taichi's bounds checks, so a loop bound
+        # one past a field's shape fails instead of reading past it.
+        ti.init(arch=ti.cpu, log_level=ti.ERROR, debug=True)
         _TI_INITIALIZED = True
 
 
@@ -143,7 +145,8 @@ def test_find_peak_max_over_grid():
     Peak is the largest |psi| across the grid, not the sum, not the last
     write.
 
-    Mutation caught: sum instead of max, or the wrong axis order.
+    Mutation caught: sum instead of max. On this cubic field a wrong
+    axis order is invisible; test_find_peak_non_cubic_grid catches it.
     """
     _ti_init()
     n = 4
@@ -155,6 +158,24 @@ def test_find_peak_max_over_grid():
     peak = ti.field(dtype=ti.f32, shape=())
     find_peak(psi, peak, n, n, n)
     assert abs(float(peak[None]) - 3.0) < 1e-6, float(peak[None])
+
+
+def test_find_peak_non_cubic_grid():
+    """
+    On a 3x4x5 field the peak sits at the last index of every axis, so
+    it is reachable only when each bound is paired with its own axis.
+
+    Mutation caught: the ndrange bounds reversed or permuted, or an
+    off-by-one on any axis.
+    """
+    _ti_init()
+    psi = ti.Vector.field(3, dtype=ti.f32, shape=(3, 4, 5))
+    psi.fill(0.0)
+    psi[0, 0, 0] = ti.Vector([1.0, 0.0, 0.0])
+    psi[2, 3, 4] = ti.Vector([0.0, 0.0, 5.0])
+    peak = ti.field(dtype=ti.f32, shape=())
+    find_peak(psi, peak, 3, 4, 5)
+    assert abs(float(peak[None]) - 5.0) < 1e-6, float(peak[None])
 
 
 # ======================================================================
@@ -188,6 +209,26 @@ def test_gradient_color_palette_orange():
     assert np.allclose(result[0], [1.0, 0.4, 0.0], atol=1e-6), result[0]
     assert np.allclose(result[1], [1.0, 0.7, 0.0], atol=1e-6), result[1]
     assert np.allclose(result[2], [1.0, 1.0, 0.0], atol=1e-6), result[2]
+
+
+def test_gradient_color_palette_ironbow():
+    """
+    Palette 2 is ironbow: red ramps first, then green, then blue, from
+    black at t = 0 to white at t = 1.
+
+    Mutation caught: any channel's slope or offset changed, or ironbow
+    swapped with another palette.
+    """
+    result = _run_gradient([0.0, 0.25, 0.5, 0.75, 1.0], palette=2)
+    expected = [
+        [0.0, 0.0, 0.0],
+        [0.5, 0.0, 0.0],
+        [1.0, 0.5, 0.0],
+        [1.0, 1.0, 0.5],
+        [1.0, 1.0, 1.0],
+    ]
+    for got, want in zip(result, expected):
+        assert np.allclose(got, want, atol=1e-6), (got, want)
 
 
 def test_gradient_color_palette_blueprint():
@@ -241,7 +282,9 @@ def main() -> int:
         test_find_peak_empty_field_returns_floor,
         test_find_peak_uses_amplitude_not_squared,
         test_find_peak_max_over_grid,
+        test_find_peak_non_cubic_grid,
         test_gradient_color_palette_orange,
+        test_gradient_color_palette_ironbow,
         test_gradient_color_palette_blueprint,
         test_gradient_color_clips_t,
         test_gradient_color_unknown_palette_falls_back,

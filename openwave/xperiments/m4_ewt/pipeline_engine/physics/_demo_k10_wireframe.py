@@ -34,23 +34,11 @@ definitions need live type objects.
 import argparse
 from pathlib import Path
 
-import numpy as np
 import taichi as ti
 
-from ..pipeline import ErrorPolicy, Pipeline
 from ..runner import Runner
 from ..sinks import InMemorySink
 
-from .allocator import AllocateWaveField
-from .seed import SeedMultiCenter
-from .evolution import (
-    ClearAccelerationProcessor,
-    LaplacianProcessor,
-    LeapfrogProcessor,
-)
-from .boundary import BoundaryProcessor
-from .motion import NoOpRule, WCMotionProcessor
-from .stability import StabilityMetricsUpdate
 from .visualize import WindowedProcessor
 from .features import (
     BoundaryCondition,
@@ -58,9 +46,8 @@ from .features import (
     StabilityMetrics,
     WaveGrid,
 )
-from .units import NaturalUnitSystem, UnitSystem
+from .units import NaturalUnitSystem
 from .wc_factory import build_wc_state
-from .wc_types import WCState
 from ..utils.viz_utils import find_peak, gradient_color, mesh_indices
 from .presets import make_linear_wave_pipeline
 

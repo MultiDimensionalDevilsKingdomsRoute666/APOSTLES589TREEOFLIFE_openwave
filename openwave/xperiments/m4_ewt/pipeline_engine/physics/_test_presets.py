@@ -2,7 +2,8 @@
 Tests for the shared pipeline builders.
 
 The point is that the preset builds, declares the features it uses,
-and fails at build time when a required feature is missing. The
+and that a required feature missing from initial_features surfaces as
+a KeyError at its first require(), not at build time. The
 processors it assembles are covered by their own tests; this module
 does not re-test their physics.
 
@@ -13,13 +14,14 @@ Run from the project root:
 import sys
 import traceback
 
-import numpy as np
 import taichi as ti
 
-from ..pipeline import BaseProcessor, PipelineError, Stage
+from ..pipeline import BaseProcessor, Stage
 from ..runner import Runner
 from ..sinks import InMemorySink
-from .features import BoundaryCondition, StabilityMetrics
+from .allocator import AllocateWaveField
+from .boundary import BoundaryProcessor
+from .features import BoundaryCondition, PsiLongField
 from .motion import NoOpRule
 from .presets import make_linear_wave_pipeline
 from .seed import SeedMultiCenter
@@ -101,8 +103,9 @@ def test_declares_the_three_external_features():
     The preset declares UnitSystem, BoundaryCondition and WCState in
     external_provides.
 
-    Mutation caught: one of them dropped, which would move the failure
-    from build time to a KeyError mid-run.
+    Mutation caught: one of them dropped. Pipeline.build() then raises
+    PipelineError naming it, for every caller, including callers that
+    do provide it in initial_features.
     """
     p = make_linear_wave_pipeline(grid=_GRID)
     ext = set(p._external_provides)
@@ -112,7 +115,7 @@ def test_declares_the_three_external_features():
 
 
 # ======================================================================
-# Missing features fail at build time
+# Missing features fail at first use
 # ======================================================================
 
 
@@ -226,6 +229,38 @@ def test_metric_threshold_forwarded():
     assert trackers[0].localization_threshold == 0.9, trackers[0].localization_threshold
 
 
+def test_grid_and_dx_forwarded():
+    """
+    grid reaches AllocateWaveField on all three axes, with dx = 1.0.
+
+    Uses a grid other than the module's _GRID, so a size hard-coded to
+    the test grid is visible.
+
+    Mutation caught: grid dropped or hard-coded on any axis, or dx
+    changed.
+    """
+    p = make_linear_wave_pipeline(grid=12)
+    allocs = [x for x in p._all if isinstance(x, AllocateWaveField)]
+    assert len(allocs) == 1, allocs
+    a = allocs[0]
+    assert (a.nx, a.ny, a.nz, a.dx) == (12, 12, 12, 1.0), (a.nx, a.ny, a.nz, a.dx)
+
+
+def test_boundary_follows_the_feature():
+    """
+    BoundaryProcessor acts on PsiLongField and takes its kind from the
+    BoundaryCondition feature, with no override.
+
+    Mutation caught: a kind_override that ignores the caller's
+    BoundaryCondition, or the processor pointed at another field.
+    """
+    p = make_linear_wave_pipeline(grid=_GRID)
+    bps = [x for x in p._all if isinstance(x, BoundaryProcessor)]
+    assert len(bps) == 1, bps
+    assert bps[0].kind_override is None, bps[0].kind_override
+    assert bps[0].field_type is PsiLongField, bps[0].field_type
+
+
 # ======================================================================
 # Hooks: nonlinear_terms, extra_measure
 # ======================================================================
@@ -265,6 +300,7 @@ def test_nonlinear_terms_added_before_leapfrog():
     marker = _Marker()
     p = make_linear_wave_pipeline(grid=_GRID, nonlinear_terms=(marker,))
     assert marker in p._all, "marker not in pipeline"
+    assert p._all.count(marker) == 1, "marker added more than once"
     p.build()  # triggers the sort
     update_order = [x for x in p._by_stage[Stage.UPDATE]]
     marker_idx = update_order.index(marker)
@@ -285,6 +321,7 @@ def test_extra_measure_added_after_stability():
     rec = _Recorder()
     p = make_linear_wave_pipeline(grid=_GRID, extra_measure=(rec,))
     assert rec in p._all, "recorder not in pipeline"
+    assert p._all.count(rec) == 1, "recorder added more than once"
     p.build()
     measure_order = p._by_stage[Stage.MEASURE]
     rec_idx = measure_order.index(rec)
@@ -315,6 +352,7 @@ def test_empty_hooks_are_no_ops():
     }
     actual_names = {x.name for x in p._all}
     assert actual_names == expected_names, actual_names
+    assert len(p._all) == len(expected_names), [x.name for x in p._all]
 
 
 def test_default_rule_is_noop():
@@ -346,6 +384,8 @@ def main() -> int:
         test_missing_wcstate_raises_at_first_use,
         test_seed_radius_forwarded,
         test_metric_threshold_forwarded,
+        test_grid_and_dx_forwarded,
+        test_boundary_follows_the_feature,
         test_nonlinear_terms_added_before_leapfrog,
         test_extra_measure_added_after_stability,
         test_empty_hooks_are_no_ops,

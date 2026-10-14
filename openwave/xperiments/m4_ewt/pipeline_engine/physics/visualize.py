@@ -28,6 +28,14 @@ from .features import PsiLongField, WaveGrid
 
 
 class TaichiWindowProcessor(BaseProcessor):
+    """
+    Opens a Taichi UI window and renders an x-y slice at z = nz//2.
+    Runs at the end of MEASURE. Reads only; does not mutate the field.
+
+    Resources (window, canvas, image buffer) are allocated in setup()
+    and released when the process exits. process() reads them only.
+    """
+
     name = "TaichiWindow"
     stage = Stage.MEASURE
     order = 2000

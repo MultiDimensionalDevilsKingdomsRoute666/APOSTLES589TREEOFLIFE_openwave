@@ -56,8 +56,8 @@ def make_linear_wave_pipeline(
     The caller must provide, through initial_features:
 
         UnitSystem         e.g. NaturalUnitSystem()
-        BoundaryCondition  its kind must match BoundaryProcessor's
-                           default, "dirichlet"
+        BoundaryCondition  BoundaryProcessor applies its kind:
+                           "dirichlet", "periodic" or "reflecting"
         WCState            consumed by SeedMultiCenter
 
     These are declared in external_provides, which the pipeline treats
@@ -68,8 +68,12 @@ def make_linear_wave_pipeline(
     The chain does not include a nonlinear term. nonlinear_terms
     accepts processors such as NonlinearCubic (order 15); they land
     between the Laplacian and the Leapfrog in the effective order.
-    extra_measure is for visualizers, loggers, and diagnostic hooks
-    that read the field after StabilityMetricsUpdate has run.
+    extra_measure is for visualizers, loggers, and diagnostic hooks.
+    Its processors are added last, and build() sorts each stage by
+    order with a stable sort, so a MEASURE processor at order 20 or
+    above runs after StabilityMetricsUpdate (the visualizers use 2000)
+    and one below 20 runs before it. Processors with equal orders keep
+    the order in which they were added.
 
     error_policy is FAIL_FAST: a pipeline with the wrong features is a
     configuration error, not a run-time event to tolerate.

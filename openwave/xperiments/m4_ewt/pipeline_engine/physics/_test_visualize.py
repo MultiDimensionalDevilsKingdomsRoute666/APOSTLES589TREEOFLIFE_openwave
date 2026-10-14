@@ -85,6 +85,7 @@ class _Tracking(WindowedProcessor):
 
     def draw(self, ctx):
         self.draw_calls += 1
+        self._render.calls.append(("draw",))
 
 
 class _Static(WindowedProcessor):
@@ -202,8 +203,8 @@ def test_process_normal_path_calls_init_scene_draw_show():
 
     assert ctx.diag.errors == [], ctx.diag.errors
     assert proc.draw_calls == 3
-    sequence = [c[0] for c in fake.calls if c[0] in ("init_scene", "show_scene")]
-    assert sequence == ["init_scene", "show_scene"] * 3
+    sequence = [c[0] for c in fake.calls if c[0] in ("init_scene", "draw", "show_scene")]
+    assert sequence == ["init_scene", "draw", "show_scene"] * 3, sequence
 
 
 def test_process_passes_show_axis_flag():
