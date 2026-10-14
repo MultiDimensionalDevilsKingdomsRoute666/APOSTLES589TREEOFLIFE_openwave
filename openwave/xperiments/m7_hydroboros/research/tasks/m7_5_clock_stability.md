@@ -72,7 +72,7 @@ Three measurements on the regenerated winner (blend/repulsive, N = 64, `E_ω = 6
 | --- | --- | --- |
 | sector norms | `avs = jvs = 0` exactly | the M7.4 winner is a **STANDING-wave doublet**: the cos-only subspace is gradient-invariant and the relaxation never left it; the rotating (Fleury m = 1) sector was never explored: M7.6 must seed `a_s ≠ 0` rotating pairs |
 | ω-projected EOM residual, decomposed on `{a_c, 2∇×a_c}` | `α = −1.978` (analytic: `−2ω² = −2`), `β = −0.786` (→ helicity multiplier `μ = −0.393`), orthogonal rest 0.12 | the fixed-`H_A` minimizer misses being a real-time orbit by exactly the `−2ω²` frame term M7.3 identified (the ω²-sign flip): **the real-time-consistent objective is fixed-`Q_can` extremization**; note `μ = −0.393` numerically ≈ M7.4's universal `H_cross/H_A = −0.390` |
-| 3ω leakage of the J equation | **0.002** relative | the RWA/harmonic truncation is essentially exact; nothing about the doublet ansatz itself is broken |
+| 3ω residual of the J equation | **0.002** relative | the RWA/harmonic truncation is essentially exact; nothing about the doublet ansatz itself is broken |
 | released real-time evolution | no ω = 1 tick; FFT peaks 0.62-0.64 on all probes; destroyed in ~2 T | the emergent-ω gate is **unmeasurable in this truncation**: the tachyon's rate (0.786) is comparable to the clock rate (1.0), so the state cannot complete a clean period; the 0.63 peak is the runaway's characteristic frequency (band-edge modes), not a clock |
 
 ### 5. Gates vs the plan + what moves where
@@ -109,7 +109,7 @@ Cross-refs: roadmap [`../m7_roadmap.md`](../m7_roadmap.md) (M7.5) · background 
 | the ω\* threshold discovery | ✅ `E_ω` PSD iff `ω ≥ ω* = k* = 0.786`; scan confirmed: 0.70/0.75 runaway, 0.79+ solitons, `Q_J` → ∞ toward ω\* (the clock IS the stabilizer) |
 | Legendre gate | ✅ `dE*/dω = Q_can` to ~1-2% at every interior scan point: ω-`Q_can` conjugacy verified in 3D |
 | persistence / emergent ω | ❌ honest: destroyed in ~2 T by the vacuum tachyon (state-independent); no ω = 1 tick measurable |
-| reduction verdict | ✅ residual `α = −1.978 ≈ −2ω²` (frame term), 3ω leakage 0.2% (ansatz fine); the M7.4 winner is a **standing-wave doublet** (`a_s = j_s = 0`) |
+| reduction verdict | ✅ residual `α = −1.978 ≈ −2ω²` (frame term), 3ω component of the J residual 0.2% (ansatz fine); the M7.4 winner is a **standing-wave doublet** (`a_s = j_s = 0`) |
 
 **Issues / blockers:** Q14 blocks any real-time program (M7.18) until answered or cured in-model; the ball-vs-torus question was never fairly tested (standing states only); `m7_5_state.npz` (25.2 MB) deleted per the >1MB rule (regen: `python m7_5_clock_stability.py main`, ~4 min).
 

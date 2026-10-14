@@ -203,7 +203,7 @@ def init_mesh():
 
 # BAD - in render loop
 while window.running:
-    vertices = ti.Vector.field(3, dtype=ti.f32, shape=24)  # Memory leak!
+    vertices = ti.Vector.field(3, dtype=ti.f32, shape=24)  # Memory never released!
 ```
 
 ### 2. Use Taichi Kernels for Updates

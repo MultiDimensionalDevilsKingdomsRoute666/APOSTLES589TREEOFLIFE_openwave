@@ -365,3 +365,11 @@ It runs on each branch and each bracket, at levels 3 and 2 independently.
 - **The record:** both branches' locator records, the tests' records, and the freeze. They are published with the scripts and a reproduction route.
 - **Adjudication** is the maintainer's, under the naming above.
 - **What does not move:** no M8.15 record is reread, and no type outside the registered brackets is claimed.
+
+## Dated note, 2026-10-12: after the verdict
+
+Everything above this heading is the filed pre-registration, byte for byte: its 39,375 bytes are a prefix of this file and hash to the governing `fc566c04…`.
+
+The maintainer adjudicated the run on [#625](https://github.com/openwave-labs/openwave/pull/625#pullrequestreview-5492753760), and the roadmap's Done row states that verdict. No change of type is located. Each primary holds an index change that stays unclassified. The secondary's steps join two solution paths, so its index change is not located. The author's dated notes record it on MIT, at the foot of the run's [`RECORD.md`](https://github.com/dmobius3/mode-identity-theory/blob/b13e0f4bd1d3763215046b9c6ab1c9b87f94a379/files/framework/files/working/files/scripts/soft-slot-dynamics-m8-15x-target1/RECORD.md) and in [The Soft-Slot Branches, § VI](https://github.com/dmobius3/mode-identity-theory/blob/b13e0f4bd1d3763215046b9c6ab1c9b87f94a379/files/framework/files/working/files/soft-slot-branches.md#vi-what-stays-open).
+
+**A correction to § Standing.** Its "Where it has run" says that every recorded point of the M8.15.x qualification shows the fast-spectrum search unrun. One does not: P5 in the qualification's `regress_verdict_before.json`, as the approval of [#624](https://github.com/openwave-labs/openwave/pull/624#pullrequestreview-5485856574) records. No rule, threshold or verdict rests on the sentence.

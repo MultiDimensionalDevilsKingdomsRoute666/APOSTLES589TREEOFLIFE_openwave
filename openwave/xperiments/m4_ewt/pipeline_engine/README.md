@@ -73,7 +73,7 @@ spawns, resource acquisition). There is no SETUP member in Stage.
 
 Every processor sees one object, Context, with five sub-objects:
 
-    run     -- immutable run identity (name, output_dir, seed)
+    run     -- immutable run identity (name, output_dir); the seed is the RunSeed feature
     params  -- typed read-only parameter access (get_int, require_float, ...)
     sim     -- mutable simulation clock (dt, t, step, should_stop)
     data    -- FeatureBag: typed container, key is the class
@@ -182,6 +182,7 @@ The geometric fields come from the shared mixin. Add the new name to
     sinks.py      -- ILogSink, JsonSessionSink, LiveJsonSink, InMemorySink
     loggers.py    -- LogProcessor (writes a ctx-derived payload to a sink)
     runner.py     -- IRunner, Runner
+    experiments.py -- ExperimentConfig, ExperimentSummary, ExperimentRunner (sweep driver)
     processors/   -- domain-agnostic processors (checkpoint, monitor spawn, ...)
     physics/      -- physics processors and feature types (separate layer)
 

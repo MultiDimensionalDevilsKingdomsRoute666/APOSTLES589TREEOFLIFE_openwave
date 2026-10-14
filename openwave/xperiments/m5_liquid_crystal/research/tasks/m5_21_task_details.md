@@ -211,7 +211,7 @@ Usage Cap Triggered: NO
 | 4 | Q8-dynamic: the unconstrained kinetic twist does NOT stabilize (stalls ~1 sweep, radiates, amplitude-robust); winding survives (noclock q = 1.000 at all radii) | ✅ measured, axisym scope-boxed |
 | 5 | Boost sector exactly 0.0 through all 4 runs (the M5.20.2 quarantine holds on full nonlinearity) | ✅ measured |
 | 6 | Duda's 3-equal core = seed-adjacent transient (0.4338 vs 0.4333 at it 300); deep relax splits it (the statics is a slide) | ✅ measured |
-| 7 | 3D spot-check: embed exact (2.8e-15); slow decelerating non-axisym leak (~0.02/t tail); no fast instability; T ≲ 50 safe | ✅ measured (small-box reflections after t ≈ 12) |
+| 7 | 3D spot-check: embed exact (2.8e-15); slow decelerating non-axisym growth (~0.02/t tail); no fast instability; T ≲ 50 safe | ✅ measured (small-box reflections after t ≈ 12) |
 
 Deviations from plan: six, logged in the FINDINGS deviations table. Issues: fixed-radius q read branch-swaps in churned regions (documented limit); 3D grows-vs-saturates undecided at T = 50.
 

@@ -87,9 +87,9 @@ Full-3D central-diff twin of the static energy (48³, h = 1, boundary pinned), v
 | GD3a gradient | ✅ complex-step directional derivative 1.75e-15 (the energy is polynomial in M, so complex-step is cancellation-free; real central differences hit their ~5e-6 roundoff floor at the g⁴ trace scale: measured, documented in the gate) |
 | Embedding | a_break (RMS deviation from the state's own azimuthal average) = 2.8e-15 on the clean embed: the equivariant embed is exact |
 | Ledger | ✅ 7.2e-7 over T = 50 |
-| a_break growth | 4.0e-4 → 1.1e-2 over T = 50; DECELERATING per segment (9.4× → 1.7× → 1.4× → 1.3× per 12.5 units); tail consistent with a slow e-rate ≈ 0.022/t. NO fast non-axisym instability; a slow leak that a longer run must classify (grows-vs-saturates undecided at T = 50) |
+| a_break growth | 4.0e-4 → 1.1e-2 over T = 50; DECELERATING per segment (9.4× → 1.7× → 1.4× → 1.3× per 12.5 units); tail consistent with a slow e-rate ≈ 0.022/t. NO fast non-axisym instability; a slow growth that a longer run must classify (grows-vs-saturates undecided at T = 50) |
 
-**Scope-boxing consequence**: axisym verdicts are safe on T ≲ 50 timescales; the T = 400 axisym story carries the caveat that non-axisym leakage (e-fold ≈ 46 time units IF the tail is exponential) is frozen out. Small-box caveat: the pinned 48³ boundary reflects the radiation back after t ≈ 12; the a_break trend before first reflection (t < 12) is the cleanest reading.
+**Scope-boxing consequence**: axisym verdicts are safe on T ≲ 50 timescales; the T = 400 axisym story carries the caveat that non-axisym growth (e-fold ≈ 46 time units IF the tail is exponential) is frozen out. Small-box caveat: the pinned 48³ boundary reflects the radiation back after t ≈ 12; the a_break trend before first reflection (t < 12) is the cleanest reading.
 
 ![3D slices](../plots/m5_21_d_slices.png)
 

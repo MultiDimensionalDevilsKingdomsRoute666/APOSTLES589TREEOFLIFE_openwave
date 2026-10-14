@@ -182,7 +182,8 @@ def _summary_to_row(s: ExperimentSummary) -> dict:
     (K, localization, sphericity, ...), and adds `name` at the front.
     `errors`, `warnings`, `crashed` appear only when non-empty so a
     clean sweep's JSON is unchanged from the pre-ExperimentRunner
-    version except for `name` and the null freq values.
+    version except for `name`, the null freq values, and the per-row
+    `errors` count, which no longer appears when it is zero.
     """
     row = {"name": s.name}
     row.update(s.metrics)
@@ -266,6 +267,9 @@ def main() -> None:
     )
     args = p.parse_args()
 
+    # Local bindings, not module-level mutation. Passing these down as
+    # arguments keeps the module constants immutable and the visible
+    # behaviour independent of how many times main() runs.
     grid = args.grid
     steps = args.steps
 

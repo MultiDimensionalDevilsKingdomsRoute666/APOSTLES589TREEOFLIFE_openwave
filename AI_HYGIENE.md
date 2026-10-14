@@ -70,7 +70,7 @@ Seven patterns account for most AI damage to research records. Lean table here; 
 | 3 | The mirror trap | the "answer" is your own question paraphrased back with authority | [§ detail](#mirror-trap-detail) |
 | 4 | Authority laundering | model text acquires the standing of the human who forwards it | [§ detail](#authority-laundering-detail) |
 | 5 | Relay drift | AI-to-AI chains lose information at every hop while gaining confidence | [§ detail](#relay-drift-detail) |
-| 6 | Publication slop | unverified model text leaking into venues, polluting the commons and the author's credibility | [§ detail](#publication-slop-detail) |
+| 6 | Publication slop | unverified model text reaching venues, polluting the commons and the author's credibility | [§ detail](#publication-slop-detail) |
 | 7 | Displaced verification | the check landed beside the load-bearing step instead of on it, and everyone involved felt verified | [§ detail](#displaced-verification-detail) |
 
 ## 5. Safeguards already in force

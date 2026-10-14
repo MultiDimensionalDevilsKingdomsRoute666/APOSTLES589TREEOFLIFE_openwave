@@ -4,7 +4,7 @@ The items the pre-registration fixes at the freeze (§ THE FREEZE, THE GUARD AND
 
 ## The terms
 
-- **SHA-256 of [`tasks/m8_15_1_task_details.md`](../tasks/m8_15_1_task_details.md):** `fc566c0406fef33d0f2a4ef2540fc6ce841191d292e5767de28d13b617156dbf`, which governs.
+- **SHA-256 of [`tasks/m8_15_1_task_details.md`](../tasks/m8_15_1_task_details.md):** `fc566c0406fef33d0f2a4ef2540fc6ce841191d292e5767de28d13b617156dbf`, which governs. Since 2026-10-12 the file carries a dated note after the terms, so this is the hash of its first 39,375 bytes, the file as filed at `dcc63851`.
 - The same hash is in a dated note in § VI of the author's parent page, MIT [`soft-slot-branches.md`](https://github.com/dmobius3/mode-identity-theory/blob/558f7d3d8dc1136e7c23cabe6741467e03ec4bf4/files/framework/files/working/files/soft-slot-branches.md) (`558f7d3`).
 - **What the locator's code cites.** The locator's code cites "`TARGET1_TERMS.md` v7". This file is that draft, reshaped for filing. Each of v7's lines is carried verbatim, apart from three kinds of change:
   - the layout: headings in uppercase, the cross-references that name them, and The question, Standing and What this task is not as subsections of TASK PLANNING;

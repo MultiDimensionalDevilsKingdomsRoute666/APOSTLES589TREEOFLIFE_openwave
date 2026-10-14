@@ -125,7 +125,7 @@ Auditor: independent agent, OWN energy implementation (no imports from the instr
 | Compact counts (26-conn) | ✅ CONFIRMED | A 2 (24, 24), C 2 (19, 19), B 0 |
 | Connectivity robustness | ⚠️ PARTIAL → ADOPTED (§ 5) | 6-conn: A → 8, B → 23, **C → 2 robust**; A/B counts quoted as 26-conn reads |
 | Equatorial arcs | ⚠️ PARTIAL → ADOPTED (§ 5) | the two size-8 arcs exact (ρ 15.2, z 0.0); "exactly two" holds under the size ≥ 3 filter (2 extra 2-voxel specks raw) |
-| Evolve ledger | ✅ CONFIRMED | E + KE + absorbed = 5.0644 vs own start E 5.0645 (leak −7.3e-5); endpoint static E recomputed 3.581573 |
+| Evolve ledger | ✅ CONFIRMED | E + KE + absorbed = 5.0644 vs own start E 5.0645 (residual −7.3e-5); endpoint static E recomputed 3.581573 |
 | Rotation-vs-melt | ✅ CONFIRMED | own final-rotation recompute 4.270°; note the trace peaks 4.61° at it 2750 then settles (non-monotone tail, stated) |
 
 One audit-brief erratum (mine, not the code's): the brief claimed `d1` uses periodic np.roll; the actual instrument uses sliced one-sided differences with a zero boundary plane. The auditor replicated the real semantics.
