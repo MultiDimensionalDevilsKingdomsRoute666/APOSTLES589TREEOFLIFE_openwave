@@ -4,8 +4,8 @@
 > your bootstrap.** Load every document in § 1 into context, in order. Then follow the
 > completion protocol in § 4: confirm you are oriented, summarize what you read, and
 > declare yourself ready. From that point the author can ask you anything about the M8
-> model, plan next moves with you, or start work with a simple **"go task m8.2"** (or
-> any roadmap task).
+> model, plan next moves with you, or start work on a roadmap task with a simple
+> **"go task m8.\<n\>"**.
 >
 > Humans are welcome to read this page too; the model's human front door is
 > [`__M8_model_briefing.md`](../__M8_model_briefing.md).
@@ -19,7 +19,7 @@
 | 3 | [`research/m8_background.md`](m8_background.md) | the gap map (what MIT has, what it lacks), the evidence-weight grading, why the field-dynamics program exists, the onboarding evaluation of record |
 | 4 | [`research/m8_roadmap.md`](m8_roadmap.md) | the program: tasks, gates, ownership, current status, what is startable now |
 | 5 | [`research/m8_platform_pointers.md`](m8_platform_pointers.md) | the cross-model reading map: where in the other OpenWave models to find Lagrangian families, defect taxonomies, clock/stability lessons, engine routes; ALSO load its § 1 platform-contract docs, [`AI_HYGIENE.md`](../../../../AI_HYGIENE.md) above all |
-| 6 | [`research/tasks/m8_2_task_details.md`](tasks/m8_2_task_details.md) ... [`m8_7_task_details.md`](tasks/m8_7_task_details.md) | the per-task planning docs: skim all six now; deep-read the one you are about to run |
+| 6 | [`research/tasks/`](tasks/) | the per-task planning docs, one per roadmap task: skim the ones the current question touches; deep-read the one you are about to run |
 | 7 | [`research/tasks/m8_1_task_details.md`](tasks/m8_1_task_details.md) + [`research/findings/m8_1_method_note.md`](findings/m8_1_method_note.md) | **the worked template**: M8.1 is a complete, closed task run (planning → execution → audit → review); § 2 below tells you what to copy from it |
 | 8 | [`theory/_CITATIONS.md`](../theory/_CITATIONS.md) | the source registry: which record backs which claim; the never-fabricate identifier policy |
 
@@ -73,4 +73,4 @@ Once §§ 1-3 are consumed, print, in this order:
 | 1 | A confirmation that you are ORIENTED on the M8 column and the platform contract |
 | 2 | A one-line summary of EACH document you read (so the author can verify nothing was skipped) |
 | 3 | The column's current status from the roadmap: what is done, what is startable, what is gated |
-| 4 | A readiness statement: you can now (a) answer the author's questions about the M8 model and its OpenWave context, (b) help plan next moves, and (c) execute a roadmap task on command: **"go task m8.2"** means open [`research/tasks/m8_2_task_details.md`](tasks/m8_2_task_details.md), complete its go-time pre-registration with the author, and run it per §§ 2-3 |
+| 4 | A readiness statement: you can now (a) answer the author's questions about the M8 model and its OpenWave context, (b) help plan next moves, and (c) execute a roadmap task on command: **"go task m8.\<n\>"** means open that task's `research/tasks/m8_<n>_task_details.md`, complete its go-time pre-registration with the author, and run it per §§ 2-3 |

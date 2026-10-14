@@ -77,7 +77,7 @@ The items the pre-registration fixes at the freeze (§ THE FREEZE, THE GUARD AND
 
 ## The numbers
 
-The task's § FROZEN VALUES. The values it inherits from M8.15's freeze are read from the instrument's [`out/freeze_numbers.json`](https://github.com/dmobius3/mode-identity-theory/blob/97a8c0884c5e3a0ed25afb345f3d668340c5b537/files/framework/files/working/files/scripts/soft-slot-dynamics-m8-15x/m8_15x_solver/out/freeze_numbers.json), SHA-256 `c46b102c5ded4a78667dfb0e87e1311d729b006cb1362c6aeb91cbe1b9fe369f`, hashed in the manifest above. The guard file must carry them unchanged.
+The task's § FROZEN VALUES. The values it inherits from M8.15's freeze are read from the instrument's [`out/freeze_numbers.json`](https://github.com/dmobius3/mode-identity-theory/blob/97a8c0884c5e3a0ed25afb345f3d668340c5b537/files/framework/files/working/files/scripts/soft-slot-dynamics-m8-15x/m8_15x_solver/out/freeze_numbers.json), SHA-256 `c46b102c5ded4a78667dfb0e87e1311d729b006cb1362c6aeb91cbe1b9fe369f`, hashed in the manifest above. The guard file must carry them unchanged. **Corrected (2026-10-14):** a target run reads them through the instrument's `frozen_numbers`, from that guard file, the instrument's `m8_15x_solver/out/FROZEN.json`; the values are the same.
 
 ## The order
 
