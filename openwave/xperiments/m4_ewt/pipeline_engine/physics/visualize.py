@@ -1,8 +1,21 @@
 """
-Interactive visualization via Taichi's ui.Window.
+Interactive visualization processors.
 
-Renders a 2D slice of the field as a scaled image. Sets ctx.sim.should_stop
-when the window is closed, so the runner exits cleanly.
+Two flavors, different rendering layers:
+
+    TaichiWindowProcessor -- 2D slice via ti.ui.Window's image canvas.
+        Simple, no GGUI scene, one window per run.
+
+    WindowedProcessor -- base class for GGUI 3D scenes via
+        openwave.i_o.render. Subclasses override setup_scene(ctx) for
+        one-time buffer setup and draw(ctx) for per-step drawing. The
+        base handles the boilerplate: opening the window in setup(),
+        checking window.running and ESC in process(), calling
+        init_scene() before draw() and show_scene() after.
+
+TaichiWindowProcessor cannot run headless. WindowedProcessor can, when
+given a mock render module (used by its tests); with the real
+openwave.i_o.render it opens a window and cannot.
 """
 
 from pathlib import Path
@@ -110,3 +123,75 @@ def _render_slice(
             img[px, py] = ti.Vector([v, v * 0.4, 1.0 - v])
         else:
             img[px, py] = ti.Vector([0.0, 0.0, 0.0])
+
+
+class WindowedProcessor(BaseProcessor):
+    """
+    Base class for GGUI 3D scene processors.
+
+    Subclass contract:
+
+        setup_scene(ctx)   allocate buffers, build static meshes.
+                           Called once, by setup().
+        draw(ctx)          draw the current step. Called by process()
+                           after init_scene() and before show_scene().
+                           Must not call show_scene().
+
+    Neither hook is optional; a subclass that does not override one
+    raises NotImplementedError at the point the hook is invoked.
+
+    The base takes only what every scene needs: camera, universe size,
+    tick spacing, and the show_axis flag. Everything else lives on the subclass.
+
+    render_module is for tests: pass a mock to avoid calling the real
+    openwave.i_o.render.init_UI in setup() (which opens a window).
+    In production, leave it None; setup() imports the real module.
+    """
+
+    name = "WindowedProcessor"
+    stage = Stage.MEASURE
+    order = 2000
+
+    def __init__(
+        self,
+        *,
+        cam=(2.5, 2.0, 2.5),
+        universe_size=(1.0, 1.0, 1.0),
+        tick_spacing=0.25,
+        show_axis=False,
+        render_module=None,
+    ):
+        self.cam = list(cam)
+        self.universe_size = list(universe_size)
+        self.tick_spacing = float(tick_spacing)
+        self.show_axis = bool(show_axis)
+        self._render_module_override = render_module
+
+    def setup(self, ctx) -> None:
+        render = self._render_module_override
+        if render is None:
+            from openwave.i_o import render as _render
+
+            render = _render
+        self._render = render
+        render.init_UI(self.universe_size, self.tick_spacing, self.cam)
+        self.setup_scene(ctx)
+
+    def process(self, ctx) -> None:
+        if not self._render.window.running:
+            ctx.sim.should_stop = True
+            return
+        if self._render.window.is_pressed(ti.ui.ESCAPE):
+            ctx.sim.should_stop = True
+            return
+        self._render.init_scene(self.show_axis)
+        self.draw(ctx)
+        self._render.show_scene()
+
+    def setup_scene(self, ctx) -> None:
+        """One-time hook. Override in subclasses."""
+        raise NotImplementedError(f"{type(self).__name__} must implement setup_scene(ctx)")
+
+    def draw(self, ctx) -> None:
+        """Per-step hook. Override in subclasses."""
+        raise NotImplementedError(f"{type(self).__name__} must implement draw(ctx)")

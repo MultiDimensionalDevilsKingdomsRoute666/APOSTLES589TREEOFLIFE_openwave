@@ -43,7 +43,7 @@ from .motion import (
 from .nonlinearity import NonlinearCubic
 from .boundary import BoundaryProcessor, DirichletBoundaryProcessor
 from .measure import AmplitudeTracker
-from .visualize import TaichiWindowProcessor
+from .visualize import TaichiWindowProcessor, WindowedProcessor
 from .seed import SeedBaseWave
 from .energy import EnergyBudgetUpdate
 from .stability import StabilityMetricsUpdate
@@ -84,6 +84,7 @@ __all__ = [
     "DirichletBoundaryProcessor",
     "AmplitudeTracker",
     "TaichiWindowProcessor",
+    "WindowedProcessor",
     "UpdateEMCDensityProcessor",
     "UpdateWaveSpeedProcessor",
     "SeedBaseWave",
