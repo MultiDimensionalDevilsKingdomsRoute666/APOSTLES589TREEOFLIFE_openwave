@@ -11,6 +11,7 @@ from .features import (
     PsiLongField,
     PsiTransField,
     PsiTripleBuffer,
+    RunSeed,
     StabilityMetrics,
     TrackerFields,
     WaveGrid,
@@ -96,7 +97,5 @@ __all__ = [
     "EnergyBudgetUpdate",
     "StabilityMetrics",
     "StabilityMetricsUpdate",
-    "WaveGrid",
-    "WaveStats",
     "RunSeed",
 ]

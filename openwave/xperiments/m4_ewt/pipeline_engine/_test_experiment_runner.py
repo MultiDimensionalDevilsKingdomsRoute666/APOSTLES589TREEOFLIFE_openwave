@@ -468,6 +468,147 @@ def test_non_callable_sinks_factory_rejected():
 
 
 # ======================================================================
+# Summary contents: what the runner copies from the run
+# ======================================================================
+
+
+class _DiagMock:
+    """Returns a Context whose Diagnostics already hold known messages."""
+
+    def __init__(self):
+        self.output_dirs = []
+
+    def run(
+        self,
+        pipeline,
+        *,
+        name,
+        params=None,
+        output_dir="out",
+        dt=1.0,
+        max_steps,
+        initial_features=None,
+    ):
+        self.output_dirs.append(output_dir)
+        diag = Diagnostics()
+        diag.error(f"err1-{name}")
+        diag.error(f"err2-{name}")
+        diag.warn(f"warn1-{name}")
+        diag.warn(f"warn2-{name}")
+        return Context(
+            run=RunContext(name=name, output_dir=Path(output_dir)),
+            params=Params(params),
+            sim=SimContext(dt=dt),
+            data=FeatureBag(),
+            log=LogContext(sinks={}),
+            diag=diag,
+        )
+
+
+def test_run_diagnostics_copied_into_summary():
+    """
+    A run that completes with errors and warnings in ctx.diag reports
+    them in its summary, per run, as tuples. crashed stays False.
+
+    Mutation caught: errors or warnings dropped on the success path
+    (a sweep would then report a run with recorded errors as clean).
+    """
+    mock = _DiagMock()
+    er = ExperimentRunner(
+        runner_factory=lambda sinks: mock,
+        sinks_factory=lambda cfg: {"session": InMemorySink()},
+    )
+    result = er.run_sweep(
+        pipeline_factory=lambda cfg: _make_pipeline(),
+        configs=[ExperimentConfig(name="a"), ExperimentConfig(name="b")],
+        summarize=_identity_summarize,
+        output_dir=Path("out_test"),
+    )
+    assert [s.errors for s in result] == [("err1-a", "err2-a"), ("err1-b", "err2-b")]
+    assert [s.warnings for s in result] == [("warn1-a", "warn2-a"), ("warn1-b", "warn2-b")]
+    assert all(s.crashed is False for s in result)
+
+
+def test_output_dir_forwarded_to_runner():
+    """
+    run_sweep's output_dir reaches IRunner.run(output_dir=...) for every
+    config, as a Path, whether it was passed as a str or a Path.
+
+    Mutation caught: output_dir dropped (the runner falls back to its
+    own default directory, and the sweep's files land elsewhere).
+    """
+    for given in ("sweep_dir_x", Path("sweep_dir_x")):
+        mock = _DiagMock()
+        er = ExperimentRunner(
+            runner_factory=lambda sinks: mock,
+            sinks_factory=lambda cfg: {"session": InMemorySink()},
+        )
+        er.run_sweep(
+            pipeline_factory=lambda cfg: _make_pipeline(),
+            configs=[ExperimentConfig(name="a"), ExperimentConfig(name="b")],
+            summarize=_identity_summarize,
+            output_dir=given,
+        )
+        assert mock.output_dirs == [Path("sweep_dir_x"), Path("sweep_dir_x")]
+        assert all(isinstance(d, Path) for d in mock.output_dirs), mock.output_dirs
+
+
+def test_crashed_summary_echoes_config():
+    """
+    A crashed run's summary still carries its params, so a crashed row
+    can be traced to the configuration that produced it.
+
+    Mutation caught: the crash branch recording an empty config.
+    """
+    mock = _MockRunner(crash_on_name="b")
+    er = ExperimentRunner(
+        runner_factory=lambda sinks: mock,
+        sinks_factory=lambda cfg: {"session": InMemorySink()},
+    )
+    result = er.run_sweep(
+        pipeline_factory=lambda cfg: _make_pipeline(),
+        configs=[
+            ExperimentConfig(name="a", params={"K": 3}),
+            ExperimentConfig(name="b", params={"K": 7}),
+        ],
+        summarize=_identity_summarize,
+        output_dir=Path("out_test"),
+    )
+    assert [s.crashed for s in result] == [False, True]
+    assert [s.config for s in result] == [{"K": 3}, {"K": 7}]
+
+
+def test_non_mapping_summarize_is_a_run_failure():
+    """
+    summarize must return a Mapping. None, a list of pairs and a string
+    are each a crashed row under on_error='continue' and a TypeError
+    under on_error='fail', as the run_sweep docstring states.
+
+    Mutation caught: the Mapping check dropped, so a list of pairs or an
+    empty string reads as a successful run (dict() accepts both).
+    """
+    for bad, policy in [(b, p) for b in (None, [("a", 1)], "") for p in ("continue", "fail")]:
+        er = ExperimentRunner(
+            runner_factory=lambda sinks: _MockRunner(),
+            sinks_factory=lambda cfg: {"session": InMemorySink()},
+            on_error=policy,
+        )
+        try:
+            result = er.run_sweep(
+                pipeline_factory=lambda cfg: _make_pipeline(),
+                configs=[ExperimentConfig(name="a")],
+                summarize=lambda ctx, bad=bad: bad,
+                output_dir=Path("out_test"),
+            )
+        except TypeError:
+            assert policy == "fail"
+            continue
+        assert policy == "continue", "on_error='fail' must raise TypeError"
+        assert result[0].crashed is True
+        assert any("TypeError" in e for e in result[0].errors)
+
+
+# ======================================================================
 # Runner
 # ======================================================================
 
@@ -488,6 +629,10 @@ def main() -> int:
         test_invalid_on_error_rejected_at_construction,
         test_non_callable_runner_factory_rejected,
         test_non_callable_sinks_factory_rejected,
+        test_run_diagnostics_copied_into_summary,
+        test_output_dir_forwarded_to_runner,
+        test_crashed_summary_echoes_config,
+        test_non_mapping_summarize_is_a_run_failure,
     ]
     passed = 0
     for t in tests:

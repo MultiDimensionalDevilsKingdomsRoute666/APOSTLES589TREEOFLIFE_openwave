@@ -887,8 +887,9 @@ This is the decision documented in Section 5. Work items:
 
 ### 1.19 — Deterministic seeds
 
-- [ ] Add `seed` to `RunContext` (already present).
-- [ ] All random initialisation reads from `ctx.run.seed`.
+- [ ] Carry the seed as the `RunSeed` feature (transport added in 1.10;
+      `RunContext` no longer has a `seed` field).
+- [ ] All random initialisation reads from `ctx.data.require(RunSeed).value`.
 - [ ] Add a test: two runs with same seed within a backend -> bit-identical
       output; two runs across backends -> equal to a stated tolerance at
       the parsed-value level.

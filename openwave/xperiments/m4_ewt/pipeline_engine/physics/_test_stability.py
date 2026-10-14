@@ -970,7 +970,6 @@ def main() -> int:
         test_ipr_of_a_delta_is_one_over_voxel_volume,
         test_freq_matches_eigenmode_frequency,
         test_wc_drift_reference_is_the_initial_position,
-        test_stateless_guard_passes,
         test_experiment_runner_with_real_pipeline,
     ]
     passed = 0

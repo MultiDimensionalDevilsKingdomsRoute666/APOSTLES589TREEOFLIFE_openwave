@@ -31,7 +31,7 @@ Design:
     domain-agnostic (engine layer, no physics import).
 
     Summary is plain data (frozen dataclass), so a sweep result can be
-    written to JSON, compared across runs, or hashed for artifact
+    written to JSON, compared across runs, or serialized for artifact
     versioning (plan item 1.21) without further conversion.
 
 Seeds. There is no seed field on ExperimentConfig. A caller that wants
@@ -79,7 +79,7 @@ class ExperimentConfig:
                          engine.
     initial_features  -- tuple of FeatureBag features passed to
                          IRunner.run(initial_features=...). A tuple, not
-                         a list, so the frozen dataclass is hashable.
+                         a list, so it cannot be mutated in place.
                          This is where a RunSeed goes when the caller
                          wants determinism.
     dt, max_steps     -- forwarded to IRunner.run.
@@ -96,7 +96,7 @@ class ExperimentConfig:
 class ExperimentSummary:
     """
     The result of one run. Plain data: no Context, no Pipeline, no
-    Taichi handles. Safe to serialize, compare, or hash.
+    Taichi handles. Safe to serialize or compare.
 
     name       -- the config's name, echoed for traceability.
     config     -- the config's params, echoed. The rest of the config
@@ -112,8 +112,9 @@ class ExperimentSummary:
                   use it.
     crashed    -- True if summarize or the run raised before a summary
                   could be built (only reachable with on_error="continue").
-                  When True, metrics is empty and the exception text is
-                  in errors.
+                  When True, metrics is empty and errors holds only the
+                  exception text: if the run completed and summarize
+                  raised, the run's own ctx.diag messages are not kept.
     """
 
     name: str
@@ -190,9 +191,9 @@ class ExperimentRunner:
         pipeline_factory(config) -> Pipeline    fresh pipeline per run
         summarize(ctx)          -> Mapping     caller's metric extraction
 
-        summarize must return a Mapping. Returning None (or any
-        non-Mapping) raises TypeError inside dict(), caught by the same
-        on_error policy as a run failure.
+        summarize must return a Mapping. Anything else (None, a list of
+        pairs, a string) raises TypeError, handled by the same on_error
+        policy as a run failure.
 
         output_dir is passed to IRunner.run() as the run's output
         directory. Its concrete use (subdirectory per run, per-sweep
@@ -215,10 +216,15 @@ class ExperimentRunner:
                     dt=cfg.dt,
                     max_steps=cfg.max_steps,
                     # Runner.run takes a list; the config stores a tuple
-                    # for hashability. Convert here.
+                    # so it cannot be mutated in place. Convert here.
                     initial_features=list(cfg.initial_features),
                 )
-                metrics = dict(summarize(ctx))
+                result = summarize(ctx)
+                if not isinstance(result, Mapping):
+                    raise TypeError(
+                        f"summarize must return a Mapping, got {type(result).__name__}"
+                    )
+                metrics = dict(result)
                 duration = time.perf_counter() - t0
                 summaries.append(
                     ExperimentSummary(
