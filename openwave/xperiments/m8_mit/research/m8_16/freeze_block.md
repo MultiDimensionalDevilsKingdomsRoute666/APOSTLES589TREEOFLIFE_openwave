@@ -4,7 +4,7 @@ The items the pre-registration fixes at the freeze (§ FIXED AT THE FREEZE of [t
 
 ## The terms
 
-- **SHA-256 of [`tasks/m8_16_task_details.md`](../tasks/m8_16_task_details.md):** `86992a5f7a278d639042adad2576c666979fa20f3cb53071daa62c614e83d5cf`, which governs. They were merged in `9f1b5d7b` ([#637](https://github.com/openwave-labs/openwave/pull/637)), byte for byte the file the manifest pin covers, `run/m8_16_task_details.md`.
+- **SHA-256 of [`tasks/m8_16_task_details.md`](../tasks/m8_16_task_details.md):** `86992a5f7a278d639042adad2576c666979fa20f3cb53071daa62c614e83d5cf`, which governs. Since 2026-10-19 the file carries a dated note after the terms, so this is the hash of its first 48,450 bytes. They were merged in `9f1b5d7b` ([#637](https://github.com/openwave-labs/openwave/pull/637)), byte for byte the file the manifest pin covers, `run/m8_16_task_details.md`.
 - The same hash is in a dated note in § V of the author's [census page](https://github.com/dmobius3/mode-identity-theory/blob/c1ea8f2e4ce3f8e61592d859b31d7fc641a6100d/files/framework/files/working/files/slot-dynamics-census.md), at MIT `c1ea8f2`.
 - **The maintainer's go:** [#637, comment 6253316435](https://github.com/openwave-labs/openwave/pull/637#issuecomment-6253316435), posted 2026-10-18T18:07:09Z. It covers the instrument pinned at `c1ea8f2`, and it is recorded in `FROZEN.json`.
 
@@ -247,7 +247,7 @@ The items the pre-registration fixes at the freeze (§ FIXED AT THE FREEZE of [t
 
 Each case's representative on the lowest level, at `N = 16`, against the Result's values (§ BEFORE THE FREEZE). Sealed seeds were checked on the lowest level only (BOUNDARY.md's amendment 2), with no solve and no spectrum.
 - **The source:** `dev/seed_check.py`, DEVLOG entry 269, its output kept as `dev/runs/269_seed_check.out`.
-- **Its currency:** the instrument files it reads, `basis.py`, `branches.py`, `certified.py`, `functional.py`, `group2i.py`, `quadrature.py`, `su2.py`, are unchanged in the pinned tree.
+- **Its currency:** the instrument files it reads, `basis.py`, `branches.py`, `certified.py`, `functional.py`, `group2i.py`, `quadrature.py`, `su2.py`, are unchanged in the pinned tree. **Corrected (2026-10-19):** the seed check imports eleven instrument files, these seven and `__init__.py`, `devtools.py`, `newton.py` and `linear.py`. Of them only `linear.py` changed after the seed check, by one line in `record()` that the seed values never reach, as the approval of [#639](https://github.com/openwave-labs/openwave/pull/639) and the run record's § 6 record.
 
 | case | slot | sealed | `Q(u)` | the Result's | relative | criticality | `(k, r_u)` |
 | --- | --- | --- | --- | --- | --- | --- | --- |
