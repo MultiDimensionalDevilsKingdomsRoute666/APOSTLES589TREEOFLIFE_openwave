@@ -681,21 +681,21 @@ Infrastructure only. No specific physics. Each item is a work unit.
 
 ### 1.0 — `UnitSystem` feature
 
-- [ ] Define the `UnitSystem` protocol (fields + conversion methods).
-- [ ] Implement `NaturalUnitSystem`, `OpenWaveUnitSystem`, `SIUnitSystem`.
-- [ ] Add `UnitSystem` to `Pipeline.external_provides`.
-- [ ] Wire `Runner.run(..., initial_features=[units])`.
-- [ ] Add a linter rule: no dimensional literal in `physics/*.py`.
-- [ ] Document in `README.md`.
+- [x] Define the `UnitSystem` protocol (fields + conversion methods).
+- [x] Implement `NaturalUnitSystem`, `OpenWaveUnitSystem`, `SIUnitSystem`.
+- [x] Add `UnitSystem` to `Pipeline.external_provides`.
+- [x] Wire `Runner.run(..., initial_features=[units])`.
+- [x] Add a linter rule: no dimensional literal in `physics/*.py`.
+- [x] Document in `README.md`.
 
 ### 1.1 — Multi-field FeatureBag
 
-- [ ] Define `PsiBaseField`, `PsiLongField`, `PsiTransField`,
+- [x] Define `PsiBaseField`, `PsiLongField`, `PsiTransField`,
       `EMCDensityField`, `EMCFluxField` (optional) as separate features.
-- [ ] Each field is a `ti.Vector.field(3, ti.f32, shape=grid)` with a
+- [x] Each field is a `ti.Vector.field(3, ti.f32, shape=grid)` with a
       triple-buffer variant for time integration.
-- [ ] Ensure `FeatureBag` handles these as distinct types without aliasing.
-- [ ] Add a test: allocate all five, write distinct values, read back.
+- [x] Ensure `FeatureBag` handles these as distinct types without aliasing.
+- [x] Add a test: allocate all five, write distinct values, read back.
 - [ ] `PsiInField`, `PsiOutField` — optional, used only by the reflective
       pipeline (B). They carry the incoming and outgoing components of the
       longitudinal field near wave centres.
@@ -707,18 +707,18 @@ Infrastructure only. No specific physics. Each item is a work unit.
 
 ### 1.2 — Trackers per voxel
 
-- [ ] Define `TrackerFields` feature.
-- [ ] Fields: `energy_long_local`, `energy_trans_local`, `amp_local`,
+- [x] Define `TrackerFields` feature.
+- [x] Fields: `energy_long_local`, `energy_trans_local`, `amp_local`,
       `freq_local`, `rho_local`.
 - [ ] Implement `TrackersUpdate` processor in `Stage.MEASURE`.
-- [ ] Implement 3-plane sampling (as in the legacy `sample_avg_trackers`)
+- [x] Implement 3-plane sampling (as in the legacy `sample_avg_trackers`)
       to compute global averages without full reductions.
-- [ ] Add a test: uniform field -> uniform tracker values.
+- [x] Add a test: uniform field -> uniform tracker values.
 
 ### 1.3 — Multi-field evolution
 
-- [ ] Generalise `LaplacianProcessor` to accept a field name in `__init__`.
-- [ ] Generalise `LeapfrogProcessor` similarly.
+- [x] Generalise `LaplacianProcessor` to accept a field name in `__init__`.
+- [x] Generalise `LeapfrogProcessor` similarly.
 - [ ] Define a coupling contract: `Psi_long -> Psi_trans` conversion at
       WCs, with a tunable coefficient.
 - [ ] Add a test: two coupled fields, no coupling coefficient -> independent
@@ -726,11 +726,11 @@ Infrastructure only. No specific physics. Each item is a work unit.
 
 ### 1.4 — Source terms (additive, not overwrite)
 
-- [ ] Define the contract: a source term **adds** to `psi_new`, never
+- [x] Define the contract: a source term **adds** to `psi_new`, never
       overwrites `psi_am`.
-- [ ] Implement `SeedBaseWave` — seeds `Psi_base` once.
-- [ ] Implement `SourceTermInterface` — base class for additive sources.
-- [ ] Implement `ScatteringOperatorInterface` — separate base class for
+- [x] Implement `SeedBaseWave` — seeds `Psi_base` once.
+- [x] Implement `SourceTermInterface` — base class for additive sources.
+- [x] Implement `ScatteringOperatorInterface` — separate base class for
       operators that redistribute energy between two fields. A scattering
       operator adds to one field and subtracts from another, and records
       the exchanged amount in the budget. `SourceTermInterface` and
@@ -738,15 +738,15 @@ Infrastructure only. No specific physics. Each item is a work unit.
       scatterers exchange. A scattering operator is unitary by contract:
       the field magnitude that enters equals the field magnitude that
       leaves, per wave centre.
-- [ ] Add a test: two sources, superposition holds.
+- [x] Add a test: two sources, superposition holds.
 
 ### 1.5 — Reflector interface
 
-- [ ] Extend `WCState` with `reflect_coeff_long`, `reflect_coeff_trans`,
+- [x] Extend `WCState` with `reflect_coeff_long`, `reflect_coeff_trans`,
       `phase_shift`.
-- [ ] These are *attributes*, not yet *behaviours*. The values are set by
+- [x] These are *attributes*, not yet *behaviours*. The values are set by
       the experiment, not computed.
-- [ ] Document the contract clearly: a reflector is a WC that satisfies
+- [x] Document the contract clearly: a reflector is a WC that satisfies
       unitarity on `Psi_in`, `Psi_out`, `Psi_spin`.
 - [ ] The scattering operator is introduced in item 2.2, variant B2d. The
       reflector interface here defines only the attributes; the operator
@@ -756,19 +756,19 @@ Infrastructure only. No specific physics. Each item is a work unit.
 
 ### 1.6 — WC motion (drift)
 
-- [ ] Extend `WCState` with `velocity`, `force`.
-- [ ] Implement `WCMotionProcessor` in `Stage.POST_UPDATE`.
-- [ ] Implement `WCDriftRule` contract: a callable that returns a force
+- [x] Extend `WCState` with `velocity`, `force`.
+- [x] Implement `WCMotionProcessor` in `Stage.POST_UPDATE`.
+- [x] Implement `WCDriftRule` contract: a callable that returns a force
       vector given local field values.
-- [ ] Provide a default rule (`F = -grad rho`) and a no-op (`F = 0`).
-- [ ] Add a test: no-op drift -> positions unchanged; default drift on a
+- [x] Provide a default rule (`F = -grad rho`) and a no-op (`F = 0`).
+- [x] Add a test: no-op drift -> positions unchanged; default drift on a
       static `rho` -> WCs move to minimum.
 
 ### 1.7 — Boundary condition
 
 - [ ] Define `BoundaryCondition` feature: `kind` (`absorbing` | `periodic`
       | `reflecting`), `r_domain`.
-- [ ] Implement `BoundaryProcessor` in `Stage.POST_UPDATE`.
+- [x] Implement `BoundaryProcessor` in `Stage.POST_UPDATE`.
 - [ ] Absorbing: waves leave without reflection. Periodic: wrap.
       Reflecting: mirror.
 - [ ] Add a test: wave hitting absorbing boundary leaves the domain without
@@ -776,22 +776,22 @@ Infrastructure only. No specific physics. Each item is a work unit.
 
 ### 1.8 — Energy budget tracker
 
-- [ ] Define `EnergyBudget` feature.
-- [ ] Fields: `E_kin`, `E_grad`, `E_deform`, `flux_boundary`, `dE_dt`.
-- [ ] `E_soliton = E_kin + E_grad` with `E_kin = integral (1/2) |dPsi/dt|^2
+- [x] Define `EnergyBudget` feature.
+- [x] Fields: `E_kin`, `E_grad`, `E_deform`, `flux_boundary`, `dE_dt`.
+- [x] `E_soliton = E_kin + E_grad` with `E_kin = integral (1/2) |dPsi/dt|^2
       dV` and `E_grad = integral (1/2) c^2(rho) |grad Psi|^2 dV`;
       `E_total = E_soliton + E_deform`.
-- [ ] Implement `EnergyBudgetUpdate` in `Stage.MEASURE`.
+- [x] Implement `EnergyBudgetUpdate` in `Stage.MEASURE`.
 - [ ] Add a test: 1D harmonic oscillator -> `dE/dt ~ 0` to machine
       precision.
 
 ### 1.9 — Stability metrics
 
-- [ ] Define `StabilityMetrics` feature.
-- [ ] Fields: `sol_lifetime`, `localization`, `sphericity`, `freq_drift`,
+- [x] Define `StabilityMetrics` feature.
+- [x] Fields: `sol_lifetime`, `localization`, `sphericity`, `freq_drift`,
       `wc_drift`.
-- [ ] Implement `StabilityMetricsUpdate` in `Stage.MEASURE`.
-- [ ] Add a test: static Gaussian -> `localization` stays constant;
+- [x] Implement `StabilityMetricsUpdate` in `Stage.MEASURE`.
+- [x] Add a test: static Gaussian -> `localization` stays constant;
       spreading Gaussian -> `localization` decreases.
 
     **`freq_drift` definition (2026-10-12).** Field-wide signal
@@ -805,7 +805,7 @@ Infrastructure only. No specific physics. Each item is a work unit.
 
 ### 1.10 — Experiment runner
 
-- [ ] Implement `ExperimentRunner`: takes a list of configuration dicts,
+- [x] Implement `ExperimentRunner`: takes a list of configuration dicts,
       runs each, records summary.
 - [ ] Output: CSV with one row per run, columns = config + final metrics.
 - [ ] Support deterministic seeds per run.
@@ -887,7 +887,7 @@ This is the decision documented in Section 5. Work items:
 
 ### 1.19 — Deterministic seeds
 
-- [ ] Carry the seed as the `RunSeed` feature (transport added in 1.10;
+- [x] Carry the seed as the `RunSeed` feature (transport added in 1.10;
       `RunContext` no longer has a `seed` field).
 - [ ] All random initialisation reads from `ctx.data.require(RunSeed).value`.
 - [ ] Add a test: two runs with same seed within a backend -> bit-identical
@@ -926,13 +926,13 @@ This is the decision documented in Section 5. Work items:
 
 ### 1.23 — Conservative discretisation of the variable-coefficient Laplacian
 
-- [ ] Implement `LaplacianVariableCoeff` using the conservative stencil:
+- [x] Implement `LaplacianVariableCoeff` using the conservative stencil:
       the flux form on half-grids, with `c^2_{i+1/2} = (1/2)(c^2_i +
       c^2_{i+1})` (and similarly for `j`, `k`). This is the discrete
       variation of `E_grad = sum (1/2) c^2_{i+1/2} ((Psi_{i+1} -
       Psi_i)/dx)^2 dx`.
-- [ ] Test 1: constant `c^2` -> recovers the standard 6-point Laplacian.
-- [ ] Test 2: variable `c^2`, harmonic wave, flux form -> the **staggered
+- [x] Test 1: constant `c^2` -> recovers the standard 6-point Laplacian.
+- [x] Test 2: variable `c^2`, harmonic wave, flux form -> the **staggered
       leapfrog invariant** is conserved to machine precision over 1000
       steps. The staggered invariant is
       `E_stag = (1/2) |(Psi^{n+1} - Psi^n)/dt|^2 + (1/2) Psi^n . A . Psi^{n+1}`
@@ -943,10 +943,10 @@ This is the decision documented in Section 5. Work items:
       standard O(dt^2) offset, so it is not the right test for machine
       precision. If `E_soliton` is scored instead, the bar is O(dt^2)
       convergence under refinement, not machine precision.
-- [ ] Test 3: the same test with the naive `c^2_i * laplacian(Psi)` form
+- [x] Test 3: the same test with the naive `c^2_i * laplacian(Psi)` form
       fails the staggered invariant by many orders of magnitude; this is
       the discriminating test.
-- [ ] The flux form is the only form used in pipeline A and pipeline B.
+- [x] The flux form is the only form used in pipeline A and pipeline B.
       The naive form is a bug.
 
 ---
@@ -1042,7 +1042,7 @@ the plan.
 
 ### 2.4 — EMC density dynamics
 
-- [ ] **B4a**: instantaneous (`rho = rho_0 - beta_rho |Psi|^2`).
+- [x] **B4a**: instantaneous (`rho = rho_0 - beta_rho |Psi|^2`).
 - [ ] **B4b**: relaxation dynamics
       (`d rho/dt = D laplacian(rho) - gamma_rho (rho - rho_0) - beta_rho |Psi|^2`).
 - [ ] **B4c**: inertial dynamics (full wave equation for `rho`).
@@ -1051,7 +1051,7 @@ the plan.
 
 ### 2.5 — Wave speed modulation
 
-- [ ] **B5a**: `c^2(rho) = c_0^2 * rho/rho_0`.
+- [x] **B5a**: `c^2(rho) = c_0^2 * rho/rho_0`.
 - [ ] **B5b**: power law `c^2 = c_0^2 * (rho/rho_0)^n`.
 - [ ] **B5c**: anisotropic `c(rho, grad rho)`.
 - [ ] Recommended start: **B5a** — matches M4.9.
@@ -1065,19 +1065,19 @@ the plan.
 
 ### 2.7 — WC motion rule
 
-- [ ] **B7a**: `F = -grad rho` (EMC density gradient).
+- [x] **B7a**: `F = -grad rho` (EMC density gradient).
 - [ ] **B7b**: `F = -grad |Psi|^2` (energy gradient).
 - [ ] **B7c**: `F = -grad (rho + |Psi|^2)`.
-- [ ] **B7d**: `F = 0` (control).
+- [x] **B7d**: `F = 0` (control).
 - [ ] Recommended start: **B7a** — matches push-out.
 
 ### 2.8 — WC topology
 
-- [ ] **B8a**: `tetrahedron_10_locked` (r1 = 1 lambda, r2 = 2 lambda).
+- [x] **B8a**: `tetrahedron_10_locked` (r1 = 1 lambda, r2 = 2 lambda).
 - [ ] **B8b**: `tetrahedron_10_unlocked` (legacy r1, r2).
-- [ ] **B8c**: `golden_angle`.
+- [x] **B8c**: `golden_angle`.
 - [ ] **B8d**: `bcc_lattice`.
-- [ ] **B8e**: `line` (negative control).
+- [x] **B8e**: `line` (negative control).
 - [ ] **B8f**: `random` (negative control).
 
 ### 2.9 — WC spacing
