@@ -17,7 +17,7 @@
 
 | TaskID | Title | Description | Owner | Gated By |
 | --- | --- | --- | --- | --- |
-| [M8.16](tasks/m8_16_task_details.md) | Qualifying the stationary harmonic Galerkin instrument | Qualify the instrument #512 admitted: the structural kernel at round-off on every control, no lifted pair where M8.15's mesh measured one, and the pyramid's in-span mode resolved at the smallest amplitude; then Theorem D exactly, Theorem R's slow frequencies, and agreement with M8.15's ladders where they decided. Frozen MIT instrument; no time integration, persistence test, MODELS.md cell movement or change to M8.7's gate | author-proposed and author-run, maintainer-adjudicated | registration and go ([#512](https://github.com/openwave-labs/openwave/discussions/512#discussioncomment-18955679)) |
+| [M8.16](tasks/m8_16_task_details.md) | Qualifying the stationary harmonic Galerkin instrument | Qualify the instrument #512 admitted: the structural kernel at round-off on every control, no lifted pair where M8.15's mesh measured one, and the pyramid's in-span mode resolved at the smallest amplitude; then Theorem D exactly, Theorem R's slow frequencies, and agreement with M8.15's ladders where they decided. Frozen MIT instrument; no time integration, persistence test, MODELS.md cell movement or change to M8.7's gate | author-proposed and author-run, maintainer-adjudicated | the maintainer's adjudication of the run ([method note](findings/m8_16_method_note.md)) |
 
 ## LATER (gated)
 
