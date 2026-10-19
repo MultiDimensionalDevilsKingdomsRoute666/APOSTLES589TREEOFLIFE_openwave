@@ -462,3 +462,11 @@ Done, on the GO list, each logged and disclosed in `DEVLOG.md`. None solved a se
   - after the verdict, a dated note on the census page.
 - **What follows.** The census run runs only the rows qualified here.
 - **What does not move.** No `MODELS.md` cell, and M8.7's gate is unchanged.
+
+## Dated note, 2026-10-19: after the verdict
+
+Everything above this heading is the filed pre-registration, byte for byte: its 48,450 bytes are a prefix of this file and hash to the governing `86992a5f…`.
+
+The maintainer adjudicated the run on [#640](https://github.com/openwave-labs/openwave/pull/640#pullrequestreview-5575251218): NOT QUALIFIED. The failing check is K4 on the pyramid, whose quartet lies 5.76% to 5.78% from Theorem R's leading order at `ε = 0.25`, over the 5% bar, and the same reading fails K3(a)'s slow-band clause, so K3's outcome is "instrument failure: the diagnosis is untested". The five controls passed, no row ran, and K5 and K6 have no outcome. The roadmap's Done row states the verdict. The author's dated note records it on MIT, in § V of [the census page](https://github.com/dmobius3/mode-identity-theory/blob/8e41cefbf5040172fd2d23412987077e693006b5/files/framework/files/working/files/slot-dynamics-census.md#v-the-program), and the run's record is [`RECORD.md`](https://github.com/dmobius3/mode-identity-theory/blob/87fc6439d8ebea228901b06323259c82327c18d7/files/framework/files/working/files/scripts/soft-slot-dynamics-m8-16/RECORD.md).
+
+**The verdict rule's K3 sentence.** § THE VERDICT RULE, AND STOP CONDITIONS says: "If K3 fails with the kernel exact, the record says that the diagnosis is wrong." The adjudication reads it as naming K3's second outcome, "Not resolved, with the kernel exact", which K3's list defines as (a) passing while (b), (c) or (d) fails. The list governs, and it is what was registered: the pinned `run/test_k3.py`, claim 7, arms this case and expects "instrument failure: the diagnosis is untested". The verdict, NOT QUALIFIED through K4, is the same under either reading. No rule, threshold or verdict changes.
