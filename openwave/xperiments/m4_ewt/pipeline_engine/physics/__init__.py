@@ -47,6 +47,7 @@ from .visualize import TaichiWindowProcessor, WindowedProcessor
 from .seed import SeedBaseWave
 from .energy import EnergyBudgetUpdate
 from .stability import StabilityMetricsUpdate
+from .vacuum import PeriodicVacuum, StaticVacuum, VacuumProvider, VacuumStepProcessor
 
 __all__ = [
     # wave centers
@@ -99,4 +100,9 @@ __all__ = [
     "StabilityMetrics",
     "StabilityMetricsUpdate",
     "RunSeed",
+    # Vacuum
+    "VacuumProvider",
+    "StaticVacuum",
+    "PeriodicVacuum",
+    "VacuumStepProcessor",
 ]
