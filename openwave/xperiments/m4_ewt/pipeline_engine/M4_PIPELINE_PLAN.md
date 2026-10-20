@@ -958,14 +958,17 @@ This is the decision documented in Section 5. Work items:
       standard O(dt^2) offset, so it is not the right quantity to test
       for the staggered invariant. If `E_soliton` is scored instead, the
       bar is O(dt^2) convergence under refinement. The implemented test
-      asserts a relative drift below `1e-4`; its docstring records
-      `5.6e-06` measured, which is f32 roundoff rather than a physical
+      asserts a relative drift below `1e-4`; the measured drift is of
+      order `1e-5`, consistent with f32 roundoff rather than a physical
+      residual. The exact value depends on the platform (Taichi's f32
+      reduction order is not fixed across architectures). measured, which is f32 roundoff rather than a physical
       residual.
-- [x] Test 3: the same test with the naive `c^2_i * laplacian(Psi)` form
-      drifts by roughly two orders of magnitude more than the flux form
-      (measured ratio ~146x); this is the discriminating test. The
-      assertion requires only that the naive drift exceeds `5e-4`,
-      against the flux form's bar of `1e-4`.
+- [x] Test 3: the same arena and step count with the naive
+      `c^2_i * laplacian(Psi)` form. The naive drift divided by the
+      flux-form drift must exceed 10; this is the discriminating test.
+      The measured ratio is of order 70-150x depending on the platform
+      (f32 reduction order); the assertion's 10x bar leaves a
+      comfortable margin under any f32 measurement but is tight enough
 - [x] The flux form is the only form used where `c^2` varies
       (`LaplacianVariableCoeffProcessor`). The preset pipeline
       (`make_linear_wave_pipeline`, a precursor to 1.22) uses the
