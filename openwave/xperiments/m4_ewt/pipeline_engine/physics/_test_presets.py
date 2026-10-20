@@ -29,6 +29,7 @@ from .stability import StabilityMetricsUpdate
 from .units import NaturalUnitSystem, UnitSystem
 from .wc_factory import build_wc_state
 from .wc_types import WCState
+from .vacuum import VacuumProvider, VacuumStepProcessor
 
 _TI_INITIALIZED = False
 
@@ -369,6 +370,40 @@ def test_default_rule_is_noop():
     assert len(motion) == 1
     assert isinstance(motion[0].rule, NoOpRule), type(motion[0].rule)
 
+def test_include_vacuum_extends_external_provides_and_chain():
+    """
+    With include_vacuum=True, the preset declares VacuumProvider in
+    external_provides and adds VacuumStepProcessor to the chain.
+
+    Mutation caught: include_vacuum ignored in the external_provides
+    tuple or in the add() calls, so a pipeline that asked for vacuum
+    support builds without the declaration or without the processor,
+    and the caller's VacuumProvider instance is silently unused.
+    """
+    p = make_linear_wave_pipeline(grid=_GRID, vacuum=StaticVacuum())
+    ext = set(p._external_provides)
+    assert VacuumProvider in ext, ext
+    assert any(isinstance(x, VacuumStepProcessor) for x in p._all), [
+        type(x).__name__ for x in p._all
+    ]
+
+
+def test_include_vacuum_default_off_keeps_preset_unchanged():
+    """
+    With include_vacuum omitted, the preset's external_provides and
+    chain match the pre-vacuum shape: VacuumProvider not declared,
+    VacuumStepProcessor not in the chain.
+
+    Mutation caught: include_vacuum defaulting to True, which changes
+    the external_provides contract for every existing caller and breaks
+    every test that documents the three-feature declaration.
+    """
+    p = make_linear_wave_pipeline(grid=_GRID)
+    ext = set(p._external_provides)
+    assert VacuumProvider not in ext, ext
+    assert not any(isinstance(x, VacuumStepProcessor) for x in p._all), [
+        type(x).__name__ for x in p._all
+    ]
 
 # ======================================================================
 # Runner
