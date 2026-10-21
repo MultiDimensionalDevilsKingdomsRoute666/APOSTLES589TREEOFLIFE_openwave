@@ -177,6 +177,7 @@ def test_feature_bag_keys_stability_metrics_independently():
     assert StabilityMetrics is not WaveGrid
     assert StabilityMetrics is not WaveStats
 
+
 def test_trans_field_write_isolated_from_base_and_long():
     """
     Writing to PsiTransField.psi does not change PsiBaseField.psi or
@@ -227,15 +228,15 @@ def test_trans_field_write_isolated_from_base_and_long():
     long_after = ctx.data.require(PsiLongField).psi.to_numpy()
     trans_after = ctx.data.require(PsiTransField).psi.to_numpy()
 
-    assert np.allclose(base_after, 1.0), (
-        f"PsiBase.psi changed by writing PsiTrans: max {base_after.max()}"
-    )
-    assert np.allclose(long_after, 2.0), (
-        f"PsiLong.psi changed by writing PsiTrans: max {long_after.max()}"
-    )
-    assert np.allclose(trans_after, 3.0), (
-        f"PsiTrans.psi wrong after write: max {trans_after.max()}"
-    )
+    assert np.allclose(
+        base_after, 1.0
+    ), f"PsiBase.psi changed by writing PsiTrans: max {base_after.max()}"
+    assert np.allclose(
+        long_after, 2.0
+    ), f"PsiLong.psi changed by writing PsiTrans: max {long_after.max()}"
+    assert np.allclose(
+        trans_after, 3.0
+    ), f"PsiTrans.psi wrong after write: max {trans_after.max()}"
 
 
 def test_emc_density_and_flux_fields_hold_distinct_arrays():
@@ -289,20 +290,20 @@ def test_emc_density_and_flux_fields_hold_distinct_arrays():
 
     # Object identity: the two features must not share the same ti.field.
     assert (
-        ctx.data.require(EMCDensityField).rho
-        is not ctx.data.require(EMCFluxField).flux
+        ctx.data.require(EMCDensityField).rho is not ctx.data.require(EMCFluxField).flux
     ), "EMCDensityField.rho and EMCFluxField.flux are the same ti.field object"
 
     # Content independence: writing flux must not surface through rho.
     rho_after = ctx.data.require(EMCDensityField).rho.to_numpy()
     flux_after = ctx.data.require(EMCFluxField).flux.to_numpy()
 
-    assert np.allclose(rho_after, 0.5), (
-        f"EMCDensityField.rho changed by writing flux: max {rho_after.max()}"
-    )
-    assert np.allclose(flux_after, 7.0), (
-        f"EMCFluxField.flux wrong after write: max {flux_after.max()}"
-    )
+    assert np.allclose(
+        rho_after, 0.5
+    ), f"EMCDensityField.rho changed by writing flux: max {rho_after.max()}"
+    assert np.allclose(
+        flux_after, 7.0
+    ), f"EMCFluxField.flux wrong after write: max {flux_after.max()}"
+
 
 # ---------------------------------------------------------------------------
 # Allocation (Taichi)

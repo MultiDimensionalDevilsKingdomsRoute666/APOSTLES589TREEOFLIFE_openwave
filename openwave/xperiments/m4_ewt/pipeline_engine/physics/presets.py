@@ -28,6 +28,7 @@ from .units import UnitSystem
 from .wc_types import WCState
 from .vacuum import VacuumProvider, VacuumStepProcessor
 
+
 def make_linear_wave_pipeline(
     *,
     grid: int,

@@ -188,8 +188,7 @@ class Pipeline:
         for r in p.requires:
             if r not in available:
                 raise PipelineError(
-                    f"{p.name}: requires '{r.__name__}', "
-                    f"not provided by any earlier processor"
+                    f"{p.name}: requires '{r.__name__}', " f"not provided by any earlier processor"
                 )
 
     # --- Lifecycle ---

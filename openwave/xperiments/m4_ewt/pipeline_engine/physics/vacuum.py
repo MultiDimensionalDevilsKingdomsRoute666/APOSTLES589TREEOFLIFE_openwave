@@ -45,7 +45,6 @@ from .evolution import _clear_accel, _laplacian, _leapfrog
 from .features import PsiBaseField, WaveGrid
 from .units import UnitSystem
 
-
 # ======================================================================
 # Feature: VacuumProvider and its variants
 # ======================================================================
@@ -96,9 +95,7 @@ class VacuumProvider(ABC):
         must decide what "evolve the vacuum" means (V1: nothing;
         V3: Laplacian + Leapfrog + periodic boundary on `PsiBaseField`).
         """
-        raise NotImplementedError(
-            f"{type(self).__name__} must implement step(ctx)"
-        )
+        raise NotImplementedError(f"{type(self).__name__} must implement step(ctx)")
 
     def energy_budget(self) -> float:
         """

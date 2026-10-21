@@ -232,9 +232,7 @@ def main() -> None:
     p.add_argument("--warp", type=float, default=0.3)
     p.add_argument("--wave-menu", type=int, default=1, choices=[1, 2, 3])
     p.add_argument("--field", type=str, default="base", choices=["base", "soliton"])
-    p.add_argument(
-        "--vacuum", type=str, default="periodic", choices=["static", "periodic"]
-    )
+    p.add_argument("--vacuum", type=str, default="periodic", choices=["static", "periodic"])
     args = p.parse_args()
 
     ti.init(arch=ti.gpu, log_level=ti.WARN)
@@ -271,10 +269,7 @@ def main() -> None:
 
     print(f"K={_K} topology='{_TOPOLOGY}'  grid={args.grid}^3  stride={args.stride}")
     print(f"warp={args.warp}  wave_menu={args.wave_menu}  vacuum={args.vacuum}")
-    print(
-        f"vacuum evolves={vacuum.evolves}  "
-        f"supports_reflection={vacuum.supports_reflection}"
-    )
+    print(f"vacuum evolves={vacuum.evolves}  " f"supports_reflection={vacuum.supports_reflection}")
     shown = "PsiLongField" if args.field == "soliton" else "PsiBaseField"
     print(f"Wireframe xy plane ({shown}). Close window (ESC) to stop.\n")
 

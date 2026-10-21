@@ -287,9 +287,7 @@ def test_vacuum_step_processor_requires_all_four_features():
         except PipelineError as e:
             assert missing.__name__ in str(e), (missing.__name__, str(e))
             continue
-        raise AssertionError(
-            f"expected PipelineError naming {missing.__name__}, none raised"
-        )
+        raise AssertionError(f"expected PipelineError naming {missing.__name__}, none raised")
 
 
 def test_vacuum_step_processor_missing_instance_raises_at_first_use():

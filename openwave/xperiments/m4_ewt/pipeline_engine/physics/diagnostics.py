@@ -63,9 +63,7 @@ class StopCondition:
     requires: tuple = ()
 
     def __call__(self, ctx) -> bool:
-        raise NotImplementedError(
-            f"{type(self).__name__} must implement __call__(ctx) -> bool"
-        )
+        raise NotImplementedError(f"{type(self).__name__} must implement __call__(ctx) -> bool")
 
 
 class MaxRhoCondition(StopCondition):
@@ -112,9 +110,7 @@ class EnergyDriftCondition(StopCondition):
 
     def __init__(self, threshold: float):
         if threshold <= 0.0:
-            raise ValueError(
-                f"EnergyDriftCondition: threshold must be > 0, got {threshold}"
-            )
+            raise ValueError(f"EnergyDriftCondition: threshold must be > 0, got {threshold}")
         self.threshold = float(threshold)
 
     def __call__(self, ctx) -> bool:
@@ -160,9 +156,7 @@ class SphericityBelowCondition(StopCondition):
 
     def __init__(self, threshold: float):
         if threshold < 0.0:
-            raise ValueError(
-                f"SphericityBelowCondition: threshold must be >= 0, got {threshold}"
-            )
+            raise ValueError(f"SphericityBelowCondition: threshold must be >= 0, got {threshold}")
         self.threshold = float(threshold)
 
     def __call__(self, ctx) -> bool:
@@ -205,9 +199,7 @@ class DiagnosticProcessor(BaseProcessor):
     def __init__(self, conditions):
         conditions = tuple(conditions)
         if not conditions:
-            raise ValueError(
-                "DiagnosticProcessor: at least one condition is required"
-            )
+            raise ValueError("DiagnosticProcessor: at least one condition is required")
         self.conditions = conditions
         req = set()
         for c in conditions:

@@ -271,16 +271,11 @@ def test_multiple_conditions_all_reported():
     class P(Pipeline):
         def __init__(self):
             super().__init__(error_policy=ErrorPolicy.FAIL_FAST)
-            self.add(
-                DiagnosticProcessor(
-                    conditions=[_AlwaysTriggers(), _AlwaysTriggers2()]
-                )
-            )
+            self.add(DiagnosticProcessor(conditions=[_AlwaysTriggers(), _AlwaysTriggers2()]))
 
     ctx = _run(P(), [NaturalUnitSystem()], max_steps=1)
     assert any(
-        ("AlwaysTriggers" in e) and ("AlwaysTriggers2" in e)
-        for e in ctx.diag.errors
+        ("AlwaysTriggers" in e) and ("AlwaysTriggers2" in e) for e in ctx.diag.errors
     ), ctx.diag.errors
 
 
@@ -417,9 +412,7 @@ def test_localization_below_condition_triggers():
     class P(Pipeline):
         def __init__(self):
             super().__init__(error_policy=ErrorPolicy.FAIL_FAST)
-            self.add(
-                DiagnosticProcessor(conditions=[LocalizationBelowCondition(0.5)])
-            )
+            self.add(DiagnosticProcessor(conditions=[LocalizationBelowCondition(0.5)]))
 
     ctx = _run(
         P(),
@@ -445,9 +438,7 @@ def test_sphericity_below_condition_triggers():
     class P(Pipeline):
         def __init__(self):
             super().__init__(error_policy=ErrorPolicy.FAIL_FAST)
-            self.add(
-                DiagnosticProcessor(conditions=[SphericityBelowCondition(0.5)])
-            )
+            self.add(DiagnosticProcessor(conditions=[SphericityBelowCondition(0.5)]))
 
     ctx = _run(
         P(),
@@ -570,9 +561,7 @@ def test_requires_union_spans_distinct_features():
             MaxRhoCondition(1.0),
         ]
     )
-    assert set(proc.requires) == {EnergyBudget, StabilityMetrics, EMCDensityField}, (
-        proc.requires
-    )
+    assert set(proc.requires) == {EnergyBudget, StabilityMetrics, EMCDensityField}, proc.requires
     assert len(proc.requires) == 3, proc.requires
 
 
@@ -635,9 +624,7 @@ def test_missing_stability_metrics_fails_at_build():
     class P(Pipeline):
         def __init__(self):
             super().__init__(error_policy=ErrorPolicy.FAIL_FAST)
-            self.add(
-                DiagnosticProcessor(conditions=[LocalizationBelowCondition(0.5)])
-            )
+            self.add(DiagnosticProcessor(conditions=[LocalizationBelowCondition(0.5)]))
 
     try:
         _run(P(), [NaturalUnitSystem()], max_steps=1)

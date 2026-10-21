@@ -374,6 +374,7 @@ def test_default_rule_is_noop():
     assert len(motion) == 1
     assert isinstance(motion[0].rule, NoOpRule), type(motion[0].rule)
 
+
 def test_include_vacuum_extends_external_provides_and_chain():
     """
     With vacuum=<instance>, the preset declares VacuumProvider in
@@ -458,6 +459,7 @@ def test_vacuum_preset_evolves_base_and_leaves_soliton_unchanged():
         "soliton field differs with the vacuum on: "
         f"max {float(np.abs(long_on - long_off).max())}"
     )
+
 
 # ======================================================================
 # Runner

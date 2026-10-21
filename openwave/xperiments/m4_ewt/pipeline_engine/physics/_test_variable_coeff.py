@@ -449,6 +449,7 @@ def _measure_staggered_drift(step_fn, n_steps, N, dx, dt):
             worst = d
     return worst
 
+
 def _staggered_energy(psi, psi_prev, c2, scratch, N, dx, dt):
     """
     E_stag = 0.5 * ||(psi^{n+1} - psi^n)/dt||^2
@@ -587,6 +588,7 @@ def _seed_harmonic_long(
         psi[i, j, k] = v
         prev[i, j, k] = v
 
+
 def test_naive_form_discriminates_from_flux_form_by_ratio():
     """
     Same arena and step count for both arms. The naive-form drift
@@ -612,12 +614,8 @@ def test_naive_form_discriminates_from_flux_form_by_ratio():
     dt = 0.01
     n_steps = 50
 
-    naive_drift = _measure_staggered_drift(
-        _leapfrog_naive_step, n_steps, N, dx, dt
-    )
-    flux_drift = _measure_staggered_drift(
-        _leapfrog_var_coeff_step, n_steps, N, dx, dt
-    )
+    naive_drift = _measure_staggered_drift(_leapfrog_naive_step, n_steps, N, dx, dt)
+    flux_drift = _measure_staggered_drift(_leapfrog_var_coeff_step, n_steps, N, dx, dt)
 
     print(f"  naive form relative drift: {naive_drift:.3e}")
     print(f"  flux form relative drift:  {flux_drift:.3e}")
@@ -629,6 +627,7 @@ def test_naive_form_discriminates_from_flux_form_by_ratio():
         f"(naive {naive_drift:.3e}, flux {flux_drift:.3e}); "
         f"the naive form no longer discriminates from the flux form"
     )
+
 
 def test_pipeline_runs_with_variable_coeff_chain():
     """
