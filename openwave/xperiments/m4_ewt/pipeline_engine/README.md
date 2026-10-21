@@ -194,10 +194,11 @@ Smoke test (no Taichi required):
 
     python -m openwave.xperiments.m4_ewt.pipeline_engine._smoke_test
 
-Runs six scenarios: a normal pipeline, a pipeline with an injected failure
+Runs eight scenarios: a normal pipeline, a pipeline with an injected failure
 (SOFT_STOP in action), a pipeline with file sinks, a pipeline reading a
-caller-supplied feature (external_provides), and two regression checks, one
-for the stateless guard and one for a failing setup().
+caller-supplied feature (external_provides), and four regression checks: the
+stateless guard, a failing setup(), a base-class requires satisfied by an
+initial_features instance, and a build failure that opens no sink.
 
 Physics demo (requires Taichi):
 
@@ -213,6 +214,9 @@ Physics demo (requires Taichi):
 5. Implement setup/process/teardown as needed.
 
 If the processor needs a feature that is not provided by any other
-processor, either declare it via Pipeline(external_provides=...) and pass
-an instance through Runner.run(..., initial_features=[...]), or add a
-lifecycle processor that provides it in setup().
+processor, either pass an instance through Runner.run(...,
+initial_features=[...]), which counts the instance and its base classes as
+provided at build time, or add a lifecycle processor that provides it in
+setup(). Declaring it in Pipeline(external_provides=...) as well lets the
+pipeline build without the instance; the omission then surfaces as a
+KeyError at the first require().

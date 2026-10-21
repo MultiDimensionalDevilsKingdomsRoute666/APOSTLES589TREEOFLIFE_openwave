@@ -692,10 +692,18 @@ Infrastructure only. No specific physics. Each item is a work unit.
 
 - [x] Define `PsiBaseField`, `PsiLongField`, `PsiTransField`,
       `EMCDensityField`, `EMCFluxField` (optional) as separate features.
-- [x] Each field is a `ti.Vector.field(3, ti.f32, shape=grid)` with a
-      triple-buffer variant for time integration.
+- [x] Each vector field (`PsiBaseField`, `PsiLongField`, `PsiTransField`)
+      is a `ti.Vector.field(3, ti.f32, shape=grid)` with a triple buffer
+      for time integration. `EMCDensityField` and `EMCFluxField` are
+      scalar, single-buffer `ti.field`s by design, since they carry
+      scalar densities and fluxes, not vector displacements.
 - [x] Ensure `FeatureBag` handles these as distinct types without aliasing.
-- [x] Add a test: allocate all five, write distinct values, read back.
+- [x] Add a test: allocate all five and confirm the `FeatureBag` keys
+      them separately (`test_allocation_provides_all_features`,
+      `_test_features.py`). The write-one, read-the-other test exists for
+      base against long (`_test_evolution_multifield.py`), transverse
+      against base and long, and EMC density against EMC flux
+      (`_test_features.py`).
 - [ ] `PsiInField`, `PsiOutField` — optional, used only by the reflective
       pipeline (B). They carry the incoming and outgoing components of the
       longitudinal field near wave centres.
@@ -713,7 +721,11 @@ Infrastructure only. No specific physics. Each item is a work unit.
 - [ ] Implement `TrackersUpdate` processor in `Stage.MEASURE`.
 - [x] Implement 3-plane sampling (as in the legacy `sample_avg_trackers`)
       to compute global averages without full reductions.
-- [x] Add a test: uniform field -> uniform tracker values.
+- [x] Add a test: a mock `TrackersUpdate` drives the tracker surface
+      with fixed outputs, and `ThreePlaneSampler` alone is tested against
+      a uniform field (`_test_sampling.py`). The production
+      `TrackersUpdate` is still open (the bullet above), so there is no
+      test of tracker values from a real field yet.
 
 ### 1.3 — Multi-field evolution
 
@@ -732,12 +744,12 @@ Infrastructure only. No specific physics. Each item is a work unit.
 - [x] Implement `SourceTermInterface` — base class for additive sources.
 - [x] Implement `ScatteringOperatorInterface` — separate base class for
       operators that redistribute energy between two fields. A scattering
-      operator adds to one field and subtracts from another, and records
-      the exchanged amount in the budget. `SourceTermInterface` and
-      `ScatteringOperatorInterface` are distinct: sources inject,
-      scatterers exchange. A scattering operator is unitary by contract:
-      the field magnitude that enters equals the field magnitude that
-      leaves, per wave centre.
+      operator adds to one field and subtracts from another.
+      `SourceTermInterface` and `ScatteringOperatorInterface` are
+      distinct: sources inject, scatterers exchange. Magnitude preservation
+      is a contract checked by the tests (`_test_sources.py`), not enforced
+      at runtime; nothing in the current build writes to `EnergyBudget`,
+      which is where a shipping operator's exchange would land.
 - [x] Add a test: two sources, superposition holds.
 
 ### 1.5 — Reflector interface
@@ -747,7 +759,9 @@ Infrastructure only. No specific physics. Each item is a work unit.
 - [x] These are *attributes*, not yet *behaviours*. The values are set by
       the experiment, not computed.
 - [x] Document the contract clearly: a reflector is a WC that satisfies
-      unitarity on `Psi_in`, `Psi_out`, `Psi_spin`.
+      unitarity on the incoming, outgoing and transverse (spin) fields.
+      `PsiInField` and `PsiOutField` do not exist yet; the transverse role
+      is carried by `PsiTransField`.
 - [ ] The scattering operator is introduced in item 2.2, variant B2d. The
       reflector interface here defines only the attributes; the operator
       that reads them is separate.
@@ -762,7 +776,9 @@ Infrastructure only. No specific physics. Each item is a work unit.
       vector given local field values.
 - [x] Provide a default rule (`F = -grad rho`) and a no-op (`F = 0`).
 - [x] Add a test: no-op drift -> positions unchanged; default drift on a
-      static `rho` -> WCs move to minimum.
+      static `rho` -> WCs move toward the deficit. The second arm checks
+      the direction after 5 steps (`x` decreases, velocity negative); the
+      motion has no damping, so nothing asserts arrival at the minimum.
 
 ### 1.7 — Boundary condition
 
@@ -864,26 +880,33 @@ This is the decision documented in Section 4. Work items:
 
 This is the decision documented in Section 5. Work items:
 
-- [ ] Define `VacuumProvider` interface: `seed`, `step`, `energy_budget`,
+- [x] Define `VacuumProvider` interface: `seed`, `step`, `energy_budget`,
       and the two capability flags `evolves` and `supports_reflection`.
-- [ ] Implement V1 (static, `evolves=False`, `supports_reflection=False`).
-- [ ] Implement V3 (periodic, both `True`).
+      (`physics/vacuum.py`)
+- [x] Implement V1 (static, `evolves=False`, `supports_reflection=False`).
+- [x] Implement V3 (periodic, both `True`).
 - [ ] Implement V4 (absorbing with re-injection, both `True`).
 - [ ] V2 and V5 are deferred.
-- [ ] Wire the provider as an external feature.
+- [x] Wire the provider as an external feature. It is passed in
+      `initial_features` and driven by `VacuumStepProcessor`;
+      `make_linear_wave_pipeline(vacuum=...)` adds the processor.
 - [ ] Implement the conservation check excluding `E_base` in pipeline A and
       including it in pipeline B.
 - [ ] Add a test: base wave alone -> `dE_soliton/dt = 0` trivially.
-- [ ] Add a test: a processor that requires `supports_reflection` raises
-      `PipelineError` when registered with V1.
+- [x] Add a test: a processor that requires `supports_reflection` raises
+      `PipelineError` when registered with V1. The processor is a test
+      fixture (`_ReflectionUser` in `_test_vacuum.py`); no shipping
+      processor reads the flag yet.
 
 ### 1.18 — Diagnostic hooks
 
-- [ ] Define a stop-condition contract: `StopCondition` callable.
-- [ ] Implement `DiagnosticProcessor` in `Stage.MEASURE`.
-- [ ] Built-in conditions: `dE/dt > threshold`, `localization < threshold`,
+- [x] Define a stop-condition contract: `StopCondition` callable.
+      (`physics/diagnostics.py`)
+- [x] Implement `DiagnosticProcessor` in `Stage.MEASURE`.
+- [x] Built-in conditions: `dE/dt > threshold`, `localization < threshold`,
       `sphericity < threshold`, `max(rho) > rho_max` (CFL guard).
-- [ ] Add a test: run with a forced violation -> simulation stops early.
+      `dE/dt` is compared as `|dE_dt|`.
+- [x] Add a test: run with a forced violation -> simulation stops early.
 
 ### 1.19 — Deterministic seeds
 
@@ -933,21 +956,34 @@ This is the decision documented in Section 5. Work items:
       Psi_i)/dx)^2 dx`.
 - [x] Test 1: constant `c^2` -> recovers the standard 6-point Laplacian.
 - [x] Test 2: variable `c^2`, harmonic wave, flux form -> the **staggered
-      leapfrog invariant** is conserved to machine precision over 1000
+      leapfrog invariant** is conserved to numerical precision over 50
       steps. The staggered invariant is
       `E_stag = (1/2) |(Psi^{n+1} - Psi^n)/dt|^2 + (1/2) Psi^n . A . Psi^{n+1}`
       where `A` is the flux-form stiffness operator (the negative of
       `LaplacianVariableCoeff`). This is the quantity the leapfrog
       conserves exactly; the Section 5.2 energy `E_soliton` is not
       conserved exactly by leapfrog on any stencil and carries the
-      standard O(dt^2) offset, so it is not the right test for machine
-      precision. If `E_soliton` is scored instead, the bar is O(dt^2)
-      convergence under refinement, not machine precision.
-- [x] Test 3: the same test with the naive `c^2_i * laplacian(Psi)` form
-      fails the staggered invariant by many orders of magnitude; this is
-      the discriminating test.
-- [x] The flux form is the only form used in pipeline A and pipeline B.
-      The naive form is a bug.
+      standard O(dt^2) offset, so it is not the right quantity to test
+      for the staggered invariant. If `E_soliton` is scored instead, the
+      bar is O(dt^2) convergence under refinement. The implemented test
+      asserts a relative drift below `1e-4`; the measured drift is of
+      order `1e-5`, consistent with f32 roundoff rather than a physical
+      residual. The exact value depends on the platform (Taichi's f32
+      reduction order is not fixed across architectures).
+- [x] Test 3: the same arena and step count with the naive
+      `c^2_i * laplacian(Psi)` form. The naive drift divided by the
+      flux-form drift must exceed 10; this is the discriminating test.
+      The measured ratio is of order 70-150x depending on the platform
+      (f32 reduction order); the assertion's 10x bar leaves a
+      comfortable margin under any f32 measurement but is tight enough
+      to fail when the two arms are swapped, where the ratio falls to
+      about 1.
+- [x] The flux form is the only form used where `c^2` varies
+      (`LaplacianVariableCoeffProcessor`). The preset pipeline
+      (`make_linear_wave_pipeline`, a precursor to 1.22) uses the
+      constant-coefficient `LaplacianProcessor`; pipelines A and B do not
+      exist yet. The naive form appears only in `_test_variable_coeff.py`
+      as the negative control.
 
 ---
 
@@ -1075,7 +1111,8 @@ the plan.
 
 - [x] **B8a**: `tetrahedron_10_locked` (r1 = 1 lambda, r2 = 2 lambda).
 - [ ] **B8b**: `tetrahedron_10_unlocked` (legacy r1, r2).
-- [x] **B8c**: `golden_angle`.
+- [x] **B8c**: `golden` (golden-angle phyllotaxis; the factory's geometry
+      name is `"golden"`).
 - [ ] **B8d**: `bcc_lattice`.
 - [x] **B8e**: `line` (negative control).
 - [ ] **B8f**: `random` (negative control).
