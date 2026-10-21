@@ -1,0 +1,6 @@
+python 3.12.14 numpy 2.5.3
+static mass 1428.8                     u'(2)=0 box: -0.1623 MeV   u(2)=0 box: +0.0796 MeV   u'(2)=0 infinite volume: -0.1624
+physical mass 938.9, same force        u'(2)=0 box: -0.0557 MeV   u(2)=0 box: +0.1213 MeV   u'(2)=0 infinite volume: -0.059
+force x0.657                           u'(2)=0 box: -0.0014 MeV   u(2)=0 box: +0.1215 MeV   u'(2)=0 infinite volume: -0.0133
+force multiplier for B_d = 2.2246 MeV at u'(2)=0, M = 938.9: 3.153
+force multiplier for B_d = 2.2246 MeV at u'(2)=0, M = 1428.8: 2.435
