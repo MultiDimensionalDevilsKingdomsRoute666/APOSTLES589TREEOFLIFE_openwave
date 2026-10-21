@@ -6,9 +6,11 @@ any condition returns True inside `DiagnosticProcessor.process`, the
 processor sets `ctx.sim.should_stop = True` and writes a diagnostic
 message to `ctx.diag.errors`. `Pipeline.step()` checks
 `ctx.sim.should_stop` after each MEASURE processor, so the run ends at
-the end of that step; MEASURE processors with a higher order (logging
-at 500, visualisation at 2000) do not run on the step where a
-condition triggers.
+the end of that step; MEASURE processors with a higher order (the
+`_demo.py` logger at 500, visualisation at 2000) do not run on the step
+where a condition triggers. A `LogProcessor` below order 100 (its
+default is 0; the smoke test uses 50 and 60) is not skipped on that
+step: it writes it if its `every` interval falls on it.
 
 A sweep driver (`ExperimentRunner`) records the diagnostic in the
 run's summary and continues with the next config.
@@ -51,7 +53,10 @@ class StopCondition:
     empty, so a lambda wrapped in a minimal subclass is legal.
 
     `name` is reported in the diagnostic message when the condition
-    triggers. Defaults to the class name.
+    triggers. Each built-in sets its own; a subclass that does not set
+    one inherits "StopCondition". A plain callable without a `name`
+    attribute is reported by its type name (a lambda reports as
+    `function`).
     """
 
     name: str = "StopCondition"
@@ -172,9 +177,11 @@ class DiagnosticProcessor(BaseProcessor):
 
     Stage.MEASURE, order 100. Sits after the measurement processors
     (`EnergyBudgetUpdate` at 5, `AmplitudeTracker` at 10,
-    `StabilityMetricsUpdate` at 20) and before logging (500) and
-    visualisation (2000), so the conditions see the step's fresh values
-    and the loggers do not record a step that is about to be stopped.
+    `StabilityMetricsUpdate` at 20) and before visualisation (2000), so
+    the conditions see the step's fresh values, and processors above it
+    (the `_demo.py` logger at 500, the visualisers at 2000) do not run on
+    a step that is about to be stopped. A `LogProcessor` below order 100
+    (its default is 0) is not skipped on that step.
 
     Requires is the union of every condition's `requires`, computed in
     `__init__` from the conditions. A condition that reads a feature

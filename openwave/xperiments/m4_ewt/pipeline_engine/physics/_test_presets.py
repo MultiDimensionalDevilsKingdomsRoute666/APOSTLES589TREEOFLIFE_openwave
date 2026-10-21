@@ -29,7 +29,7 @@ from .stability import StabilityMetricsUpdate
 from .units import NaturalUnitSystem, UnitSystem
 from .wc_factory import build_wc_state
 from .wc_types import WCState
-from .vacuum import VacuumProvider, VacuumStepProcessor
+from .vacuum import StaticVacuum, VacuumProvider, VacuumStepProcessor
 
 _TI_INITIALIZED = False
 
@@ -104,9 +104,11 @@ def test_declares_the_three_external_features():
     The preset declares UnitSystem, BoundaryCondition and WCState in
     external_provides.
 
-    Mutation caught: one of them dropped. Pipeline.build() then raises
-    PipelineError naming it, for every caller, including callers that
-    do provide it in initial_features.
+    Mutation caught: one of them dropped. A caller that provides the
+    feature in initial_features still builds, since Runner.run() counts
+    initial_features as provided; a caller that omits it then gets
+    PipelineError at build instead of the KeyError at first use that
+    the three tests below pin.
     """
     p = make_linear_wave_pipeline(grid=_GRID)
     ext = set(p._external_provides)
@@ -128,10 +130,12 @@ def test_missing_unitsystem_raises_at_first_use():
     inside LaplacianProcessor.process, as a KeyError naming UnitSystem.
 
     This test pins the engine's contract: external_provides is a
-    declaration, not a check. If the engine ever grows a real check
-    (scanning initial_features at build time), this test goes red and
-    the failure mode changes; the preset's docstring should be updated
-    at the same time.
+    declaration, not a check. Runner.run() now also counts
+    initial_features at build time, but only as an extra source, so an
+    omitted instance still reaches this KeyError. If the engine ever
+    grows a check that rejects a declared but absent feature at build
+    time, this test goes red and the failure mode changes; the preset's
+    docstring should be updated at the same time.
 
     Mutation caught: UnitSystem removed from the preset's
     external_provides. With the declaration gone, Pipeline.build()
@@ -372,10 +376,10 @@ def test_default_rule_is_noop():
 
 def test_include_vacuum_extends_external_provides_and_chain():
     """
-    With include_vacuum=True, the preset declares VacuumProvider in
+    With vacuum=<instance>, the preset declares VacuumProvider in
     external_provides and adds VacuumStepProcessor to the chain.
 
-    Mutation caught: include_vacuum ignored in the external_provides
+    Mutation caught: vacuum= ignored in the external_provides
     tuple or in the add() calls, so a pipeline that asked for vacuum
     support builds without the declaration or without the processor,
     and the caller's VacuumProvider instance is silently unused.
@@ -390,11 +394,11 @@ def test_include_vacuum_extends_external_provides_and_chain():
 
 def test_include_vacuum_default_off_keeps_preset_unchanged():
     """
-    With include_vacuum omitted, the preset's external_provides and
+    With vacuum= omitted, the preset's external_provides and
     chain match the pre-vacuum shape: VacuumProvider not declared,
     VacuumStepProcessor not in the chain.
 
-    Mutation caught: include_vacuum defaulting to True, which changes
+    Mutation caught: the vacuum branch taken for vacuum=None, which changes
     the external_provides contract for every existing caller and breaks
     every test that documents the three-feature declaration.
     """
@@ -404,6 +408,56 @@ def test_include_vacuum_default_off_keeps_preset_unchanged():
     assert not any(isinstance(x, VacuumStepProcessor) for x in p._all), [
         type(x).__name__ for x in p._all
     ]
+
+
+def test_vacuum_preset_evolves_base_and_leaves_soliton_unchanged():
+    """
+    End to end through Runner.run: with vacuum=PeriodicVacuum() the base
+    field moves off its seed, without vacuum= it stays there, and the
+    soliton field is bit-identical in both runs.
+
+    Mutation caught: VacuumStepProcessor not added by the preset (the
+    base field stays at its seed), or the vacuum step writing into
+    PsiLongField (the soliton runs differ). The second half is the
+    VacuumStepProcessor docstring's claim that base and soliton are
+    independent in the current build.
+    """
+    import numpy as np
+
+    from .features import PsiBaseField
+    from .seed import SeedBaseWave
+    from .vacuum import PeriodicVacuum
+
+    _ti_init()
+    n = _GRID
+    i, j, k = np.meshgrid(np.arange(n), np.arange(n), np.arange(n), indexing="ij")
+    r2 = (i - n / 2) ** 2 + (j - n / 2) ** 2 + (k - n / 2) ** 2
+    seed = np.zeros((n, n, n, 3), dtype=np.float32)
+    seed[..., 0] = np.exp(-r2 / (2.0 * 4.0**2))
+
+    runs = {}
+    for label, vacuum in (("off", None), ("on", PeriodicVacuum())):
+        p = make_linear_wave_pipeline(grid=n, vacuum=vacuum)
+        p.add(SeedBaseWave(seed))
+        initial = _initial_features()
+        if vacuum is not None:
+            initial.append(vacuum)
+        ctx = _run(p, initial, max_steps=10)
+        assert ctx.diag.errors == [], (label, ctx.diag.errors)
+        runs[label] = (
+            ctx.data.require(PsiBaseField).psi.to_numpy(),
+            ctx.data.require(PsiLongField).psi.to_numpy(),
+        )
+
+    base_off, long_off = runs["off"]
+    base_on, long_on = runs["on"]
+    assert float(np.abs(base_off - seed).max()) == 0.0, "base moved without a vacuum"
+    moved = float(np.abs(base_on - seed).max())
+    assert moved > 1e-3, f"PeriodicVacuum did not evolve the base field: {moved}"
+    assert np.array_equal(long_on, long_off), (
+        "soliton field differs with the vacuum on: "
+        f"max {float(np.abs(long_on - long_off).max())}"
+    )
 
 # ======================================================================
 # Runner
@@ -425,6 +479,9 @@ def main() -> int:
         test_extra_measure_added_after_stability,
         test_empty_hooks_are_no_ops,
         test_default_rule_is_noop,
+        test_include_vacuum_extends_external_provides_and_chain,
+        test_include_vacuum_default_off_keeps_preset_unchanged,
+        test_vacuum_preset_evolves_base_and_leaves_soliton_unchanged,
     ]
     passed = 0
     for t in tests:

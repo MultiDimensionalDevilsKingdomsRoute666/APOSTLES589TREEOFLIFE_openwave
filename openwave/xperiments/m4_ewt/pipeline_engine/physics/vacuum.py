@@ -218,13 +218,15 @@ class VacuumStepProcessor(BaseProcessor):
     pay this declaration cost; the alternative (per-variant processors)
     was rejected because it puts the variant name in the pipeline code.
 
-    Note on `external_provides`: `VacuumProvider` must be declared in
-    the pipeline's `external_provides` or provided by an earlier
-    processor, otherwise `Pipeline.build()` raises `PipelineError`. If
-    the pipeline declares it but the caller omits the instance from
-    `initial_features`, `process()` raises `KeyError` at step 0. This is
-    the same "declaration, not check" behaviour the preset tests
-    document.
+    Note on `external_provides`: under `Runner.run()`, a provider
+    instance in `initial_features` satisfies `requires` at build time
+    by MRO, with or without a declaration. Without an instance,
+    `VacuumProvider` must be declared in the pipeline's
+    `external_provides` (or provided by an earlier processor), otherwise
+    `Pipeline.build()` raises `PipelineError`. If the pipeline declares
+    it but the caller omits the instance, `process()` raises `KeyError`
+    at step 0. This is the same "declaration, not check" behaviour the
+    preset tests document.
     """
 
     name = "VacuumStepProcessor"

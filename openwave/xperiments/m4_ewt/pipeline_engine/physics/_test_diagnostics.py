@@ -458,6 +458,163 @@ def test_sphericity_below_condition_triggers():
     assert any("SphericityBelowCondition" in e for e in ctx.diag.errors), ctx.diag.errors
 
 
+def test_localization_and_sphericity_read_their_own_field():
+    """
+    Each StabilityMetrics condition reads its own field. The tests above
+    seed one metric and leave the other at its default 0.0, which is
+    below every threshold, so a condition reading the other field still
+    fires there. Here the other metric sits at a healthy 1.0, both ways.
+
+    Mutation caught: LocalizationBelowCondition reading `sphericity`, or
+    SphericityBelowCondition reading `localization`.
+    """
+    _ti_init()
+
+    def stopped(cond, metrics):
+        class P(Pipeline):
+            def __init__(self):
+                super().__init__(error_policy=ErrorPolicy.FAIL_FAST)
+                self.add(DiagnosticProcessor(conditions=[cond]))
+
+        ctx = _run(P(), [NaturalUnitSystem(), metrics], max_steps=5)
+        return ctx.sim.step == 1
+
+    low_loc = StabilityMetrics(localization=0.1, sphericity=1.0)
+    low_sph = StabilityMetrics(localization=1.0, sphericity=0.1)
+    assert stopped(LocalizationBelowCondition(0.5), low_loc)
+    assert not stopped(LocalizationBelowCondition(0.5), low_sph)
+    assert stopped(SphericityBelowCondition(0.5), low_sph)
+    assert not stopped(SphericityBelowCondition(0.5), low_loc)
+
+
+class _SeedRhoSpike(BaseProcessor):
+    """Fill EMCDensityField.rho with `value`, then one voxel with `spike`."""
+
+    name = "_SeedRhoSpike"
+    stage = Stage.PRE_UPDATE
+    order = 5
+    requires = (EMCDensityField,)
+
+    def __init__(self, value, spike, at=(2, 5, 3)):
+        self.value = float(value)
+        self.spike = float(spike)
+        self.at = tuple(at)
+
+    def process(self, ctx):
+        if ctx.sim.step > 0:
+            return
+        rho = ctx.data.require(EMCDensityField).rho
+        rho.fill(self.value)
+        rho[self.at] = self.spike
+
+
+def test_max_rho_condition_reads_the_maximum():
+    """
+    MaxRhoCondition fires on a single voxel above rho_max in a field
+    that is otherwise below it. A uniform fill cannot tell the maximum
+    from the mean, the minimum or any one voxel.
+
+    Mutation caught: `.max()` replaced by `.mean()` or `.min()`.
+    """
+    _ti_init()
+
+    class P(Pipeline):
+        def __init__(self):
+            super().__init__(error_policy=ErrorPolicy.FAIL_FAST)
+            self.add(AllocateWaveField(nx=8, ny=8, nz=8, dx=1.0))
+            self.add(_SeedRhoSpike(0.5, 1.5))
+            self.add(DiagnosticProcessor(conditions=[MaxRhoCondition(1.0)]))
+
+    ctx = _run(P(), [NaturalUnitSystem()], max_steps=5)
+    assert ctx.sim.step == 1, ctx.sim.step
+    assert any("MaxRhoCondition" in e for e in ctx.diag.errors), ctx.diag.errors
+
+
+def test_energy_drift_condition_both_signs_and_band():
+    """
+    EnergyDriftCondition fires on a large positive dE_dt too, and stays
+    silent inside the band on either side.
+
+    Mutation caught: abs() replaced by a negation (only negative drift
+    caught), or the comparison flipped.
+    """
+    _ti_init()
+
+    def stopped(dE_dt):
+        class P(Pipeline):
+            def __init__(self):
+                super().__init__(error_policy=ErrorPolicy.FAIL_FAST)
+                self.add(DiagnosticProcessor(conditions=[EnergyDriftCondition(1.0)]))
+
+        ctx = _run(P(), [NaturalUnitSystem(), EnergyBudget(dE_dt=dE_dt)], max_steps=5)
+        return ctx.sim.step == 1
+
+    assert stopped(+1e6)
+    assert not stopped(+0.5)
+    assert not stopped(-0.5)
+
+
+def test_requires_union_spans_distinct_features():
+    """
+    The requires union covers conditions with different requirements.
+    test_requires_aggregated_from_conditions uses two conditions that
+    both need StabilityMetrics, so it cannot see a union that reads only
+    the first condition.
+
+    Mutation caught: requires taken from the first condition only.
+    """
+    proc = DiagnosticProcessor(
+        conditions=[
+            EnergyDriftCondition(1.0),
+            LocalizationBelowCondition(0.5),
+            MaxRhoCondition(1.0),
+        ]
+    )
+    assert set(proc.requires) == {EnergyBudget, StabilityMetrics, EMCDensityField}, (
+        proc.requires
+    )
+    assert len(proc.requires) == 3, proc.requires
+
+
+_ORDER_PROBE_CALLS = []
+
+
+class _OrderProbe(BaseProcessor):
+    """Record (order, step) for each process() call. Test fixture."""
+
+    name = "_OrderProbe"
+    stage = Stage.MEASURE
+
+    def __init__(self, order):
+        self.order = order
+
+    def process(self, ctx):
+        _ORDER_PROBE_CALLS.append((self.order, ctx.sim.step))
+
+
+def test_processors_after_diagnostic_skip_the_stop_step():
+    """
+    On the step where a condition fires, a MEASURE processor below
+    order 100 runs and one above it (the visualisers' 2000) does not.
+
+    Mutation caught: DiagnosticProcessor.order moved above the
+    visualisers, so they draw the step that is being stopped.
+    """
+    _ti_init()
+    _ORDER_PROBE_CALLS.clear()
+
+    class P(Pipeline):
+        def __init__(self):
+            super().__init__(error_policy=ErrorPolicy.FAIL_FAST)
+            self.add(_OrderProbe(50))
+            self.add(DiagnosticProcessor(conditions=[_AlwaysTriggers()]))
+            self.add(_OrderProbe(2000))
+
+    ctx = _run(P(), [NaturalUnitSystem()], max_steps=5)
+    assert ctx.sim.step == 1, ctx.sim.step
+    assert _ORDER_PROBE_CALLS == [(50, 0)], _ORDER_PROBE_CALLS
+
+
 # ======================================================================
 # Build-time validation
 # ======================================================================
@@ -531,6 +688,11 @@ def main() -> int:
         test_energy_drift_condition_uses_absolute_value,
         test_localization_below_condition_triggers,
         test_sphericity_below_condition_triggers,
+        test_localization_and_sphericity_read_their_own_field,
+        test_max_rho_condition_reads_the_maximum,
+        test_energy_drift_condition_both_signs_and_band,
+        test_requires_union_spans_distinct_features,
+        test_processors_after_diagnostic_skip_the_stop_step,
         test_missing_stability_metrics_fails_at_build,
         test_stateless_guard_passes,
     ]

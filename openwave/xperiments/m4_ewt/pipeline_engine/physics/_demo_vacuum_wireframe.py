@@ -2,15 +2,15 @@
 Runnable demo: vacuum (base wave) as a wireframe xy mesh.
 
 The pipeline runs the standard linear-wave soliton chain plus the
-vacuum layer. The wireframe visualises `PsiBaseField`, the field the
-vacuum variant owns: under a static vacuum (V1) the base wave stays at
-its seed; under a periodic vacuum (V3) the base wave evolves under the
-wave equation with a periodic boundary.
+vacuum layer. By default the wireframe visualises `PsiBaseField`, the
+field the vacuum variant owns: under a static vacuum (V1) the base wave
+stays at its seed; under a periodic vacuum (V3) the base wave evolves
+under the wave equation with a periodic boundary.
 
 The soliton field (`PsiLongField`) is seeded by `SeedMultiCenter` from
-the `wc_state` the caller passes, and evolves alongside, but this demo
-does not render it. The `_demo_k10_wireframe.py` demo is the one that
-renders the soliton.
+the `wc_state` the caller passes, and evolves alongside; `--field
+soliton` renders it instead. The `_demo_k10_wireframe.py` demo is the
+fuller soliton view.
 
 Run:
     python -m openwave.xperiments.m4_ewt.pipeline_engine.physics._demo_vacuum_wireframe
@@ -24,6 +24,8 @@ Options:
     --cam 2.0 2.5 2.0      camera position
     --wave-menu 1          1=orange, 2=ironbow, 3=blueprint
     --vacuum periodic      static (V1) or periodic (V3)
+    --field base           base (PsiBaseField) or soliton (PsiLongField)
+    --steps 1000000        maximum steps
 
 Not a test: opens a Taichi GGUI window and blocks until closed. Not in
 the CI test list, cannot be run headless.
@@ -273,7 +275,8 @@ def main() -> None:
         f"vacuum evolves={vacuum.evolves}  "
         f"supports_reflection={vacuum.supports_reflection}"
     )
-    print("Wireframe xy plane (PsiBaseField). Close window (ESC) to stop.\n")
+    shown = "PsiLongField" if args.field == "soliton" else "PsiBaseField"
+    print(f"Wireframe xy plane ({shown}). Close window (ESC) to stop.\n")
 
     out_dir = Path(__file__).resolve().parents[2] / "data"
     ctx = Runner({"session": InMemorySink()}).run(

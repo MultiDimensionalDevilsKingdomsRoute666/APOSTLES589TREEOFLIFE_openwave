@@ -38,7 +38,47 @@ def make_linear_wave_pipeline(
     vacuum: VacuumProvider | None = None,
 ) -> Pipeline:
     """
-    ... (reszta docstringu bez zmian do momentu opisu vacuum) ...
+    Build the standard linear-wave pipeline on a cube grid.
+
+    Processor chain, in order of appearance (Pipeline.build() then
+    sorts by each processor's order attribute):
+
+        AllocateWaveField(grid, grid, grid, dx=1.0)
+        SeedMultiCenter(radius=seed_radius)
+        ClearAccelerationProcessor
+        VacuumStepProcessor          only when vacuum is given
+        LaplacianProcessor
+        ...nonlinear_terms
+        LeapfrogProcessor
+        BoundaryProcessor(PsiLongField)
+        WCMotionProcessor(NoOpRule)
+        StabilityMetricsUpdate(threshold=metric_threshold)
+        ...extra_measure
+
+    The caller must provide, through initial_features:
+
+        UnitSystem         e.g. NaturalUnitSystem()
+        BoundaryCondition  BoundaryProcessor applies its kind:
+                           "dirichlet", "periodic" or "reflecting"
+        WCState            consumed by SeedMultiCenter
+
+    These are declared in external_provides. Runner.run() also counts
+    every initial_features instance (and its base classes) as provided
+    at build time, so an instance satisfies validation with or without
+    the declaration. The declaration is what lets a caller that omits
+    one of the three still pass build-time validation; that caller gets
+    a KeyError at the first require() inside that processor's process().
+    Not at build time.
+
+    The chain does not include a nonlinear term. nonlinear_terms
+    accepts processors such as NonlinearCubic (order 15); they land
+    between the Laplacian and the Leapfrog in the effective order.
+    extra_measure is for visualizers, loggers, and diagnostic hooks.
+    Its processors are added last, and build() sorts each stage by
+    order with a stable sort, so a MEASURE processor at order 20 or
+    above runs after StabilityMetricsUpdate (the visualizers use 2000)
+    and one below 20 runs before it. Processors with equal orders keep
+    the order in which they were added.
 
     vacuum=None (the default) keeps the chain identical to the
     pre-vacuum preset; every existing demo and test is unaffected.
@@ -55,7 +95,10 @@ def make_linear_wave_pipeline(
 
     Passing vacuum= does not check the instance's capability flags.
     A processor that needs supports_reflection=True is expected to
-    check them in its own setup() (see VacuumStepProcessor docstring).
+    check them in its own setup() (see the VacuumProvider docstring).
+
+    error_policy is FAIL_FAST: a pipeline with the wrong features is a
+    configuration error, not a run-time event to tolerate.
     """
     external = (UnitSystem, BoundaryCondition, WCState)
     if vacuum is not None:

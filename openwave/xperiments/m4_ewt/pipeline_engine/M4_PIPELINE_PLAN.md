@@ -701,8 +701,9 @@ Infrastructure only. No specific physics. Each item is a work unit.
 - [x] Add a test: allocate all five and confirm the `FeatureBag` keys
       them separately (`test_allocation_provides_all_features`,
       `_test_features.py`). The write-one, read-the-other test exists for
-      base against long (`_test_evolution_multifield.py`); the transverse
-      and EMC fields do not have such a test yet.
+      base against long (`_test_evolution_multifield.py`), transverse
+      against base and long, and EMC density against EMC flux
+      (`_test_features.py`).
 - [ ] `PsiInField`, `PsiOutField` — optional, used only by the reflective
       pipeline (B). They carry the incoming and outgoing components of the
       longitudinal field near wave centres.
@@ -879,26 +880,33 @@ This is the decision documented in Section 4. Work items:
 
 This is the decision documented in Section 5. Work items:
 
-- [ ] Define `VacuumProvider` interface: `seed`, `step`, `energy_budget`,
+- [x] Define `VacuumProvider` interface: `seed`, `step`, `energy_budget`,
       and the two capability flags `evolves` and `supports_reflection`.
-- [ ] Implement V1 (static, `evolves=False`, `supports_reflection=False`).
-- [ ] Implement V3 (periodic, both `True`).
+      (`physics/vacuum.py`)
+- [x] Implement V1 (static, `evolves=False`, `supports_reflection=False`).
+- [x] Implement V3 (periodic, both `True`).
 - [ ] Implement V4 (absorbing with re-injection, both `True`).
 - [ ] V2 and V5 are deferred.
-- [ ] Wire the provider as an external feature.
+- [x] Wire the provider as an external feature. It is passed in
+      `initial_features` and driven by `VacuumStepProcessor`;
+      `make_linear_wave_pipeline(vacuum=...)` adds the processor.
 - [ ] Implement the conservation check excluding `E_base` in pipeline A and
       including it in pipeline B.
 - [ ] Add a test: base wave alone -> `dE_soliton/dt = 0` trivially.
-- [ ] Add a test: a processor that requires `supports_reflection` raises
-      `PipelineError` when registered with V1.
+- [x] Add a test: a processor that requires `supports_reflection` raises
+      `PipelineError` when registered with V1. The processor is a test
+      fixture (`_ReflectionUser` in `_test_vacuum.py`); no shipping
+      processor reads the flag yet.
 
 ### 1.18 — Diagnostic hooks
 
-- [ ] Define a stop-condition contract: `StopCondition` callable.
-- [ ] Implement `DiagnosticProcessor` in `Stage.MEASURE`.
-- [ ] Built-in conditions: `dE/dt > threshold`, `localization < threshold`,
+- [x] Define a stop-condition contract: `StopCondition` callable.
+      (`physics/diagnostics.py`)
+- [x] Implement `DiagnosticProcessor` in `Stage.MEASURE`.
+- [x] Built-in conditions: `dE/dt > threshold`, `localization < threshold`,
       `sphericity < threshold`, `max(rho) > rho_max` (CFL guard).
-- [ ] Add a test: run with a forced violation -> simulation stops early.
+      `dE/dt` is compared as `|dE_dt|`.
+- [x] Add a test: run with a forced violation -> simulation stops early.
 
 ### 1.19 — Deterministic seeds
 
@@ -961,14 +969,15 @@ This is the decision documented in Section 5. Work items:
       asserts a relative drift below `1e-4`; the measured drift is of
       order `1e-5`, consistent with f32 roundoff rather than a physical
       residual. The exact value depends on the platform (Taichi's f32
-      reduction order is not fixed across architectures). measured, which is f32 roundoff rather than a physical
-      residual.
+      reduction order is not fixed across architectures).
 - [x] Test 3: the same arena and step count with the naive
       `c^2_i * laplacian(Psi)` form. The naive drift divided by the
       flux-form drift must exceed 10; this is the discriminating test.
       The measured ratio is of order 70-150x depending on the platform
       (f32 reduction order); the assertion's 10x bar leaves a
       comfortable margin under any f32 measurement but is tight enough
+      to fail when the two arms are swapped, where the ratio falls to
+      about 1.
 - [x] The flux form is the only form used where `c^2` varies
       (`LaplacianVariableCoeffProcessor`). The preset pipeline
       (`make_linear_wave_pipeline`, a precursor to 1.22) uses the

@@ -21,14 +21,15 @@ a happy-path smoke check. The not-happy-path arms are:
 This module imports Taichi kernels from `evolution.py` and `boundary.py`;
 it does not define any `@ti.kernel` itself.
 
-Note on `external_provides`: every pipeline that hosts
-`VacuumStepProcessor` must declare `UnitSystem` in
-`external_provides`, because `VacuumStepProcessor.requires` includes
+Note on `external_provides`: `VacuumStepProcessor.requires` includes
 `UnitSystem` (the union of what V1 and V3 need) and no processor
 provides it. `WaveGrid` and `PsiBaseField` come from
-`AllocateWaveField` and do not need to be declared. `VacuumProvider`
-comes from `initial_features` but must still be declared, per the
-"declaration, not check" contract.
+`AllocateWaveField`. Under `Runner.run()`, a `UnitSystem` or
+`VacuumProvider` instance in `initial_features` satisfies `requires` at
+build time by MRO, so the declarations below are needed only by the
+tests that omit an instance on purpose. The fixtures declare both
+anyway, so the pipelines meant to build also build under a direct
+`Pipeline.build()` call.
 
 Run from the project root:
 
@@ -56,7 +57,7 @@ from .allocator import AllocateWaveField
 from .boundary import _boundary_periodic
 from .evolution import _clear_accel, _laplacian, _leapfrog
 from .features import PsiBaseField, WaveGrid
-from .units import NaturalUnitSystem, UnitSystem
+from .units import NaturalUnitSystem, OpenWaveUnitSystem, UnitSystem
 from .vacuum import (
     PeriodicVacuum,
     StaticVacuum,
@@ -467,6 +468,58 @@ def test_periodic_vacuum_step_matches_manual_composition():
     assert d_prev < 1e-5, f"V3 prev mismatches manual composition by {d_prev}"
 
 
+def test_periodic_vacuum_matches_manual_on_noncubic_grid():
+    """
+    The manual-composition check above on an arena where the grid
+    arguments can be told apart: a 12 x 16 x 20 grid, dx = 0.5, and
+    OpenWaveUnitSystem (c = 0.2998). The cubic dx = c = 1 arena cannot
+    see a lost c, a lost dx or permuted axes, because each of them
+    evaluates to the same number there.
+
+    Mutation caught: `float(units.c)` replaced by 1.0, `grid.dx`
+    replaced by 1.0, or the Laplacian called with (nz, ny, nx).
+    """
+    _ti_init()
+
+    nx, ny, nz = 12, 16, 20
+    dx = 0.5
+    dt = 0.2
+    units = OpenWaveUnitSystem()
+
+    class P(Pipeline):
+        def __init__(self):
+            super().__init__(
+                error_policy=ErrorPolicy.FAIL_FAST,
+                external_provides=(VacuumProvider, UnitSystem),
+            )
+            self.add(AllocateWaveField(nx=nx, ny=ny, nz=nz, dx=dx))
+            self.add(_SeedBase(amp=0.3, sigma=3.0))
+            self.add(VacuumStepProcessor())
+
+    ctx = _run(P(), [units, PeriodicVacuum()], dt=dt, max_steps=3)
+    assert not ctx.diag.errors, ctx.diag.errors
+    v3_psi = ctx.data.require(PsiBaseField).psi.to_numpy()
+
+    psi_ti = ti.Vector.field(3, dtype=ti.f32, shape=(nx, ny, nz))
+    prev_ti = ti.Vector.field(3, dtype=ti.f32, shape=(nx, ny, nz))
+    new_ti = ti.Vector.field(3, dtype=ti.f32, shape=(nx, ny, nz))
+    seed = np.zeros((nx, ny, nz, 3), dtype=np.float32)
+    _seed_base_gaussian_on_np(seed, nx, ny, nz, 0.3, 3.0)
+    psi_ti.from_numpy(seed)
+    prev_ti.from_numpy(seed)
+    for _ in range(3):
+        _clear_accel(new_ti, nx, ny, nz)
+        _laplacian(psi_ti, new_ti, nx, ny, nz, dx, float(units.c))
+        _leapfrog(psi_ti, prev_ti, new_ti, nx, ny, nz, dt * dt)
+        _boundary_periodic(psi_ti, prev_ti, nx, ny, nz)
+    manual = psi_ti.to_numpy()
+
+    moved = float(np.abs(manual - seed).max())
+    assert moved > 1e-3, f"arena too quiet to discriminate: {moved}"
+    d = float(np.abs(v3_psi - manual).max())
+    assert d < 1e-6, f"V3 mismatches manual composition on 12x16x20 by {d}"
+
+
 # ======================================================================
 # Capability mismatch: reflection
 # ======================================================================
@@ -590,6 +643,7 @@ def main() -> int:
         test_static_vacuum_leaves_base_field_unchanged,
         test_periodic_vacuum_evolves_base_field,
         test_periodic_vacuum_step_matches_manual_composition,
+        test_periodic_vacuum_matches_manual_on_noncubic_grid,
         test_reflection_user_fails_with_static_vacuum,
         test_reflection_user_succeeds_with_periodic_vacuum,
         test_vacuum_step_processor_calls_seed_once,
