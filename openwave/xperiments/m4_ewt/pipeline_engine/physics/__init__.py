@@ -48,6 +48,14 @@ from .seed import SeedBaseWave
 from .energy import EnergyBudgetUpdate
 from .stability import StabilityMetricsUpdate
 from .vacuum import PeriodicVacuum, StaticVacuum, VacuumProvider, VacuumStepProcessor
+from .diagnostics import (
+    DiagnosticProcessor,
+    EnergyDriftCondition,
+    LocalizationBelowCondition,
+    MaxRhoCondition,
+    SphericityBelowCondition,
+    StopCondition,
+)
 
 __all__ = [
     # wave centers
@@ -105,4 +113,11 @@ __all__ = [
     "StaticVacuum",
     "PeriodicVacuum",
     "VacuumStepProcessor",
+    # Diagnostic
+    "StopCondition",
+    "MaxRhoCondition",
+    "EnergyDriftCondition",
+    "LocalizationBelowCondition",
+    "SphericityBelowCondition",
+    "DiagnosticProcessor",
 ]

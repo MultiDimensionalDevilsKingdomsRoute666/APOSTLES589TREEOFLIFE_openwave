@@ -259,9 +259,11 @@ def test_vacuum_step_processor_requires_all_four_features():
     in `external_provides` and omits R, then add only VacuumStepProcessor.
     Pipeline.build() must raise PipelineError naming R.
 
-    Each of the four requires is tested independently, so dropping one
-    requirement does not hide the others. A single-arm check would only
-    catch the first missing feature and would miss the rest.
+    initial_features is empty so the MRO expansion in Runner.run() adds
+    nothing: the only source of `available` in this test is
+    `external_provides`. A non-empty initial_features would supply
+    UnitSystem via NaturalUnitSystem's MRO and mask the
+    `missing=UnitSystem` arm.
 
     Mutation caught: any of the four dropped from requires.
     """
@@ -280,7 +282,7 @@ def test_vacuum_step_processor_requires_all_four_features():
                 self.add(VacuumStepProcessor())
 
         try:
-            _run(P(), [NaturalUnitSystem()], max_steps=1)
+            _run(P(), [], max_steps=1)
         except PipelineError as e:
             assert missing.__name__ in str(e), (missing.__name__, str(e))
             continue

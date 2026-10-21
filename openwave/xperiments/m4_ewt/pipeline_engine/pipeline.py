@@ -137,15 +137,41 @@ class Pipeline:
 
     # --- Validation ---
 
-    def build(self) -> None:
+    def build(self, extra_provides: tuple[type, ...] = ()) -> None:
+        """
+        Sort processors and validate the requires/provides graph.
+
+        `extra_provides` lists feature classes that the caller has
+        promised to supply through `initial_features`. `Runner.run()`
+        passes the MRO expansion of `initial_features` here, so a
+        feature passed as an instance satisfies a processor's requires
+        without a matching entry in `external_provides`. A direct
+        caller (a test that only inspects `_all` after build) can call
+        this with no arguments; validation then sees only
+        `external_provides` and processor `provides`.
+        """
         self._all.sort(key=lambda p: p.order)
         for s in Stage:
             self._by_stage[s].sort(key=lambda p: p.order)
-        self._validate()
+        self._validate(extra_provides)
         self._built = True
 
-    def _validate(self) -> None:
-        available: set[type] = set(self._external_provides)
+    def _validate(self, extra_provides: tuple[type, ...] = ()) -> None:
+        """
+        Check every processor's `requires` against the union of three
+        sources: `external_provides`, `extra_provides` (the MRO
+        expansion of `initial_features`, passed by `Runner.run`), and
+        the `provides` of every processor that has already run.
+
+        A `requires` entry not satisfied by any of the three raises
+        `PipelineError` at build, not at the first `require()` inside
+        a processor's `process()`. A feature that is declared (either
+        via `external_provides` or by being in `initial_features`) but
+        never actually written to `ctx.data` still raises `KeyError`
+        at first use -- that is the "declaration, not check" half, and
+        it remains.
+        """
+        available: set[type] = set(self._external_provides) | set(extra_provides)
         # Lifecycle-only processors first, in global order.
         for p in self._all:
             if p.stage is None:
@@ -162,7 +188,8 @@ class Pipeline:
         for r in p.requires:
             if r not in available:
                 raise PipelineError(
-                    f"{p.name}: requires '{r.__name__}', " f"not provided by any earlier processor"
+                    f"{p.name}: requires '{r.__name__}', "
+                    f"not provided by any earlier processor"
                 )
 
     # --- Lifecycle ---
