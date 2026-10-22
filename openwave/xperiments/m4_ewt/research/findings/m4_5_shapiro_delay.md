@@ -90,8 +90,8 @@ No free numerical parameters are introduced.
 
 ## Reference
 
-Full derivation in the Enhanced EWT manuscript, version 4.5.7:
-[DOI: 10.5281/zenodo.22097316](https://doi.org/10.5281/zenodo.22097316)
+Full derivation in the Enhanced EWT manuscript, version 5.1.7:
+[DOI: 10.5281/zenodo.23559858](https://doi.org/10.5281/zenodo.23559858)
 
 Relevant section:
 

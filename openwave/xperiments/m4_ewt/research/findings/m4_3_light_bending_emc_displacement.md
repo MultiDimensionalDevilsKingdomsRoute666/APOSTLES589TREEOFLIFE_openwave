@@ -120,8 +120,8 @@ property.
 
 ## Reference
 
-Full derivation in the Enhanced EWT manuscript, version 4.5.6:
-[DOI: 10.5281/zenodo.22086668](https://doi.org/10.5281/zenodo.22086668) (version DOI; concept DOI 10.5281/zenodo.17654657)
+Full derivation in the Enhanced EWT manuscript, version 5.1.7:
+[DOI: 10.5281/zenodo.23559858](https://doi.org/10.5281/zenodo.23559858) (version DOI; concept DOI 10.5281/zenodo.17654657)
 
 Relevant sections:
 
