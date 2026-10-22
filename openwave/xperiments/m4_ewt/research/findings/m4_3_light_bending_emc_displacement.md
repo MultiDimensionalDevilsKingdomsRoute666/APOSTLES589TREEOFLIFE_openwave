@@ -2,8 +2,8 @@
 
 > This is an Enhanced EWT extension, authored by Łukasz Smoliński, as registered in
 > [`_CITATIONS.md`](../../theory/_CITATIONS.md) (The Geometric Identity of Gravity and
-> Dimensional Unification, v4.5.6, DOI
-> [10.5281/zenodo.22086668](https://doi.org/10.5281/zenodo.22086668)).
+> Dimensional Unification, v5.1.7, DOI
+> [10.5281/zenodo.23559858](https://doi.org/10.5281/zenodo.23559858)).
 
 ## Criterion
 Gravity: local metric phenomena (light bending component; gravitational
@@ -96,8 +96,8 @@ the Enhanced EWT lattice model, derived in the cited manuscript sections
 - The full non-linear expression is
   \(n_\gamma(r) = \eta(r)^{-1} = (1 - r_s/r)^{-1}\), combining the
   spatial stretching \(\eta^{-1/2}\) and the temporal dilation
-  \(\eta^{-1/2}\) of the strained lattice. It matches the exact
-  Schwarzschild optical metric factor.
+  \(\eta^{-1/2}\) of the strained lattice. It equals the radial
+  Schwarzschild optical factor \(\sqrt{|g_{rr}/g_{00}|}\) exactly.
 
 No free numerical parameters are introduced.
 
@@ -110,7 +110,7 @@ The encoding, not the bending, is the model-specific step: the
 derivation of \(n(r)\) from lattice elasticity is given in the
 manuscript (Reference); it is not recomputed in-platform, so
 in-platform this artifact remains a consistency test of the encoding.
-The same encoding is argued, via \(c \equiv \lambda_l/t_p\), to control clock rates; gravitational
+The same density ratio \(\eta\) is argued, via \(c \equiv \lambda_l/t_p\), to control clock rates; gravitational
 time dilation is not separately computed here.
 
 Formally, the ray bends because of the gradient of the phase

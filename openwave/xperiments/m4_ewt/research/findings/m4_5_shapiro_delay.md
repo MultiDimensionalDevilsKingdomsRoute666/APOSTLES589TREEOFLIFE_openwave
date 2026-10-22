@@ -2,8 +2,8 @@
 
 > This is an Enhanced EWT extension, authored by Łukasz Smoliński, as registered in
 > [`_CITATIONS.md`](../../theory/_CITATIONS.md) (The Geometric Identity of Gravity and
-> Dimensional Unification, v4.5.7, DOI
-> [10.5281/zenodo.22097316](https://doi.org/10.5281/zenodo.22097316)).
+> Dimensional Unification, v5.1.7, DOI
+> [10.5281/zenodo.23559858](https://doi.org/10.5281/zenodo.23559858)).
 
 ## Criterion
 Gravity: local metric phenomena (Shapiro delay component)
@@ -81,8 +81,8 @@ the Enhanced EWT lattice model:
 - The normalised EMC density profile is
   \(\eta(r)=1-r_s/r\).
 - The optical refractive index is
-  \(n_\gamma(r)=\eta(r)^{-1}=(1-r_s/r)^{-1}\), which matches the
-  exact Schwarzschild optical metric factor.
+  \(n_\gamma(r)=\eta(r)^{-1}=(1-r_s/r)^{-1}\), which equals the
+  radial Schwarzschild optical factor \(\sqrt{|g_{rr}/g_{00}|}\) exactly.
 - The signal path is approximated as a straight line, which is
   valid in the weak-field regime.
 
