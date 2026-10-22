@@ -14,7 +14,7 @@ Mechanism:
         v_gamma(r) = 1 / n_gamma(r),
 
     where n_gamma(r) is the optical refractive index derived in the
-    Enhanced EWT manuscript v4.5.7.
+    Enhanced EWT manuscript v5.1.7.
 
     The excess coordinate time along a straight-line path is
 

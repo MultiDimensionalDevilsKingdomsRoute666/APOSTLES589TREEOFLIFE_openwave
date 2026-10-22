@@ -17,7 +17,7 @@ Mechanism:
     modifies the local propagation speed. The effective refractive
     index n(r) is only a scalar encoding of that displacement:
 
-    n(r) = 1 / (1 - r_s/r) = eta(r)^(-1)
+        n(r) = 1 / (1 - r_s/r) = eta(r)^(-1)
 
     The bending is computed from grad n(r), but the physical origin
     is the EMC displacement, not a generic optical slow-down.
@@ -97,7 +97,7 @@ print("[3/4] Integrating the light bending angle using u = R/r ...")
 
 # We integrate from r = R to infinity using u = R/r.
 # The integral becomes:
-#   Integral = r_s / R^2 * ∫_{0}^{1} (1 - 2*r_s*u/R)^(-3/2) / sqrt(1-u^2) du
+#   Integral = r_s / R^2 * ∫_{0}^{1} u * (1 - r_s*u/R)^(-2) / sqrt(1-u^2) du
 # and the bending angle is:
 #   theta_rad = 2 * R * Integral
 #

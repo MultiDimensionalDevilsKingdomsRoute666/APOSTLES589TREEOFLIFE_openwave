@@ -1,5 +1,9 @@
 # M4.9 - Emergent Encoding from Lattice Dynamics
 
+> **Note (2026-10-22, [PR #649](https://github.com/openwave-labs/openwave/pull/649)):** M4.3 and M4.5 use the index $n_\gamma = \eta^{-1}$ since that
+> change. The statements below that identify $\eta^{-1/2}$ with the M4.3 and M4.5 encoding
+> predate it; the clock exponent (M4.4) is unaffected.
+
 ## Status
 DONE (post-hoc)
 

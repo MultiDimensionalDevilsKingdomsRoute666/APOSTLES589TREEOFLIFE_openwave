@@ -6,6 +6,11 @@
 > the relative-difference figure corrected to match the 1.7517 reference (announced in
 > the same thread).
 
+> **Encoding update (2026-10-22, [PR #649](https://github.com/openwave-labs/openwave/pull/649)):** the findings use the profile
+> \(N_\nu/N_{\text{stat}} = 1 - r_s/r\) and the index \(n = (1 - r_s/r)^{-1} = \eta^{-1}\),
+> giving \(1.751722\) arcsec (\(0.0012\%\)). The method and result below record the task as
+> first merged.
+
 ## Status
 
 DONE (post-hoc: the criteria below were recorded after the numbers existed, which the
@@ -70,10 +75,12 @@ the standard ray integral.
 ## Review note (maintainer)
 
 With the script's own constants the first-order GR value \(2r_s/R_\odot\) is
-\(1.750885\) arcsec; the integral's higher-order factor contributes the remaining
-\(+0.048\%\). The conventionally quoted \(1.7517\) arcsec is the first-order value
-with standard constants, so the \(0.0016\%\) agreement partly reflects that choice of
-reference. Recorded here so the comparison's meaning is on file with the number.
+\(1.751710\) arcsec; the integral's higher-order factor contributes the remaining
+\(+0.0010\%\). The conventionally quoted \(1.7517\) arcsec is that first-order value
+rounded to four decimals, so the \(0.0016\%\) agreement is the higher-order term plus
+that rounding. Recorded here so the comparison's meaning is on file with the number
+(values corrected 2026-10-22 in [PR #649](https://github.com/openwave-labs/openwave/pull/649); the note first gave \(1.750885\) arcsec and
+\(+0.048\%\)).
 
 ## Interpretation
 
