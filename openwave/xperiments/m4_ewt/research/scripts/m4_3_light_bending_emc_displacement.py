@@ -17,7 +17,7 @@ Mechanism:
     modifies the local propagation speed. The effective refractive
     index n(r) is only a scalar encoding of that displacement:
 
-        n(r) = 1 / sqrt(1 - 2*r_s/r)
+    n(r) = 1 / (1 - r_s/r) = eta(r)^(-1)
 
     The bending is computed from grad n(r), but the physical origin
     is the EMC displacement, not a generic optical slow-down.
@@ -62,11 +62,11 @@ print("[2/4] Building EMC density profile and scalar encoding n(r)...")
 def N_nu(r):
     """
     Local EMC density outside the Sun.
-    N_nu(r) = N_stat * (1 - 2*r_s/r)
+    N_nu(r) = N_stat * (1 - r_s/r)
     """
     if r <= 0:
         raise ValueError("r must be positive")
-    deficit = 2.0 * r_s / r
+    deficit = 1.0 * r_s / r
     if deficit >= 1.0:
         raise ValueError("Deficit >= 1: invalid in this static profile")
     return N_stat * (1.0 - deficit)
@@ -76,12 +76,15 @@ def n_index(r):
     """
     Scalar encoding of the EMC displacement.
 
-    n(r) = 1 / sqrt(1 - 2*r_s/r)
+    n(r) = 1 / (1 - r_s/r) = eta(r)^(-1)
 
     This is not an independent optical assumption: it follows from
-    the same EMC density that defines the displacement field u(r).
+    the same EMC density that defines the displacement field u(r),
+    combining the spatial stretching eta^(-1/2) and the temporal
+    period dilation eta^(-1/2) of the strained lattice.
     """
-    return 1.0 / math.sqrt(1.0 - 2.0 * r_s / r)
+    eta = 1.0 - r_s / r
+    return 1.0 / eta
 
 
 print(f"    N_nu(R_sun) / N_stat = {N_nu(R_sun)/N_stat:.12f}")
@@ -104,7 +107,7 @@ print("[3/4] Integrating the light bending angle using u = R/r ...")
 def integrand_u(u):
     if u <= 0.0 or u >= 1.0:
         return 0.0
-    factor = (1.0 - 2.0 * r_s * u / R_sun) ** (-1.5)
+    factor = (1.0 - r_s * u / R_sun) ** (-2.0)
     return u * factor / math.sqrt(1.0 - u * u)
 
 
