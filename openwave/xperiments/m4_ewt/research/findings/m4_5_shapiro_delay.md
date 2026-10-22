@@ -2,8 +2,8 @@
 
 > This is an Enhanced EWT extension, authored by Łukasz Smoliński, as registered in
 > [`_CITATIONS.md`](../../theory/_CITATIONS.md) (The Geometric Identity of Gravity and
-> Dimensional Unification, v4.5.7, DOI
-> [10.5281/zenodo.22097316](https://doi.org/10.5281/zenodo.22097316)).
+> Dimensional Unification, v5.1.7, DOI
+> [10.5281/zenodo.23559858](https://doi.org/10.5281/zenodo.23559858)).
 
 ## Criterion
 Gravity: local metric phenomena (Shapiro delay component)
@@ -31,7 +31,7 @@ v_\gamma(r) = \frac{1}{n_\gamma(r)},
 where the optical refractive index is
 
 \[
-n_\gamma(r) = \left(1 - \frac{2r_s}{r}\right)^{-1/2}.
+n_\gamma(r) = \left(1 - \frac{r_s}{r}\right)^{-1} = \eta(r)^{-1}.
 \]
 
 The excess coordinate time is therefore
@@ -65,15 +65,13 @@ standard logarithmic delay.
 - Integral one-way: \(3.5827 \times 10^{4}\) m
 - Numerical round-trip delay: \(239.014\,\mu\text{s}\)
 - Standard round-trip delay: \(239.014\,\mu\text{s}\)
-- Relative difference: \(0.000075\%\)
+- Relative difference: \(0.000020\%\)
 
 The residue is not quadrature error. To first order in \(r_s/r\) the
 EMC index integrates exactly to the standard logarithmic formula; the
-\(0.000075\%\) is the sum of the index's higher-order terms
-(\(+0.00016\%\), of order \(r_s/b = 4.2 \times 10^{-6}\)) and the
-exact straight-path geometry, \(\operatorname{asinh}(L/b)\) against
-\(\ln(2\,\text{AU}/b)\) (\(-0.00009\%\)), both far below the
-\(0.1\%\) gate.
+\(0.000020\%\) residue is the sum of the index's higher-order terms
+and the exact straight-path geometry (\(\operatorname{asinh}(L/b)\)
+against \(\ln(2\,\text{AU}/b)\)), both far below the \(0.1\%\) gate.
 
 ## Model assumptions (derived in the manuscript, not fitted here)
 
@@ -83,7 +81,8 @@ the Enhanced EWT lattice model:
 - The normalised EMC density profile is
   \(\eta(r)=1-r_s/r\).
 - The optical refractive index is
-  \(n_\gamma(r)=(1-2r_s/r)^{-1/2}\).
+  \(n_\gamma(r)=\eta(r)^{-1}=(1-r_s/r)^{-1}\), which equals the
+  radial Schwarzschild optical factor \(\sqrt{|g_{rr}/g_{00}|}\) exactly.
 - The signal path is approximated as a straight line, which is
   valid in the weak-field regime.
 
@@ -91,8 +90,8 @@ No free numerical parameters are introduced.
 
 ## Reference
 
-Full derivation in the Enhanced EWT manuscript, version 4.5.7:
-[DOI: 10.5281/zenodo.22097316](https://doi.org/10.5281/zenodo.22097316)
+Full derivation in the Enhanced EWT manuscript, version 5.1.7:
+[DOI: 10.5281/zenodo.23559858](https://doi.org/10.5281/zenodo.23559858)
 
 Relevant section:
 

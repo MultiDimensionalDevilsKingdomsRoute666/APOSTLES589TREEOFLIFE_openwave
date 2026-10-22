@@ -14,7 +14,7 @@ Mechanism:
         v_gamma(r) = 1 / n_gamma(r),
 
     where n_gamma(r) is the optical refractive index derived in the
-    Enhanced EWT manuscript v4.5.7.
+    Enhanced EWT manuscript v5.1.7.
 
     The excess coordinate time along a straight-line path is
 
@@ -64,10 +64,11 @@ def n_gamma(x, b):
     """
     Full EMC optical index along a straight line y = b.
 
-    n_gamma(r) = (1 - 2*r_s/r)^(-1/2)
+    n_gamma(r) = 1 / (1 - r_s/r) = eta(r)^(-1)
     """
     r = math.sqrt(x * x + b * b)
-    return 1.0 / math.sqrt(1.0 - 2.0 * r_s / r)
+    eta = 1.0 - r_s / r
+    return 1.0 / eta
 
 
 # Integration limits for the round-trip path.
