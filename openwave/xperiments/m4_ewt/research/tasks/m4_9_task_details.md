@@ -11,15 +11,16 @@ Demonstrate how the macroscopic timelike encoding
 ($v_{\text{clock}} \propto \sqrt{\eta}$) maps directly to microscopic 1D
 lattice dynamics under an assumed $1/r$ EMC pair potential ($n=1$) and
 axial lattice compression ($q=1$). The null-probe refractive index
-$n_\gamma = \eta^{-1}$ follows from the same strain field through the
-null-probe combination $\sqrt{g_{rr}/g_{00}}$ (manuscript v5.1.7), not
-from $1/v_{\text{phys}}$.
+$n_\gamma = \eta^{-1}$ is the radial Schwarzschild factor
+$\sqrt{|g_{rr}/g_{00}|}$, taken from the manuscript's metric (v5.1.7,
+eq. (173)) as in M4.3 and M4.5; it is not $1/v_{\text{phys}}$, and this
+chain does not derive it.
 
 The required encodings are:
 
 - \(v_{\text{clock}} \propto \sqrt{\eta}\) (measured here, \(\beta = 0.5\))
-- \(n_\gamma = \eta^{-1}\) (derived from \(\sqrt{g_{rr}/g_{00}}\), not from
-  \(1/v_{\text{phys}}\); manuscript v5.1.7)
+- \(n_\gamma = \eta^{-1}\) (the radial factor \(\sqrt{|g_{rr}/g_{00}|}\) from the
+  manuscript's metric, not derived here; manuscript v5.1.7)
 
 ## Method
 
@@ -46,10 +47,10 @@ All three are consistent with the expected values.
 Given a $1/r$ EMC pair potential ($n=1$) and axial lattice compression ($q=1$),
 the physical (timelike) wave speed scales as $v_{\text{phys}} \propto
 \eta^{n/(2q)} = \eta^{+1/2}$; this is the clock exponent used in M4.4.
-The null-probe refractive index is not \(1/v_{\text{phys}}\): light samples
-both the spatial cell stretching and the temporal propagation-period
-dilation, giving \(n_\gamma = \sqrt{g_{rr}/g_{00}} = \eta^{-1}\), the
-encoding M4.3 and M4.5 use.
+The null-probe refractive index is not \(1/v_{\text{phys}}\). It is the radial
+Schwarzschild factor \(n_\gamma = \sqrt{|g_{rr}/g_{00}|} = \eta^{-1}\) from the
+manuscript's metric, the encoding M4.3 and M4.5 use, and this chain does not
+derive it.
 
 ## Artifacts
 
@@ -63,4 +64,4 @@ Enhanced EWT manuscript, version 5.1.7:
 
 Relevant section:
 
-- „Emergent Metric Encodings from Lattice Dynamics"
+- „Emergent Metric Encodings from Lattice Dynamics”

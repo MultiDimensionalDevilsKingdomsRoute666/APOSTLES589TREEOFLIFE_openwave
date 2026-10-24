@@ -41,15 +41,15 @@ For $n=1$, this scales as
 
 $$v_{\text{phys}} \propto \eta^{+1/2}$$
 
-### 3. Refractive index
+### 3. Refractive index (an input, not derived here)
 
 The timelike wave speed is $v_{\text{phys}} \propto \eta^{+1/2}$; this is the clock exponent (M4.4: $v_{\text{clock}} = \sqrt{\eta}$).
 
-The null-probe refractive index is not $1/v_{\text{phys}}$. A light ray samples both the spatial cell stretching ($\eta^{-1/2}$) and the temporal propagation-period dilation ($\eta^{-1/2}$) of the strained medium, giving
+The null-probe refractive index is not $1/v_{\text{phys}}$. It is the radial Schwarzschild factor, taken from the manuscript's metric (v5.1.7, eq. (173)), as in M4.3 and M4.5:
 
-$$n_\gamma(\eta) = \sqrt{\frac{g_{rr}}{g_{00}}} = \frac{1}{\eta} = \left(1 - \frac{r_s}{r}\right)^{-1}$$
+$$n_\gamma(\eta) = \sqrt{\left|\frac{g_{rr}}{g_{00}}\right|} = \frac{1}{\eta} = \left(1 - \frac{r_s}{r}\right)^{-1}$$
 
-(manuscript v5.1.7, "Emergent Metric Encodings from Lattice Dynamics"; M4.3 and M4.5 use this form). This index is not measured by the script below; the script measures the timelike exponents $\alpha$ and $\beta$.
+(manuscript v5.1.7, "Emergent Metric Encodings from Lattice Dynamics"; M4.3 and M4.5 use this form). This chain does not derive this index and the script below does not measure it; the script computes the stiffness exponent $\alpha$ analytically and measures the timelike exponent $\beta$.
 
 ### 4. Clock frequency
 
@@ -125,14 +125,14 @@ Phase 3 is an analytical consistency check on phase 2 ($\gamma \equiv \beta$), n
 
 Given the $1/r$ EMC pair potential ($n=1$) and the 1D linear spacing reduction $a(\eta) = 1/\eta$, the physical (timelike) wave speed scales as $v_{\text{phys}} \propto \eta^{n/2} = \eta^{+1/2}$.
 
-The mapping to M4.3–M4.5 uses the null-probe index, not the timelike speed. In 1D axial strain ($q = 1$) the axial spacing is $a_\parallel(\eta) = \eta^{-1}$ and the timelike speed is $v_{\text{phys}} \propto \eta^{+1/2}$. The null-probe index is $n_\gamma = 1/v_\gamma = \sqrt{g_{rr}/g_{00}} = \eta^{-1}$, which is the encoding M4.3 and M4.5 use.
+M4.4 uses the timelike speed; M4.3 and M4.5 use the null-probe index. In 1D axial strain ($q = 1$) the axial spacing is $a_\parallel(\eta) = \eta^{-1}$ and the timelike speed is $v_{\text{phys}} \propto \eta^{+1/2}$. The null-probe index $n_\gamma = \sqrt{|g_{rr}/g_{00}|} = \eta^{-1}$ comes from the manuscript's metric; this chain does not derive it.
 
-This establishes how the Schwarzschild encodings used in M4.3–M4.5 map back to microscopic lattice parameters:
+This maps the clock encoding used in M4.4 back to microscopic lattice parameters; the null-probe index stays an input:
 
 - $v_{\text{clock}} \propto \sqrt{\eta}$ (timelike, $\beta = 0.5$)
-- $n_\gamma = \eta^{-1}$ (null probe, from $\sqrt{g_{rr}/g_{00}}$, not from $1/v_{\text{phys}}$)
+- $n_\gamma = \eta^{-1}$ (null probe, the radial factor $\sqrt{|g_{rr}/g_{00}|}$ from the manuscript's metric, as in M4.3 and M4.5; not derived here, and not $1/v_{\text{phys}}$)
 
-For a pair potential $V(r) \propto r^{-n}$ the timelike exponent is $\beta = n/2$ at $q = 1$. Under the physical assumption of a $1/r$ electrostatic-like EMC interaction, the timelike wave-speed exponent is $\beta = +1/2$ (clock, M4.4) and the null-probe index is $n_\gamma = \eta^{-1}$ (light, M4.3 and M4.5). The two exponents are distinct: a clock samples node availability ($\sqrt{\eta}$); a light ray samples the combined spatial and temporal strain ($\eta^{-1}$).
+For a pair potential $V(r) \propto r^{-n}$ the timelike exponent is $\beta = n/2$ at $q = 1$. Under the physical assumption of a $1/r$ electrostatic-like EMC interaction, the timelike wave-speed exponent is $\beta = +1/2$ (clock, M4.4). The null-probe index $n_\gamma = \eta^{-1}$ (light, M4.3 and M4.5) is a separate input, and only the clock exponent is derived from the lattice here.
 
 ## Reference
 
@@ -141,4 +141,4 @@ Enhanced EWT manuscript, version 5.1.7:
 
 Relevant section:
 
-- „Emergent Metric Encodings from Lattice Dynamics"
+- „Emergent Metric Encodings from Lattice Dynamics”
