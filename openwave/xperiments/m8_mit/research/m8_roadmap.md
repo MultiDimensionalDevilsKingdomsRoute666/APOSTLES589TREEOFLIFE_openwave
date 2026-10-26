@@ -17,7 +17,7 @@
 
 | TaskID | Title | Description | Owner | Gated By |
 | --- | --- | --- | --- | --- |
-| [M8.16.1](tasks/m8_16_1_task_details.md) | The second and last qualification of the stationary harmonic Galerkin instrument | Qualify M8.16's instrument, byte for byte, a second and last time, scoring slow modes against Proposition N's next-order coefficients, frozen before the go, at the pyramid, the rows, T5's second member and the C3 ray in `R4`, a new control that gates nothing. Frozen MIT instrument; no time integration, persistence test, MODELS.md cell movement or change to M8.7's gate | author-proposed and author-run, maintainer-adjudicated | registration and go ([#512](https://github.com/openwave-labs/openwave/discussions/512#discussioncomment-19071299)) |
+| [M8.16.1](tasks/m8_16_1_task_details.md) | The second and last qualification of the stationary harmonic Galerkin instrument | Qualify M8.16's instrument, byte for byte, a second and last time, scoring slow modes against Proposition N's next-order coefficients, frozen before the go, at the pyramid, the rows, T5's second member and the C3 ray in `R4`, a new control that gates nothing. Frozen MIT instrument; no time integration, persistence test, MODELS.md cell movement or change to M8.7's gate | author-proposed and author-run, maintainer-adjudicated | the maintainers' adjudication of the run ([method note](findings/m8_16_1_method_note.md)) |
 
 ## LATER (gated)
 
