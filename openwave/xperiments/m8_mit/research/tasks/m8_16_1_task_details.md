@@ -399,3 +399,19 @@ As M8.16's, with these additions:
 - **the roadmap:** both M8 status rows record the filing, and the Done row states the adjudicated verdict;
 - **after the verdict,** a dated note on the census page;
 - **what follows:** the census run, under its own pre-registration, runs only the rows and members qualified here.
+
+## Dated note, 2026-10-26: after the verdict
+
+Everything above this heading is the filed pre-registration, byte for byte: its 47,420 bytes are a prefix of this file and hash to the governing `9d167129…`.
+
+The maintainer adjudicated the run on [#653](https://github.com/openwave-labs/openwave/pull/653#pullrequestreview-5646373760) (2026-10-26): QUALIFIED. The instrument qualifies, with K3 resolved, and so do T1 to T4 in `R4` and `R5` and T5 in `R2`. T5's second member, T5J/R2, is not qualified: K5 fails on the convergence rule's Unresolved reading at `ε = 0.25`, and under the stop it is not offered to this instrument again. The C3 ray passed and gates nothing. The roadmap's Done row states the verdict. The author's dated note records it on MIT, in § V of [the census page](https://github.com/dmobius3/mode-identity-theory/blob/e09d453247127a0de6b54efda481526a175240a1/files/framework/files/working/files/slot-dynamics-census.md#v-the-program), and the run's record is [`RECORD.md`](https://github.com/dmobius3/mode-identity-theory/blob/292b158cf1a53902489ced3426e1f047699aeb62/files/framework/files/working/files/scripts/soft-slot-dynamics-m8-16-1/RECORD.md).
+
+**The approval's comment.** § THE NEXT-ORDER BAR asks for `ĉ₂`, `ĉ₃`, the spread, `E_c` and the two-term residual at every group and cutoff, reported and unscored. `RECORD.md` § 11 prints them "not read" at T5J's nine group-cutoffs, where check 1 fails. The approval gives the spread, check 4's distance, `E_c` and the two-term residual, computed from the case file, and they change no reading. The method note carries a dated correction.
+
+**The approval's reading notes,** carried with the verdict:
+1. the instrument's qualification is the outcome § Known outcomes names, read as INFERRED, and the new evidence is the nine rows, the C3 ray and T5J;
+2. check 1's margin is measured on this run's data, not certified;
+3. T3/R4 and T5/R2 carry ladder points above `ε = 2` that this instrument leaves Unresolved; they carry no type from it, and the census run's adequacy tests apply there;
+4. T5J's partner set near `6.015i` is two Krein-positive groups at `N = 16` and 24 and one group of size 2 at `N = 32`; this is offered for the method note's OPEN question, not as a reading of the rule, and the registered outcome stands.
+
+No rule, threshold or verdict changes.
