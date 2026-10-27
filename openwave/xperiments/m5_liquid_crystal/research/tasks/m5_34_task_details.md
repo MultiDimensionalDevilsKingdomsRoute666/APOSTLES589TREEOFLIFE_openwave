@@ -105,3 +105,169 @@ A candidate follow-up, the user's call, not part of this task: a leak measuremen
 ### 7. Blindspot pass at PLAN
 
 (i) The package is AI-prepared and AI-reviewed ("Prepared with Claude"; the adversarial review "a separate Claude agent"); under [`AI_HYGIENE.md`](../../../../../AI_HYGIENE.md) every number is a draft until it reproduces here, and the review's corrections are evidence, so R2's audit is independent of both. (ii) Two rows carry claims about OUR record field that OUR checks could turn into icon moves: row 3 (a validated ✅ that `V11` reads as a leaking clock) and row 28 (a 🚧 that `V2` reads as an exact null for `L_cert`). A move on our own check is within the rule, but a demotion of a validated cell and a new honest negative are both put to the user at REVIEW with the audit record before any edit, never made in the PR by default. (iii) The toy point of `common.py` must equal the certified action's (R0); a mismatch silently changes every `V1` to `V19` number. (iv) The long refits use homotopy from v2.6 and local refits; a different local minimum is a legitimate outcome and is reported as a branch, not a failure. (v) The package's claims on the Vortex stacks are reproducible only as the author's replicas reproduce the author's replicas; they never touch an icon. (vi) `V3` and `V10` disagree on which kinetic terms are healthy (`V10` corrects `V3`); R1v records both and the correction, and hands the result to R29's "which modes count" question rather than resolving it here. (vii) Threads: the pool jobs run with OMP and OpenBLAS threads pinned (the R27 oversubscription trap).
+
+## EXECUTION RECORD (2026-10-26; the go at 19:40 EDT, the preps armed by 19:41, the work started on the user's "fan is on, go" at 19:43 EDT)
+
+### 8. Environment and isolation
+
+| Item | Value |
+| --- | --- |
+| Machine | the first OpenWave run on the new workstation (Apple M5 Max, 18 cores, 128 GB, macOS 27.0.1); a home-automation session records the system-side telemetry and runs the old workstation against the same probe |
+| Interpreter and pins | `/opt/anaconda3/envs/master312/bin/python3` 3.12.14, NumPy 2.5.3, SciPy 1.18.1, SymPy 1.14.0, mpmath 1.3.0 (the same pins as M5.33 on the old workstation) |
+| Isolation | four full copies of the package's `LdGS_vacuum_sectors/` folder in a session-local working directory outside both repos (`shipped/` untouched, `r1a/`, `r1b/`, `r1c/` run in place); every script run with `python3 -E -s` from its own copy (29 scripts import a sibling module, so `-I` cannot be used); nothing from the package is imported by repo code |
+| Threads | 2 per process (OMP, OpenBLAS, MKL, VECLIB), the pool at 12 jobs on 18 cores; the timing probe single-threaded on the idle machine |
+| Comparator | [`m5_33_compare_json.py`](../scripts/m5_33_compare_json.py) logic with the package's `common.py` as the copy-time reference (only JSON newer than the copy counts as regenerated) |
+| Cross-machine timing probe | the three M5.33 scripts S24, S27, S36 rerun single-threaded on the idle machine: 9.85 s, 30.40 s, 88.59 s. Against the same recipe on the idle old workstation (run by the user the same evening, same pins): 12.85 s, 35.80 s, 91.66 s, so 1.30× / 1.18× / 1.03×, geometric mean 1.17× single-core. The M5.33 log times (12.44, 36.33, 120.98 s) were taken under heavy concurrency and are not a baseline (S36's 121 s was 32 percent contention) |
+| R0 | the package's toy point (`common.py`: s = −1, g = 32, δ = 0.3, w = 7.24023879e-4) equals the certified action's; the colour table's live column equals `MODELS.md` (9 / 11 / 2 / 9, row by row) |
+
+### 9. R1a: the fast chain and the short scripts, every README value reproduced
+
+34 scripts, 34 exit 0, 8.5 min wall sequential. Shipped-versus-rerun on every regenerated JSON: every physics leaf at the README digits; the comparator's larger ratios are all on round-off-level residuals (1e-9 to 1e-19: invariance deviations, "max |F|" on homogeneous jets, random-map spreads) or RNG-seeded spreads.
+
+| Script | Wall (s) | Shipped vs rerun |
+| --- | --- | --- |
+| `V1` | 0.4 | 26 leaves, max rel diff 0.519 at `/uniqueness/singular_values_smallest_two[1]` |
+| `V2` | 0.2 | 16 leaves, max rel diff 0.915 at `/(b)_V4_on_vacuum_orbit_max` |
+| `V3` | 0.4 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V4` | 0.4 | 31 leaves, max rel diff 0 at `/(b)_domain_walls/its_cube_root_MeV` |
+| `V5` | 16.1 | 20 leaves, max rel diff 0.131 at `/split/virial_residual` |
+| `V6` | 0.1 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V7` | 0.4 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V8` | 3.8 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V9` | 1.2 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V10` | 0.6 | 12 leaves, max rel diff 8.18e-16 at `/energy_inside_R` |
+| `V11` | 7.9 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V12` | 2.6 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V13` | 4.7 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V14` | 19.3 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V15` | 0.1 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V16` | 2.2 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V17` | 0.1 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V18` | 30.9 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V19` | 0.8 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V20` | 10.7 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V22` | 27.7 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V24` | 4.0 | 28 leaves, max rel diff 3.14e-06 at `/states/3/z0` |
+| `make` | 1.0 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V26` | 1.3 | 5 leaves, max rel diff 0 at `/beta_core` |
+| `V27` | 0.4 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V29` | 1.1 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V32` | 6.6 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `fewbody` | 14.7 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V33` | 232.2 | 1 leaves, max rel diff inf at `` |
+| `V35` | 1.2 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V36` | 1.6 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V37` | 3.1 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V38` | 75.7 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+| `V39` | 1.1 | no regenerated JSON (figure, log-only, or the npz-only V20 profile) |
+
+Notes: `V33`'s shipped JSON is a 2-row list from an older version of the script while the rerun writes a 12-row dict (the overlapping rows agree to 1e-12). `V20`'s "B_native / B_v2.6 at the centre" differs by 0.4 percent (69.74 against 70.01), the largest real-leaf difference of the chain; `V24`'s z0 by 3e-6; `V12`'s theorem check by 1.4e-7.
+
+### 10. R1b: the long refits, detached on the pool
+
+12 jobs launched 19:49:42 EDT, all finished by 20:02:34 EDT, all exit 0, far ahead of the README's "2 cores" times. The logs hold the full iteration ladders (V25 88 lines over λ 0 to 10, V21 568 lines), so the refits ran rather than reused the shipped outputs.
+
+| Job | Wall (s) | README's time | Shipped vs rerun (headlines) |
+| --- | --- | --- | --- |
+| `V21` | 772 | about 1 h | fixed-coefficient rows exact (base 14.1129, L1 39.0459); refits exact on base, F1, F2, F4, I2, L1 to L5 (14.0955, 14.8836, 14.9947, 341, 87.64, 14.2603, 14.2407, 14.3482, 65.201); F3 refit 15.83 against 15.28, I3 85.89 against 86.32; the failed internal reading I1 at fixed coefficients on another branch (83.1 against 104.9); the rerun carries 60 extra leaves (r_p, r2_MV) the shipped file lacks |
+| `V23` | 126 | about 20 min per variant | E15 14.2887 and 14.3943 at 2e-7; r_p 0.8582 and 0.8783 at 2e-5; τ_n 880.5713 s (physical g_A) and 1125.1294 s (v2.6 g_A) exact; the shipped file is named `V23_radii_and_beta.json`, the rerun `V23_part_H4g_L1H4g.json` |
+| `V25` | 117 | about 2 h | λ = 0 exact (E15 14.0955, E₂/2E₁ 0.95700, E₄/4E₁ 0.84563, BE4 888.7); the refit ladder 1 to 4 percent from the shipped optima (E15 21.19 / 30.55 / 45.87 against 20.93 / 29.62 / 44.20; E₄/4E₁ 0.9230 / 0.9572 / 0.9943 against 0.9230 / 0.9573 / 0.9945); the rerun adds λ 6, 8, 10 |
+| `V28_Q1` | 50 | about 1 h per variant | fixed rows exact (89.97, r_p 3.4919); refit 48.10 against 47.83, r_p 0.729 against 0.716 |
+| `V28_Q2_Q3` | 185 | about 1 h per variant | fixed rows exact (82.64, 82.69); refits 13.93 against 14.56 and 14.62 against 14.40 |
+| `V28_Q3g` | 105 | about 1 h per variant | exact (71.5485 both) |
+| `V30` | 124 | about 20 min | 1.4e-9 |
+| `V31_GA1` | 66 | (not listed) | start exact (14.1129); refit 14.10 against 14.27; τ_n 1125.29 against 1124.51 s; Γ_Δ chain 75.27 against 75.34 MeV |
+| `V31_GA2` | 130 | (not listed) | start exact; refit 25.44 against 25.48; τ_n 889.94 s both |
+| `V31_GA2c` | 130 | about 30 min | exact (25.4439, τ_n 889.937 s, Γ_Δ 100.706 MeV) |
+| `V34_34b` | 208 | about 15 + 10 min | 9.9e-10 |
+| `V34c` | 178 | about 20 min | 8.1e-10 |
+
+Reading: the fixed-coefficient evaluations and the closed-form chains reproduce to the printed digits; the local sequential refits land within 1 to 4 percent of the shipped optima (an optimizer-path spread, each refit a trust-region continuation from v2.6), which the README's "about 1e-6 across versions" statement does not cover; the README's headline numbers (14.09 / 14.29 percent, 1125 s, the E₄/4E₁ ladder) reproduce.
+
+### 11. R1c: the Vortex replicas and the v3 review set
+
+17 scripts, 17 exit 0, 5 min wall. `vortex_radial.py` and `vortex_v3.py` run as replicas (0.5 s each, their self-prints). Headlines at the README digits: `V40` replay 5e-12; `V40b` 6e-16; `V42` exact; `V43` 8e-11; `V47` 1e-14; `V48` the covariant refit E15 9.2009 against 9.2011 at the 4.5 proxy, g_A 1.15803 against 1.15802, Γ_Δ 62.05 both, at every proxy (3.0, 4.5, 5.8) within 2e-5; `V44` E15 at drag 1.0 8.82429 both, `fixed_clock_MI_minus_M0` −333.96 both; `V51` κ 0.17788 against 0.17782 (3.7e-4, downstream of the refit); `V49` the invariance residuals at round-off (the comparator's 0.66 is on 3e-12 against 1e-12). The comparator's 18 percent on `V44` and `V48b` is one near-zero row residual of the refit (`a11`, 0.088 against 0.072 percent).
+
+### 12. R1k: the package's two OpenWave checks, run on our stored data ([`m5_34_kit_checks.py`](../scripts/m5_34_kit_checks.py), [`m5_34_kit_checks.json`](../data/m5_34_kit_checks.json), 2.3 s)
+
+| Check | Result |
+| --- | --- |
+| (i) `dkin/dR = 13.48` at δ = 0.3 (`V11`) | the author's coefficient `32πδ²[1 + (1 − δ)²]` = 13.4812 per unit radius EQUALS this repo's M5.21.14 "base" bulk kin per unit radius (13.4812, the audited 9-digit shell evaluation of [`m5_21_14_note.md`](../findings/m5_21_14_note.md) § 7 row 5): the same quantity, the undressed twist of the uniaxial exterior. On the certified lattice (M5.32 R4's box ladder, h 1.5) `kin_cert` = 426.507 / 658.307 / 890.442 at L = 48 / 72 / 96: linear in the box, 9.658 and 9.672 per unit side, 1.17 × the continuum prediction `c_t × (cube content of 1/r²)` = 8.23 (the lattice shell sum of 1/r² is within 0.2 percent of the continuum and the excess is the same at both rungs, so it is a coefficient or tail-profile mismatch between the lattice clock family and the pure uniaxial twist, not geometry and not a convergence effect; unresolved here). ⭐ What `V11` does not carry: M5.21.14 found the first 1/g dressing term extensive too and steeper (−19.6 per unit radius), so the dressed bulk kin per unit radius is NEGATIVE (net −6.12) and the constant-ω kin total descends with the box beyond R ≈ 12. The author's "the clock inertia grows with the box" holds for the undressed exterior and reverses under the dressing; neither is a leak measurement |
+| (ii) `μ = p × ṗ/(2e)` (`V14`) | on the fixed-clock electron of [`m5_8_2r_electron_id.py`](../scripts/m5_8_2r_electron_id.py) (tilt channel, the only EM-active one; the instrument's retired import paths shimmed, the instrument itself unmodified), at n = 24 / 32 / 48 (h 0.52 / 0.39 / 0.26, the box fixed): the hedgehog's charge from the radial 2-form integrates to 12.54 over the full interior against 4π = 12.57 (the flux through the interior faces 13.2 to 12.9; over the instrument's active mask, which excludes the core and the axis tube, 0.57), its dipole is 1e-15 of either charge (centred), so `p × ṗ/(2e)` is 1e-15, and the dual-reading source-current moment is 1e-14; the instrument's `|μ|` = 0.2209 / 0.2484 / 0.2771 is ENTIRELY the displacement term `−½ ∫ x × ω ∂E/∂φ` (the curl-B term is 3e-15, a cancellation by the symmetry of the mask and the regularized texture rather than a pointwise identity: max\|curl B\| is 0.054 against max\|B\| 0.263 on the mask, the audit's finding) and grows with resolution at fixed box (not converged in h). Reading: the author's identity holds on our field, and the instrument's readout is a quantity the identity does not cover, a displacement-term integral whose value the row's ❌ already called a preparation-dependent residue |
+
+### 13. R1v: the identities the package states about the certified action, verified with our own functions ([`m5_34_identity_checks.py`](../scripts/m5_34_identity_checks.py), [`m5_34_identity_checks.json`](../data/m5_34_identity_checks.json), 0.1 s; `F_of_A`, `v4_traces_np`, `c4_of` from [`m5_32_lagrangian.py`](../scripts/m5_32_lagrangian.py), `kt_density_np` from [`m5_32_r7_a_kt_form.py`](../scripts/m5_32_r7_a_kt_form.py))
+
+| Package claim | Our check | Verdict |
+| --- | --- | --- |
+| `V1`: F is blind to the trace direction η, and η is the only such constant direction | `F(A + s η) − F(A)` at 3.7e-16 relative on 50 random jets; the linear map N → dF over the ten symmetric basis matrices has a one-dimensional null space, exactly η (the audit extends this to all 16 constant matrices) (my first version drew new jets per column and found no null space: a bug in the check, fixed before the audit) | ✅ CONFIRMED |
+| `V2`: homogeneous fields have F ≡ 0; V4(M_vac) = 0; V4 ≥ 0; V4 = 0 on the O(1,3) orbit | max\|F\| = 0 on 200 time-only jets; V4(M_vac) = 0.0; the smallest of 500 random V4 samples 4.4e5 (a sum of squares with w > 0); the orbit at 3.1e-12 | ✅ CONFIRMED: the certified action has `Λ_own = 0` exactly |
+| `V3` / `V10`: the kinetic norms of the ten vacuum directions | `−4I1` = 0 on every single-derivative jet (F needs two derivative directions); `K_T` = −2 on the three boosts, 0 elsewhere; `K_cov` = −1 (diagonals), +2 (boosts), −2 (rotations); `K_h` = −1 / −2 / −2; the director term's coefficient on a hedgehog `r² Σ‖∂(nnᵀ)‖²` = 4.000000000, so `κ Σ‖∂S‖²` has exterior energy 16πκD²(R − r₀), linear in R | ✅ CONFIRMED (the signs of `K_h` are listed, not interpreted; R29's "which modes count" reads them) |
+| `V6`: the stress trace is ∝ V alone (the curvature term is traceless in 4D) | Euler degree 4 of `−4I1` in the jets at 2.6e-10 relative; T^μ_μ = 4 L_kin − 4L = −4 L_pot (the author writes −4V with the opposite overall sign); Derrick then gives E_F = 3 E_V for a STATIC stationary finite-energy state (with a running clock the F_0i terms scale as λ⁺¹ under dilation and the virial reads −E_F + E_K + 3E_V = 0, the audit's point) | ✅ CONFIRMED at the form level; `E_V/E = 0.250000` on the author's radial hedgehog reproduced in R1a (`V5`), not re-measured on a stored lattice field |
+| `V14`: E·B ≡ 0 for the director's EM reading | `ε^{μνρσ} f_μν f_ρσ` at 3.4e-16 for the pullback 2-form on 100 random jets, against 1.70 for a generic antisymmetric f; exact by the dimension of S² | ✅ CONFIRMED |
+| `V49`: `L_cert` invariant under internal and spacetime O(1,3) SEPARATELY; a u·∂ term only under the diagonal | internal 3.9e-11, spacetime 1.2e-15 at 40 random non-vacuum points and boosts; the rule-R-like term `tr(η (u·A) η (u·A))` changes by 73 and 288 under the single factors and by 4e-12 under the diagonal | ✅ CONFIRMED as a statement about the ACTION; the Lorentz row's open item (a boosted defect in-sim) is a dynamics measurement, untouched |
+
+### 14. R2: the adjudication (the draft before the fresh-agent audit; the audit's record follows in § 15)
+
+Rule: a cell text changes only on something this stack ran or verified (R1k, R1v, the reruns); an icon moves only on a run of ours, and the two candidates (rows 3 and 28) go to the user at REVIEW. Cell texts stay inside the 65-prose-word budget (counted with the checker's own function before the edit); `→` lines are pointers, outside the count.
+
+| # | Criterion | Verdict | What changes | Backed by |
+| --- | --- | --- | --- | --- |
+| 3 | de Broglie clock | ADOPT WITH OUR WORDING, icon ✅ kept, the move put to the user | one sentence added: the exterior twist's inertia is box-extensive on the uniaxial vacuum and reverses sign under the first dressing term; the confining mechanism is open; links to M5.21.14 and the kit check | R1k(i): the author's coefficient equals our M5.21.14 base; the certified ladder is linear in the box; the dressing flip is ours. The leak (a turning core radiating) is NOT measured here and stays the author's formula |
+| 5 | Magnetic moment | ADOPT WITH OUR WORDING, icon ❌ | the second sentence replaced: on the director's EM reading E·B vanishes identically and a centered charge has no dipole, so the source-current moment is zero; the readout is the displacement term alone, resolution-dependent; the kit check linked | R1k(ii) on the instrument's own field; R1v `V14` |
+| 11 | Lepton masses | NO CHANGE | the live cell already states the ratio 1 : 5.9 : 15.1 and the terminal failure of the calibration bridge; the author's × is the chip rule on their column | the live cell |
+| 13 | Baryons: bound state | pointer extended | the `→` line gains the v2.6 nucleon's B = Hopf(n) = 1 with the charge-axis ring at 0.64 fm, rerun here | R1a `V20` |
+| 15 | Baryons: exact masses | route line added | `→` the author's Lorentz-safe covariant nucleon (∂q·∂q)³ with the ω coupling gated: 15 rows within 9.2 to 10.3 percent, g_A 1.158, τ_n 1030 s, Γ_Δ 62 MeV, rerun here | R1c `V48` at the README digits |
+| 16 | Deuteron | route line added | `→` the covariant nucleon's deuteron: Q_d 0.24 with a 500 MeV scalar, 0.15 with the model's own 1.4 GeV scalar, against 0.286, the sign set by the pion tensor force, rerun here | R1a `V18`, `V22`; R1c `V51` |
+| 17 | Nuclear structure | ADOPT WITH OUR WORDING, icon 🚧 | the second sentence restated: the single-field no-fit number kept; the author's Skyrme-sector soliton merges ⁴He classically (889 MeV against 28.3), the generic Skyrme overbinding whose known repairs (a dynamical ω, vibrational zero-point energy) are unrun on that functional | R1a `V24`, R1c `V43`; the repairs are the author's to run (the nuclei kit) |
+| 18 | Mesons | route line added | `→` the sextic of the author's nucleon reads as ω exchange, g²/4π 10.2 (contact) to 14.7 (finite range) against NN 6 to 20; no kaon | R1a `V20`, R1c `V48` |
+| 19 | Dark matter | ADOPT WITH OUR WORDING for the identity sentence, icon 🚧; the v3-note HOLD untouched | one sentence added: the trace direction η is exactly invisible to the curvature term (verified here), so a trace mode couples only through the potential, which as written mixes it with the charge axis: no exactly dark state | R1v `V1` on our functions; the split potential stays a proposal for a different action |
+| 20 | Coulomb 1/r | pointer added, icon ✅ | `→` an explicit two-charge field with pair energy exactly ±e²/d, e² = 64π, on the certified action, rerun here | R1a `V13` at the README digits |
+| 21 | Lorentz covariance | ADOPT WITH OUR WORDING, icon ⚠️ | the first sentence extended: invariant separately under internal and spacetime Lorentz transformations (round-off residuals), so the vacuum's time axis is an internal clock, not a frame; the open item unchanged (the in-sim boosted defect) | R1v `V49` on our functions; the row's open item is a dynamics measurement, which a symmetry statement does not close |
+| 25 | Beta decay | route line extended | the author's nucleon's τ_n from its own g_A: 1125 s (v2.6) and 1030 s (covariant) against 878 s, rerun here | R1b `V23`, `V31`; R1c `V48` |
+| 26 | Gravity: Newton | ADOPT WITH OUR WORDING, icon ⚠️ | one sentence added: the stress trace is −4V exactly (the quartic curvature term is traceless in 4D, verified), so a scalar coupled through V attracts universally but is Nordström's theory, excluded by light bending and pulsar radiation | R1v `V6`; R1a `V6`, `V9` |
+| 27 | Gravity: local metric | ADOPT WITH OUR WORDING, icon 🚧 | one sentence added: a fixed-determinant response is a coordinate condition (γ = 1/3 excluded); the reciprocal-axes rule on the record's time eigenvector gives γ = β = 1 only if that axis comoves with matter, and radiation needs spin-2 | R1a `V7`, `V8`, `V9` (the author's sympy PPN, rerun here); Q63 |
+| 28 | Cosmology: Λ | ADOPT WITH OUR WORDING; icon 🚧 by default, ❌ [honest negative for the certified action] offered to the user | the cell restated: the certified action carries no cosmological constant of its own (F ≡ 0 on homogeneous fields, the potential non-negative with its zero on the whole vacuum orbit, verified here), so Λ_own = 0 exactly; any Λ needs an added term or a coupling to a dynamical metric | R1v `V2` on our functions |
+| 31 | Orbital quantization | NO CHANGE | HOLD by the author's instruction on the v3 note; the pair law is recorded on row 20 | the 2026-10-21 instruction |
+
+The 17 proposed rows (C1 to C6, H1 to H9, N1, N2) and the author's two × grades of our column on H2 and H3: recorded in § 5, raised in the reply as a board-level question, no edit.
+
+### 15. The fresh-agent audit of R1v and R1k (2026-10-26, before any `MODELS.md` edit)
+
+A fresh subagent that did not open `m5_34_identity_checks.py`, `m5_34_kit_checks.py` or their JSON, with its own code written from the claims alone (four scripts in a session-local audit directory; hand proofs where they exist; under one minute of compute): **8 CONFIRMED, 1 QUALIFIED, 0 REFUTED** over the nine claims (the seven identities, the box-growth check, the moment check). Its numbers: the η shift at 1.6e-15 with the null space one-dimensional and the null vector −η, unique among all 16 constant matrices; F ≡ 0 exactly on homogeneous jets, V4(M_vac) = 0.0, the orbit at 8.8e-21 against 1.9e7 for a non-Lorentz control; the ten-direction table reproduced (u = e₀ at M_vac, so h = 1 there); the director coefficient 4 by sympy; I1 exactly quartic (1.7⁴ = 8.3521), the canonical trace sum equal to 4 V4 with the I1 part cancelling, the Derrick exponents −1 and +3; the Pfaffian of the pullback 2-form at 9.4e-16 against 0.45 for a generic 2-form; the separate invariances at 1.7e-14 (I1) and 5.9e-13 (V4) against 0.77 for a non-Lorentz control, the u·A term changing by 10.7 and 21.1 under the single factors and 1.4e-14 under the diagonal; the box ladder's quotients 9.6583 and 9.6723, the lattice shell sum 7.673 per unit side against the continuum 7.660, ratios 1.1733 and 1.1749; the instrument's moment 0.22091 (b = 0) and 0.22102 (b = B_STAR), curl-B part 3.2e-15, dipole 1.1e-15, dual moment 6.2e-14 and 8.8e-14.
+
+| Claim | Verdict | Qualification, applied |
+| --- | --- | --- |
+| 1 to 8 | CONFIRMED | none; the audit's extension (η unique among all 16 constant matrices) recorded in § 13 |
+| 9 (the moment check) | QUALIFIED | the fourth digit at B_STAR is 0.2210, not 0.2209 (0.05 percent b-dependence): § 12 states the b = 0 value; the quoted charge must name its mask (0.573 on the active mask, 4π over the full interior): § 12 names both |
+
+Beyond the claims, four findings folded in: (1) the vanishing curl-B moment is a symmetry cancellation, not a pointwise identity (max \|curl B\| 0.054 on the mask): § 12 and the row-5 wording restated; (2) the 17 percent excess of the box slope over `c_t × S` is not a lattice-shell artifact and is the same at both rungs, so it is a coefficient or tail-profile mismatch: § 12 restated, the attribution to the stencil withdrawn; (3) the Derrick quarter is a static-field statement, the running clock's F_0i terms change the virial: § 13 restated; (4) the certified action's invariance test as a whole is dominated by V4 at random points, so the audit split the two terms (both pass): noted.
+
+## TASK REVIEW (2026-10-26; presented in the terminal at 20:14 EDT and approved by the user's commit)
+
+**Task Duration:** 00:34 (from the 19:40 EDT go to the 20:14 EDT review; the work started at 19:43 on the user's "fan is on, go")
+**Usage Cap Triggered:** NO
+
+**Results**
+
+| Item | Status |
+| --- | --- |
+| R0 | ✅ the package's toy point is the certified action's; the colour table's live column equals `MODELS.md` (9 / 11 / 2 / 9) |
+| R1a, 34 scripts | ✅ all exit 0 in 8.5 min; every physics leaf at the README digits (worst real leaf 0.4 percent, `V20`'s centre ratio) |
+| R1b, 12 long refits | ✅ all exit 0 in 13 min of wall time (the README's hours); closed-form chains exact (τ_n 880.57 / 1125.13 s), local refits within 1 to 4 percent of the shipped optima, one failed internal-reading variant on another branch |
+| R1c, 17 scripts | ✅ all exit 0 in 5 min; the covariant refit at the README digits (E15 9.201, g_A 1.158) |
+| R1k (i), the clock's box slope | ✅ measured: the author's 13.4812 per unit radius IS this repo's M5.21.14 base; the certified ladder linear in the box (9.66 per unit side, 1.17 × the pure-twist prediction, a coefficient or tail mismatch); 🔶 the physical sign is open: M5.21.14's dressing makes the net −6.1 (Q65) |
+| R1k (ii), the moment identity | ✅ measured: the instrument's μ is entirely the displacement term, the charge centred, so the author's identity gives zero on our field; the readout grows with resolution at fixed box (Q66) |
+| R1v, seven identities on the certified action | ✅ all CONFIRMED with our own functions; Λ_own = 0 exactly (Q67); the separate boost invariances hold at round-off |
+| Audit | ✅ 8 CONFIRMED, 1 QUALIFIED, 0 REFUTED; four findings folded in before the edit |
+| R2 / R3 | ✅ eight cells restated within the 65-word budget, six pointer lines, no icon moved; `check_models_md.py` clean |
+| Cross-machine probe | ✅ 1.30 / 1.18 / 1.03, geometric mean 1.17 single-core against the idle old workstation (the home session's clean rerun) |
+
+**Issues / blockers**: (1) Two of our own checks could move icons on our evidence, put to the user here, not moved: row 3 (a validated ✅ whose clock inertia is box-extensive, with the dressing reversing the sign; the leak itself unmeasured) and row 28 (Λ_own = 0 exactly: an honest negative for the certified action if the user reads the criterion that way). (2) The instrument `m5_8_2r_electron_id.py` no longer runs as checked in: its imports name a retired layout; the kit check loaded it through a shim rather than editing it (a platform item, not filed). (3) Family "Artifact read as result": the author's refit values are optimizer-path numbers at the 1 to 4 percent level, below the README's "1e-6 across versions" statement; recorded, not a failure. (4) The box-slope excess of 17 percent is unexplained (a coefficient or tail-profile mismatch, the audit's reading).
+
+**Deviations from plan**: the budget: R1b finished in 13 minutes, not 2.5 hours, so the whole run closed in one sitting; the record compiler reads the task's own summary lines instead of M5.33's log format; the timing probe was added at the go (the home session's benchmark request) and its first ratios were superseded by the clean old-workstation rerun; four checkpoint stamps had been estimated ahead of the clock and were corrected from artifact times (the rule from here on: every stamp from `date`). Nothing in the plan's rungs was dropped.
+
+**Action needed**: the user's two icon calls (rows 3 and 28; the default in the PR keeps ✅ and 🚧); the `MODELS.md` PR; the thread reply (the verdicts, the two icon questions, the 17 proposed rows as a board question, the three asks of § 6); R29 (D8) is next, its gates drawing on § 13's `K_h` table.
+
+**Findings**: the author's v1.1 package reproduces in full on this stack, and the two checks the author addressed to OpenWave both close in the author's favor on the identities while pointing at our own earlier record for the physics: the clock's exterior inertia is the M5.21.14 base coefficient to the digit, whose dressing reverses the sign, and the electron-ID moment is a displacement-term read that the dipole identity does not cover. The certified action carries no cosmological constant of its own and is invariant under internal and spacetime boosts separately; neither statement moves an icon without the user.
+
+**Research docs created / updated**: [`m5_34_task_details.md`](m5_34_task_details.md) (this record: § 8 to § 15 and this review) · [`MODELS.md`](../../../../../MODELS.md) (eight M5 cells, six pointer lines) · [`m5_question_tracker.md`](../m5_question_tracker.md) (Q65 to Q67) · [`m5_roadmap.md`](../m5_roadmap.md) (the row to DONE, the change-log) · scripts [`m5_34_identity_checks.py`](../scripts/m5_34_identity_checks.py), [`m5_34_kit_checks.py`](../scripts/m5_34_kit_checks.py), [`m5_34_reproduction_record.py`](../scripts/m5_34_reproduction_record.py) · data [`m5_34_identity_checks.json`](../data/m5_34_identity_checks.json), [`m5_34_kit_checks.json`](../data/m5_34_kit_checks.json), [`m5_34_reproduction.json`](../data/m5_34_reproduction.json)
