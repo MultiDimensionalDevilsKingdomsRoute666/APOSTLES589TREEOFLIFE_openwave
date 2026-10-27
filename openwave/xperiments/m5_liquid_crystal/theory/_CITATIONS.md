@@ -174,6 +174,7 @@ Entries are ordered by year (ascending; undated last); the Bibliography is the r
 | Duda (2026) | `duda_2026-10-24_ldgs_against_openwave_criteria/LdGS_OpenWave_scorecard_v1_1.pdf` | 9.0 MB |
 | Duda (2026) | `duda_2026-10-24_ldgs_against_openwave_criteria/ldgs-openwave-v1.1-code-and-data.zip` and its unpacked tree `package/LdGS_vacuum_sectors/` (README, `AGREEMENTS_UPDATE.md`, 12 further notes and post drafts, the scorecard `.tex`, 62 `.py`, 55 `.json`, 34 `.npz`, 19 `.png`, the colour table; 189 files) | 6.5 MB zip, 7.7 MB unpacked |
 | Duda (2026) | `duda_2026-10-24_ldgs_against_openwave_criteria/LdGS_OpenWave_colour_table_post_2026-10-24.png` (the colour table as attached to the #186 post of 2026-10-24) | 1.2 MB |
+| Duda (2026) | `duda_2026-10-24_ldgs_against_openwave_criteria/duda_2026-10-26_reply_discussioncomment-19208635.md` and `SEARCH_KIT_for_OpenWave_2026-10-27.md` (the author's #186 reply of 2026-10-26 answering the M5.34 asks, and the four pre-registered searches S1 to S4 pasted in it; the bundle V1 to V57 it names is not yet received) | 10 KB and 6 KB |
 | Duda (2026) | `duda_2026-10-24_electron_trajectories/ElectronPaths_v1.6.pdf` | 768 KB |
 | Duda (2026) | `duda_2026-08-20_current_4x4_lagrangian.png` | 28 KB |
 | Duda (2026) | `duda_2026-08-23_models_scoreboard_screenshot.png` | 69 KB |
