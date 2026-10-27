@@ -244,6 +244,8 @@ Beyond the claims, four findings folded in: (1) the vanishing curl-B moment is a
 
 ## TASK REVIEW (2026-10-26; presented in the terminal at 20:14 EDT and approved by the user's commit)
 
+> The record PR is [#658](https://github.com/openwave-labs/openwave/pull/658) (merge `72193a65`); the reply went up as [discussioncomment-19206812](https://github.com/vantasnerdan/substrate-framework/discussions/186#discussioncomment-19206812); the icons stayed as proposed by the user's decision at the review.
+
 **Task Duration:** 00:34 (from the 19:40 EDT go to the 20:14 EDT review; the work started at 19:43 on the user's "fan is on, go")
 **Usage Cap Triggered:** NO
 
