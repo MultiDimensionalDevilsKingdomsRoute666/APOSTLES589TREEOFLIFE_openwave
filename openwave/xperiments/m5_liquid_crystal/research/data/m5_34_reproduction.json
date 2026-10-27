@@ -1,0 +1,586 @@
+{
+ "versions": {
+  "python": "3.12.14",
+  "numpy": "2.5.3",
+  "scipy": "1.18.1",
+  "sympy": "1.14.0",
+  "mpmath": "1.3.0"
+ },
+ "bench": [
+  {
+   "run": "S24",
+   "wall_s": 9.85,
+   "exit": 0
+  },
+  {
+   "run": "S27",
+   "wall_s": 30.4,
+   "exit": 0
+  },
+  {
+   "run": "S36",
+   "wall_s": 88.59,
+   "exit": 0
+  }
+ ],
+ "r1a": [
+  {
+   "run": "V1",
+   "wall_s": 0.42,
+   "exit": 0
+  },
+  {
+   "run": "V2",
+   "wall_s": 0.23,
+   "exit": 0
+  },
+  {
+   "run": "V3",
+   "wall_s": 0.39,
+   "exit": 0
+  },
+  {
+   "run": "V4",
+   "wall_s": 0.36,
+   "exit": 0
+  },
+  {
+   "run": "V5",
+   "wall_s": 16.1,
+   "exit": 0
+  },
+  {
+   "run": "V6",
+   "wall_s": 0.11,
+   "exit": 0
+  },
+  {
+   "run": "V7",
+   "wall_s": 0.41,
+   "exit": 0
+  },
+  {
+   "run": "V8",
+   "wall_s": 3.83,
+   "exit": 0
+  },
+  {
+   "run": "V9",
+   "wall_s": 1.17,
+   "exit": 0
+  },
+  {
+   "run": "V10",
+   "wall_s": 0.6,
+   "exit": 0
+  },
+  {
+   "run": "V11",
+   "wall_s": 7.92,
+   "exit": 0
+  },
+  {
+   "run": "V12",
+   "wall_s": 2.63,
+   "exit": 0
+  },
+  {
+   "run": "V13",
+   "wall_s": 4.65,
+   "exit": 0
+  },
+  {
+   "run": "V14",
+   "wall_s": 19.3,
+   "exit": 0
+  },
+  {
+   "run": "V15",
+   "wall_s": 0.11,
+   "exit": 0
+  },
+  {
+   "run": "V16",
+   "wall_s": 2.22,
+   "exit": 0
+  },
+  {
+   "run": "V17",
+   "wall_s": 0.06,
+   "exit": 0
+  },
+  {
+   "run": "V18",
+   "wall_s": 30.89,
+   "exit": 0
+  },
+  {
+   "run": "V19",
+   "wall_s": 0.83,
+   "exit": 0
+  },
+  {
+   "run": "V20",
+   "wall_s": 10.66,
+   "exit": 0
+  },
+  {
+   "run": "V22",
+   "wall_s": 27.69,
+   "exit": 0
+  },
+  {
+   "run": "V24",
+   "wall_s": 3.96,
+   "exit": 0
+  },
+  {
+   "run": "make",
+   "wall_s": 0.96,
+   "exit": 0
+  },
+  {
+   "run": "V26",
+   "wall_s": 1.26,
+   "exit": 0
+  },
+  {
+   "run": "V27",
+   "wall_s": 0.39,
+   "exit": 0
+  },
+  {
+   "run": "V29",
+   "wall_s": 1.11,
+   "exit": 0
+  },
+  {
+   "run": "V32",
+   "wall_s": 6.58,
+   "exit": 0
+  },
+  {
+   "run": "fewbody",
+   "wall_s": 14.68,
+   "exit": 0
+  },
+  {
+   "run": "V33",
+   "wall_s": 232.2,
+   "exit": 0
+  },
+  {
+   "run": "V35",
+   "wall_s": 1.24,
+   "exit": 0
+  },
+  {
+   "run": "V36",
+   "wall_s": 1.63,
+   "exit": 0
+  },
+  {
+   "run": "V37",
+   "wall_s": 3.12,
+   "exit": 0
+  },
+  {
+   "run": "V38",
+   "wall_s": 75.72,
+   "exit": 0
+  },
+  {
+   "run": "V39",
+   "wall_s": 1.14,
+   "exit": 0
+  }
+ ],
+ "r1b": [
+  {
+   "job": "V21",
+   "start": "19:49:42",
+   "cmd": "/opt/anaconda3/envs/master312/bin/python3 -E -s V21_vortex_native_tests.py",
+   "end": "20:02:34",
+   "exit": 0,
+   "wall_s": 772,
+   "finished": true,
+   "errors": []
+  },
+  {
+   "job": "V23",
+   "start": "19:49:42",
+   "cmd": "/opt/anaconda3/envs/master312/bin/python3 -E -s V23_radii_and_beta.py",
+   "end": "19:51:48",
+   "exit": 0,
+   "wall_s": 126,
+   "finished": true,
+   "errors": []
+  },
+  {
+   "job": "V25",
+   "start": "19:49:42",
+   "cmd": "/opt/anaconda3/envs/master312/bin/python3 -E -s V25_lightly_bound_gate.py",
+   "end": "19:51:39",
+   "exit": 0,
+   "wall_s": 117,
+   "finished": true,
+   "errors": []
+  },
+  {
+   "job": "V28_Q1",
+   "start": "19:49:42",
+   "cmd": "/opt/anaconda3/envs/master312/bin/python3 -E -s V28_baryon_core_lock.py Q1",
+   "end": "19:50:32",
+   "exit": 0,
+   "wall_s": 50,
+   "finished": true,
+   "errors": []
+  },
+  {
+   "job": "V28_Q2_Q3",
+   "start": "19:49:42",
+   "cmd": "/opt/anaconda3/envs/master312/bin/python3 -E -s V28_baryon_core_lock.py Q2 Q3",
+   "end": "19:52:47",
+   "exit": 0,
+   "wall_s": 185,
+   "finished": true,
+   "errors": []
+  },
+  {
+   "job": "V28_Q3g",
+   "start": "19:49:42",
+   "cmd": "/opt/anaconda3/envs/master312/bin/python3 -E -s V28_baryon_core_lock.py Q3g",
+   "end": "19:51:27",
+   "exit": 0,
+   "wall_s": 105,
+   "finished": true,
+   "errors": []
+  },
+  {
+   "job": "V30",
+   "start": "19:49:42",
+   "cmd": "/opt/anaconda3/envs/master312/bin/python3 -E -s V30_light_nuclei_clusters.py",
+   "end": "19:51:46",
+   "exit": 0,
+   "wall_s": 124,
+   "finished": true,
+   "errors": []
+  },
+  {
+   "job": "V31_GA1",
+   "start": "19:49:42",
+   "cmd": "/opt/anaconda3/envs/master312/bin/python3 -E -s V31_gA_anchored.py GA1",
+   "end": "19:50:48",
+   "exit": 0,
+   "wall_s": 66,
+   "finished": true,
+   "errors": []
+  },
+  {
+   "job": "V31_GA2",
+   "start": "19:49:42",
+   "cmd": "/opt/anaconda3/envs/master312/bin/python3 -E -s V31_gA_anchored.py GA2",
+   "end": "19:51:52",
+   "exit": 0,
+   "wall_s": 130,
+   "finished": true,
+   "errors": []
+  },
+  {
+   "job": "V31_GA2c",
+   "start": "19:49:42",
+   "cmd": "/opt/anaconda3/envs/master312/bin/python3 -E -s V31_gA_anchored.py GA2c",
+   "end": "19:51:52",
+   "exit": 0,
+   "wall_s": 130,
+   "finished": true,
+   "errors": []
+  },
+  {
+   "job": "V34_34b",
+   "start": "19:49:42",
+   "cmd": "zsh -c /opt/anaconda3/envs/master312/bin/python3 -E -s V34_mt_core_from_sextic.py && /opt/anaconda3/envs/master312/bin/python3 -E -s V34b_range_from_rs.py",
+   "end": "19:53:10",
+   "exit": 0,
+   "wall_s": 208,
+   "finished": true,
+   "errors": []
+  },
+  {
+   "job": "V34c",
+   "start": "19:49:42",
+   "cmd": "/opt/anaconda3/envs/master312/bin/python3 -E -s V34c_omega_sensitivity.py",
+   "end": "19:52:40",
+   "exit": 0,
+   "wall_s": 178,
+   "finished": true,
+   "errors": []
+  }
+ ],
+ "r1c": [
+  {
+   "run": "vortex",
+   "wall_s": 0.5,
+   "exit": 0
+  },
+  {
+   "run": "vortex",
+   "wall_s": 0.49,
+   "exit": 0
+  },
+  {
+   "run": "V40",
+   "wall_s": 9.31,
+   "exit": 0
+  },
+  {
+   "run": "V40b",
+   "wall_s": 22.76,
+   "exit": 0
+  },
+  {
+   "run": "V41",
+   "wall_s": 0.83,
+   "exit": 0
+  },
+  {
+   "run": "V42",
+   "wall_s": 0.38,
+   "exit": 0
+  },
+  {
+   "run": "V43",
+   "wall_s": 6.2,
+   "exit": 0
+  },
+  {
+   "run": "V44",
+   "wall_s": 113.39,
+   "exit": 0
+  },
+  {
+   "run": "V44b",
+   "wall_s": 6.19,
+   "exit": 0
+  },
+  {
+   "run": "V45",
+   "wall_s": 0.71,
+   "exit": 0
+  },
+  {
+   "run": "V46",
+   "wall_s": 1.09,
+   "exit": 0
+  },
+  {
+   "run": "V47",
+   "wall_s": 0.35,
+   "exit": 0
+  },
+  {
+   "run": "V48",
+   "wall_s": 118.08,
+   "exit": 0
+  },
+  {
+   "run": "V48b",
+   "wall_s": 8.31,
+   "exit": 0
+  },
+  {
+   "run": "V49",
+   "wall_s": 0.25,
+   "exit": 0
+  },
+  {
+   "run": "V50",
+   "wall_s": 2.38,
+   "exit": 0
+  },
+  {
+   "run": "V51",
+   "wall_s": 11.71,
+   "exit": 0
+  }
+ ],
+ "compare": {
+  "V10_kinetic_terms_and_charge.json": {
+   "run_dir": "r1a",
+   "leaves": 12,
+   "max_rel_diff": "8.18e-16",
+   "at": "/energy_inside_R",
+   "values": "profile with the V5 scale",
+   "note": "/50/E_spectral/kappa (104.2264696 vs 104.2264696)"
+  },
+  "V1_trace_shift.json": {
+   "run_dir": "r1a",
+   "leaves": 26,
+   "max_rel_diff": "0.519",
+   "at": "/uniqueness/singular_values_smallest_two[1]",
+   "values": "2.864671715e-15 vs 5.959413949e-15",
+   "note": ""
+  },
+  "V24_alpha_particle.json": {
+   "run_dir": "r1a",
+   "leaves": 28,
+   "max_rel_diff": "3.14e-06",
+   "at": "/states/3/z0",
+   "values": "0.2754612941 vs 0.2754604303",
+   "note": ""
+  },
+  "V26_record_inside_nucleon.json": {
+   "run_dir": "r1a",
+   "leaves": 5,
+   "max_rel_diff": "0",
+   "at": "/beta_core",
+   "values": "0.5012666833 vs 0.5012666833",
+   "note": ""
+  },
+  "V2_vacuum_energy.json": {
+   "run_dir": "r1a",
+   "leaves": 16,
+   "max_rel_diff": "0.915",
+   "at": "/(b)_V4_on_vacuum_orbit_max",
+   "values": "1.770965517e-13 vs 1.499459293e-14",
+   "note": ""
+  },
+  "V33_core_requirement.json": {
+   "run_dir": "r1a",
+   "leaves": 1,
+   "max_rel_diff": "inf",
+   "at": "",
+   "values": "uncomparable [{'pion': 'v2.6 pion', 'g_omega2_4pi': 10.17, 'gs_triplet': 3.1039023022703125, 'gs_singlet': 3.66920629450",
+   "note": "; 1 NON-NUMERIC MISMATCH e.g. ('', \"uncomparable [{'pion': 'v2.6 pion', 'g_omega2_4pi': 10.17, 'gs_triplet': 3.1039023022703125, 'gs_singlet': 3.669206294505889"
+  },
+  "V4_radiation_walls_metric.json": {
+   "run_dir": "r1a",
+   "leaves": 31,
+   "max_rel_diff": "0",
+   "at": "/(b)_domain_walls/its_cube_root_MeV",
+   "values": "15.95576144 vs 15.95576144",
+   "note": ""
+  },
+  "V5_radial_hedgehog.json": {
+   "run_dir": "r1a",
+   "leaves": 20,
+   "max_rel_diff": "0.131",
+   "at": "/split/virial_residual",
+   "values": "E_F - 3 E_V",
+   "note": "/E (-2.372911638e-06 vs -2.063182004e-06)"
+  },
+  "V23_part_H4g_L1H4g.json": {
+   "note": "NEW (no shipped copy)"
+  },
+  "V25_lightly_bound_gate.json": {
+   "run_dir": "r1b",
+   "leaves": 1,
+   "max_rel_diff": "inf",
+   "at": "/scan",
+   "values": "len 4 vs 7",
+   "note": "; 1 NON-NUMERIC MISMATCH e.g. ('/scan', 'len 4 vs 7', inf)"
+  },
+  "V31_curve_GA1.json": {
+   "note": "NEW (no shipped copy)"
+  },
+  "V31_curve_GA2.json": {
+   "note": "NEW (no shipped copy)"
+  },
+  "V31_curve_GA2c.json": {
+   "run_dir": "r1b",
+   "leaves": 114,
+   "max_rel_diff": "1.83",
+   "at": "[2]/errors/S",
+   "values": "1.423962654 vs -1.187162117",
+   "note": ""
+  },
+  "V31_part_GA1.json": {
+   "run_dir": "r1b",
+   "leaves": 71,
+   "max_rel_diff": "0.248",
+   "at": "/GA1/refit",
+   "values": "unweighted errors",
+   "note": "/errors (%)/rES2 (0.2153955057 vs 0.2865203776)"
+  },
+  "V31_part_GA2.json": {
+   "run_dir": "r1b",
+   "leaves": 71,
+   "max_rel_diff": "0.711",
+   "at": "/GA2/refit",
+   "values": "unweighted errors",
+   "note": "/errors (%)/S (-8.24188 vs -2.385619474)"
+  },
+  "V31_part_GA2c.json": {
+   "run_dir": "r1b",
+   "leaves": 71,
+   "max_rel_diff": "0.526",
+   "at": "/GA2c/refit",
+   "values": "unweighted errors",
+   "note": "/errors (%)/S (-1.129812417 vs -2.385619474)"
+  },
+  "V34c_omega_sensitivity.json": {
+   "run_dir": "r1b",
+   "leaves": 28,
+   "max_rel_diff": "8.13e-10",
+   "at": "[3]/g_attr_singlet",
+   "values": "1216.863557 vs 1216.863556",
+   "note": ""
+  },
+  "V40_v3_replay.json": {
+   "run_dir": "r1c",
+   "leaves": 235,
+   "max_rel_diff": "5.2e-12",
+   "at": "/R0/errors/b00",
+   "values": "0.969092307 vs 0.969092307",
+   "note": ""
+  },
+  "V40b_second_branch.json": {
+   "run_dir": "r1c",
+   "leaves": 7,
+   "max_rel_diff": "6.08e-16",
+   "at": "/E15",
+   "values": "35.05874142 vs 35.05874142",
+   "note": ""
+  },
+  "V41_clock_kink_check.json": {
+   "run_dir": "r1c",
+   "leaves": 36,
+   "max_rel_diff": "5.04e-07",
+   "at": "/lam=0.3/E_tr",
+   "values": "0.1161009834 vs 0.1161010419",
+   "note": ""
+  },
+  "V43_v3_merging.json": {
+   "run_dir": "r1c",
+   "leaves": 42,
+   "max_rel_diff": "7.75e-11",
+   "at": "/O10/bag_fm[0]",
+   "values": "1.463468834 vs 1.463468834",
+   "note": ""
+  },
+  "V44_comoving_clock_refit.json": {
+   "run_dir": "r1c",
+   "leaves": 256,
+   "max_rel_diff": "0.182",
+   "at": "/1.0/errors/a11",
+   "values": "0.08774190656 vs 0.07179621522",
+   "note": ""
+  },
+  "V47_inertial_mass_3d.json": {
+   "run_dir": "r1c",
+   "leaves": 33,
+   "max_rel_diff": "1.3e-14",
+   "at": "/R0/M_I_minus_Est",
+   "values": "-26.22758564 vs -26.22758564",
+   "note": ""
+  },
+  "V48_covariant_omega_refit_ell.json": {
+   "run_dir": "r1c",
+   "leaves": 114,
+   "max_rel_diff": "0.00967",
+   "at": "/4.5/errors/b20",
+   "values": "-1.181923187 vs -1.193463775",
+   "note": ""
+  }
+ }
+}
