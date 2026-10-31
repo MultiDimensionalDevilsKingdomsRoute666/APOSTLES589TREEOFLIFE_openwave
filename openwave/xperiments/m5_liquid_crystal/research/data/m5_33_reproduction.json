@@ -1,0 +1,568 @@
+{
+ "versions": {
+  "r1a_S24.log": "3.12.14 2.5.3 1.18.1",
+  "r1a_S26.log": "3.12.14 2.5.3 1.18.1",
+  "r1a_S27.log": "3.12.14 2.5.3 1.18.1",
+  "r1a_S29.log": "3.12.14 2.5.3 1.18.1",
+  "r1a_S30.log": "venv 3.12.14 2.5.3 1.18.1 0.26.0",
+  "r1a_S36.log": "3.12.14 2.5.3 1.18.1",
+  "r1a_S39.log": "3.12.14 2.5.3 1.18.1",
+  "r1a_S41.log": "3.12.14 2.5.3 1.18.1",
+  "r1a_S43.log": "3.12.14 2.5.3 1.18.1",
+  "r1a_S44.log": "3.12.14 2.5.3 1.18.1",
+  "r1a_S46.log": "3.12.14 2.5.3 1.18.1",
+  "r1s_run.log": "3.12.14 2.5.3 1.18.1",
+  "r1b/S1.log": "3.12.14 2.5.3 1.18.1",
+  "r1b/S16_B3.log": "3.12.14 2.5.3 1.18.1",
+  "r1b/S16_B4.log": "3.12.14 2.5.3 1.18.1",
+  "r1b/S34.log": "3.12.14 2.5.3 1.18.1",
+  "r1b/S37_b1.log": "3.12.14 2.5.3 1.18.1",
+  "r1b/S37_torus.log": "3.12.14 2.5.3 1.18.1",
+  "r1b/S37b.log": "venv 3.12.14 2.5.3 1.18.1",
+  "r1b/S45b.log": "3.12.14 2.5.3 1.18.1",
+  "r1b/S4b.log": "3.12.14 2.5.3 1.18.1",
+  "r1b/stage3.log": "3.12.14 2.5.3 1.18.1 skimage 0.26.0",
+  "r1b/stage4.log": "3.12.14 2.5.3 1.18.1"
+ },
+ "r1a": [
+  {
+   "log": "r1a_S24.log",
+   "run": "S24",
+   "start": "10:52:34",
+   "end": "10:52:47",
+   "wall_s": 12.44,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1a_S26.log",
+   "run": "S26",
+   "start": "10:52:34",
+   "end": "10:52:35",
+   "wall_s": 0.15,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1a_S27.log",
+   "run": "S27",
+   "start": "10:53:59",
+   "end": "10:54:35",
+   "wall_s": 36.33,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1a_S27.log",
+   "run": "S28",
+   "start": "10:54:35",
+   "end": "10:54:37",
+   "wall_s": 1.8,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1a_S29.log",
+   "run": "S29",
+   "start": "10:52:34",
+   "end": "10:52:34",
+   "wall_s": 0.06,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1a_S30.log",
+   "run": "S30",
+   "start": "10:55:13",
+   "end": "10:55:21",
+   "wall_s": 7.32,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1a_S36.log",
+   "run": "S36",
+   "start": "10:55:13",
+   "end": "10:57:14",
+   "wall_s": 120.98,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1a_S39.log",
+   "run": "S39",
+   "start": "10:52:34",
+   "end": "10:53:29",
+   "wall_s": 54.84,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1a_S41.log",
+   "run": "S41",
+   "start": "10:52:34",
+   "end": "10:57:14",
+   "wall_s": 279.98,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1a_S43.log",
+   "run": "S43",
+   "start": "10:52:34",
+   "end": "10:53:23",
+   "wall_s": 48.19,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1a_S44.log",
+   "run": "S44",
+   "start": "10:52:34",
+   "end": "10:56:55",
+   "wall_s": 260.81,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1a_S46.log",
+   "run": "S46",
+   "start": "10:52:34",
+   "end": "10:52:43",
+   "wall_s": 8.99,
+   "exit": 0,
+   "errors": []
+  }
+ ],
+ "r1s": [
+  {
+   "log": "r1s_run.log",
+   "run": "proton_21cm_bound.py",
+   "start": "10:54:56",
+   "end": "10:54:56",
+   "wall_s": 0.01,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1s_run.log",
+   "run": "s77_mass.py",
+   "start": "10:54:56",
+   "end": "10:59:28",
+   "wall_s": 271.81,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1s_run.log",
+   "run": "s77_interp.py",
+   "start": "10:59:28",
+   "end": "10:59:28",
+   "wall_s": 0.1,
+   "exit": 1,
+   "errors": [
+    "Traceback (most recent call last):",
+    "ModuleNotFoundError: No module named 's77_mass'"
+   ]
+  },
+  {
+   "log": "r1s_run.log",
+   "run": "extract_capsule.py",
+   "start": "10:59:28",
+   "end": "10:59:32",
+   "wall_s": 4.47,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1s_run.log",
+   "run": "phys_fpi_scan.py",
+   "start": "10:59:32",
+   "end": "10:59:38",
+   "wall_s": 5.68,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1s_run.log",
+   "run": "frontier.py",
+   "start": "10:59:38",
+   "end": "10:59:41",
+   "wall_s": 3.44,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "r1s_run.log",
+   "run": "s77_interp.py (python3 -E -s)",
+   "start": "11:04:09",
+   "end": "11:04:26",
+   "wall_s": 16.42,
+   "exit": 0,
+   "errors": []
+  }
+ ],
+ "r1b": [
+  {
+   "log": "S1.log",
+   "run": "S1 b1",
+   "start": "10:54:56",
+   "end": "11:07:28",
+   "wall_s": 752.37,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "S1.log",
+   "run": "S1 torus",
+   "start": "11:07:28",
+   "end": "11:19:01",
+   "wall_s": 692.44,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "S16_B3.log",
+   "run": "S16 B3",
+   "start": "10:54:56",
+   "end": "11:18:59",
+   "wall_s": 1443.1,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "S16_B4.log",
+   "run": "S16 B4",
+   "start": "10:54:56",
+   "end": "11:18:59",
+   "wall_s": 1442.45,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "S34.log",
+   "run": "S34",
+   "start": "10:54:56",
+   "end": "11:15:30",
+   "wall_s": 1233.51,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "S37_b1.log",
+   "run": "S37 b1",
+   "start": "11:16:53",
+   "end": "11:25:35",
+   "wall_s": 521.99,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "S37_torus.log",
+   "run": "S37 torus",
+   "start": "11:16:53",
+   "end": "11:29:02",
+   "wall_s": 728.91,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "S37b.log",
+   "run": "S37b",
+   "start": "11:29:30",
+   "end": "11:29:35",
+   "wall_s": 4.77,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "S45b.log",
+   "run": "S45b 4 12 2.6",
+   "start": "11:28:17",
+   "end": "11:35:51",
+   "wall_s": 453.92,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "S4b.log",
+   "run": "S4b",
+   "start": "10:54:56",
+   "end": "11:31:23",
+   "wall_s": 2186.32,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "stage3.log",
+   "run": "S19_vortex_picture.py clean",
+   "start": "11:25:43",
+   "end": "11:25:44",
+   "wall_s": 1.0,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "stage3.log",
+   "run": "S20_hopf_and_threebody.py hopf_only",
+   "start": "11:25:44",
+   "end": "11:25:46",
+   "wall_s": 2.31,
+   "exit": 1,
+   "errors": [
+    "Traceback (most recent call last):",
+    "FileNotFoundError: [Errno 2] No such file or directory: 'S20_hopf_and_threebody.json'"
+   ]
+  },
+  {
+   "log": "stage3.log",
+   "run": "S22_spectral_baryon.py",
+   "start": "11:25:46",
+   "end": "11:25:48",
+   "wall_s": 1.76,
+   "exit": 1,
+   "errors": [
+    "Traceback (most recent call last):",
+    "FileNotFoundError: [Errno 2] No such file or directory: 'S20_hopf_and_threebody.json'"
+   ]
+  },
+  {
+   "log": "stage3.log",
+   "run": "S25_light_nuclei_rotors.py",
+   "start": "11:25:48",
+   "end": "11:25:51",
+   "wall_s": 3.02,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "stage4.log",
+   "run": "S38_valley_metric.py",
+   "start": "11:31:36",
+   "end": "11:31:43",
+   "wall_s": 6.84,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "stage4.log",
+   "run": "S35_valley_deuteron.py",
+   "start": "11:31:43",
+   "end": "11:31:45",
+   "wall_s": 1.82,
+   "exit": 0,
+   "errors": []
+  },
+  {
+   "log": "stage4.log",
+   "run": "S35b_valley_true_metric.py",
+   "start": "11:31:45",
+   "end": "11:31:45",
+   "wall_s": 0.2,
+   "exit": 0,
+   "errors": []
+  }
+ ],
+ "json_vs_shipped": {
+  "S24_gravity_checks.json": {
+   "dir": "r1a_S24",
+   "leaves": 37,
+   "max_rel_diff": 3.52e-11,
+   "at": "/dln_rB_dlnbeta",
+   "values": "-0.128136683 vs -0.128136683",
+   "flags": ""
+  },
+  "S26_baryon_current_projector.json": {
+   "dir": "r1a_S26",
+   "leaves": 1,
+   "max_rel_diff": 0.0,
+   "at": "/max_abs_difference",
+   "values": "1.243449788e-14 vs 1.243449788e-14",
+   "flags": ""
+  },
+  "S29_moment_ledger.json": {
+   "dir": "r1a_S29",
+   "leaves": 35,
+   "max_rel_diff": 0.0,
+   "at": "/product_data",
+   "values": "1.03532 vs 1.03532",
+   "flags": ""
+  },
+  "S30_halfskyrmion_crystal.json": {
+   "dir": "r1a_S30",
+   "leaves": 24,
+   "max_rel_diff": 1.11e-15,
+   "at": "/Hopf_block",
+   "values": "4 vs 4",
+   "flags": ""
+  },
+  "S36_two_top_orientation.json": {
+   "dir": "r1a_S36",
+   "leaves": 467,
+   "max_rel_diff": 3.9e-07,
+   "at": "/deuteron/projected",
+   "values": "free orientations); locked valley shape inside 0.8 fm/eta (0.02018849818 vs 0.0201884903",
+   "flags": ""
+  },
+  "S39_binding_targets.json": {
+   "dir": "r1a_S39",
+   "leaves": 89,
+   "max_rel_diff": 7.09e-10,
+   "at": "[7]/E",
+   "values": "0.03177745642 vs 0.0317774564",
+   "flags": ""
+  },
+  "S41_calibration_family.json": {
+   "dir": "r1a_S41",
+   "leaves": 167,
+   "max_rel_diff": 1.36e-06,
+   "at": "/family[8]/tensor_tail_vs_physical_OPE",
+   "values": "0.8491690985 vs 0.8491702499",
+   "flags": ""
+  },
+  "S43_deuteron_AN.json": {
+   "dir": "r1a_S43",
+   "leaves": 68,
+   "max_rel_diff": 4.55e-08,
+   "at": "/results/two-top/eta",
+   "values": "0.01801240727 vs 0.01801240809",
+   "flags": ""
+  },
+  "S44_deuteron_threshold.json": {
+   "dir": "r1a_S44",
+   "leaves": 28,
+   "max_rel_diff": 1.31e-11,
+   "at": "/ours",
+   "values": "f 92.4) | two-top/160.0/lambda_threshold (1.727899371 vs 1.727899371",
+   "flags": ""
+  },
+  "S46_gA_tail_deuteron.json": {
+   "dir": "r1a_S46",
+   "leaves": 54,
+   "max_rel_diff": 3.82e-09,
+   "at": "/results/rF=0.8/g_for_Bd/eta",
+   "values": "0.02792949278 vs 0.02792949289",
+   "flags": ""
+  },
+  "S27_omega_lever.json": {
+   "dir": "r1a_S27",
+   "leaves": 152,
+   "max_rel_diff": 4.3e-05,
+   "at": "/scan/2.0/gA_tail_rel",
+   "values": "1.005501889 vs 1.005545102",
+   "flags": ""
+  },
+  "S28_isoscalar_cloud.json": {
+   "dir": "r1a_S27",
+   "leaves": 56,
+   "max_rel_diff": 7.24e-06,
+   "at": "/vmd/omega_eff_at[13][1]",
+   "values": "0.1439308856 vs 0.143929843",
+   "flags": ""
+  },
+  "S16_B3.json": {
+   "dir": "r1b",
+   "leaves": 8,
+   "max_rel_diff": 0.00135,
+   "at": "/dE_last",
+   "values": "6.925522575e-05 vs 6.916174789e-05",
+   "flags": ""
+  },
+  "S16_B4.json": {
+   "dir": "r1b",
+   "leaves": 8,
+   "max_rel_diff": 7.07e-06,
+   "at": "/E1",
+   "values": "1629.080299 vs 1629.091821",
+   "flags": ""
+  },
+  "S19_vortex_picture.json": {
+   "dir": "r1b",
+   "leaves": 2,
+   "max_rel_diff": 0.0,
+   "at": "/B1_ring_spread_fm",
+   "values": "0.02075117013 vs 0.02075117013",
+   "flags": ""
+  },
+  "S1_N96.json": {
+   "dir": "r1b",
+   "leaves": 25,
+   "max_rel_diff": 0.00611,
+   "at": "/V_axis_fm",
+   "values": "5.447564183 vs 5.481072692",
+   "flags": ""
+  },
+  "S25_light_nuclei_rotors.json": {
+   "dir": "r1b",
+   "leaves": 67,
+   "max_rel_diff": 1.8,
+   "at": "/B1/metric[4][5]",
+   "values": "-7.456713817e-19 vs 5.931208262e-19",
+   "flags": ""
+  },
+  "S34_constrained_valley.json": {
+   "dir": "r1b",
+   "leaves": 37,
+   "max_rel_diff": 0.00368,
+   "at": "/rows[3]/V_product",
+   "values": "2.385213625 vs 2.376425842",
+   "flags": ""
+  },
+  "S35_valley_deuteron.json": {
+   "dir": "r1b",
+   "leaves": 3330,
+   "max_rel_diff": 1.44,
+   "at": "/valley[2]/axis[2]",
+   "values": "1.778139867e-18 vs -4.034059137e-18",
+   "flags": ""
+  },
+  "S37_b1.json": {
+   "dir": "r1b",
+   "leaves": 242,
+   "max_rel_diff": 2.0,
+   "at": "/modes[9]/d_quad[2]",
+   "values": "0.0006294432368 vs -0.0006294430597",
+   "flags": ""
+  },
+  "S37_torus.json": {
+   "dir": "r1b",
+   "leaves": 382,
+   "max_rel_diff": 2.0,
+   "at": "/modes[3]/d_dipole[2]",
+   "values": "0.003711353695 vs -0.003711353689",
+   "flags": ""
+  },
+  "S37b_vibration_summary.json": {
+   "dir": "r1b",
+   "leaves": 264,
+   "max_rel_diff": 2.0,
+   "at": "/torus/modes[15]/dr2",
+   "values": "-0.003108803431 vs 0.003108803141",
+   "flags": ""
+  },
+  "S38_valley_metric.json": {
+   "dir": "r1b",
+   "leaves": 63,
+   "max_rel_diff": 1.98,
+   "at": "/segments[3]/zero_mode_coeffs[2]",
+   "values": "3.529388592e-19 vs -3.602119541e-19",
+   "flags": ""
+  },
+  "S45b_L4_N12_R2.6.json": {
+   "dir": "r1b",
+   "leaves": 139,
+   "max_rel_diff": 2.87e-07,
+   "at": "/runs[2]/dc_gyro_over_ctree",
+   "values": "-0.008511209686 vs -0.008511212133",
+   "flags": ""
+  },
+  "S4_inner.json": {
+   "dir": "r1b",
+   "leaves": 189,
+   "max_rel_diff": 0.00378,
+   "at": "/rows[0]/V_relaxed",
+   "values": "25.86682813 vs 25.76895947",
+   "flags": ""
+  }
+ }
+}

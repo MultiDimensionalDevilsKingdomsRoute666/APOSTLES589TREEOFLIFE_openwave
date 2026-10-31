@@ -1,0 +1,145 @@
+{
+ "versions": {
+  "python": "3.12.14",
+  "numpy": "2.5.3"
+ },
+ "V1_eta_shift": {
+  "max_rel_residual_F(A+s.eta)-F(A)": 3.684874897263448e-16,
+  "null_space_dim_(singular_values_below_1e-10)": 1,
+  "null_direction_normalized": [
+   [
+    -1.0,
+    -0.0,
+    -0.0,
+    -0.0
+   ],
+   [
+    -0.0,
+    1.0,
+    -0.0,
+    -0.0
+   ],
+   [
+    -0.0,
+    -0.0,
+    1.0,
+    0.0
+   ],
+   [
+    -0.0,
+    -0.0,
+    0.0,
+    1.0
+   ]
+  ],
+  "null_direction_is_eta": true,
+  "fails_if": "a residual above 1e-12, or a null space of dimension other than 1, or a null direction other than eta"
+ },
+ "V2_homogeneous_and_vacuum": {
+  "max|F|_on_200_time-only_jets": 0.0,
+  "V4(M_vac)": 0.0,
+  "min_V4_over_500_random_M_(nonnegative_by_construction)": 35583.26486837969,
+  "max_V4_on_the_internal_O(1,3)_orbit_of_M_vac": 5.6373339356624365e-12,
+  "reading": "a uniform M(t) has L = -V4, so the certified action carries no cosmological constant of its own (Lambda_own = 0) and no homogeneous negative energy density; the orbit check shows the vacuum manifold is the full O(1,3) orbit",
+  "fails_if": "any F entry above 1e-14 on a time-only jet, or V4(M_vac) above 1e-20, or a negative V4 sample, or V4 above 1e-12 on the orbit"
+ },
+ "V3_V10_kinetic_norms_about_M_vac": {
+  "per_direction_(A_0 = X, A_i = 0)": {
+   "diag0": {
+    "-4I1": -0.0,
+    "K_cov": -1.0,
+    "K_T": 0.0,
+    "K_h=K_cov+2K_T": -1.0
+   },
+   "diag1": {
+    "-4I1": -0.0,
+    "K_cov": -1.0,
+    "K_T": 0.0,
+    "K_h=K_cov+2K_T": -1.0
+   },
+   "diag2": {
+    "-4I1": -0.0,
+    "K_cov": -1.0,
+    "K_T": 0.0,
+    "K_h=K_cov+2K_T": -1.0
+   },
+   "diag3": {
+    "-4I1": -0.0,
+    "K_cov": -1.0,
+    "K_T": 0.0,
+    "K_h=K_cov+2K_T": -1.0
+   },
+   "boost01": {
+    "-4I1": -0.0,
+    "K_cov": 2.0,
+    "K_T": -2.0,
+    "K_h=K_cov+2K_T": -2.0
+   },
+   "boost02": {
+    "-4I1": -0.0,
+    "K_cov": 2.0,
+    "K_T": -2.0,
+    "K_h=K_cov+2K_T": -2.0
+   },
+   "boost03": {
+    "-4I1": -0.0,
+    "K_cov": 2.0,
+    "K_T": -2.0,
+    "K_h=K_cov+2K_T": -2.0
+   },
+   "rot12": {
+    "-4I1": -0.0,
+    "K_cov": -2.0,
+    "K_T": 0.0,
+    "K_h=K_cov+2K_T": -2.0
+   },
+   "rot13": {
+    "-4I1": -0.0,
+    "K_cov": -2.0,
+    "K_T": 0.0,
+    "K_h=K_cov+2K_T": -2.0
+   },
+   "rot23": {
+    "-4I1": -0.0,
+    "K_cov": -2.0,
+    "K_T": 0.0,
+    "K_h=K_cov+2K_T": -2.0
+   }
+  },
+  "-4I1_vanishes_for_every_single-derivative_jet": true,
+  "I1_on_mixed_(t,x)_jets_max": 3050.2984876221817,
+  "reading": "the curvature term gives no quadratic kinetic norm to any direction about the uniform vacuum (F is bilinear in two different derivative directions); K_T is nonzero on the boosts only; K_cov is sign-indefinite across the ten; K_h = K_cov + 2K_T signs listed per direction",
+  "fails_if": "-4I1 nonzero on a single-derivative jet, or K_T nonzero on a non-boost direction, or any K_h sign differing from the package's census when compared at R2"
+ },
+ "V10_director_term_on_a_hedgehog": {
+  "r^2 * sum_i ||d_i(n n^T)||^2_(should_be_4)": [
+   3.9999999995048046,
+   3.999999999888912,
+   3.9999999999972418,
+   3.9999999998856848
+  ],
+  "exterior_energy_of_kappa*sum||dS||^2_from_r0_to_R": "16 pi kappa D^2 (R - r0): linear in R",
+  "fails_if": "the sampled coefficient differs from 4 beyond 1e-6"
+ },
+ "V6_stress_trace": {
+  "max_rel_residual_Euler_degree4_on_-4I1": 2.740223940750246e-09,
+  "reading": "T^mu_mu = sum_mu <dL/dA_mu, A_mu> - 4 L = 4 L_kin - 4 (L_kin + L_pot) = -4 L_pot = 4 V4 in this sign convention (the author writes -4V with the opposite overall sign); the curvature term drops out of the trace in four dimensions. Static consequence (Derrick): E_F = 3 E_V, E_V / E = 1/4 for any stationary finite-energy state; checked on a stored relaxed hedgehog in part 2",
+  "fails_if": "a residual above 1e-8"
+ },
+ "V14_E_dot_B": {
+  "max_rel_|eps f f|_for_pullback_f": 3.07307411191346e-16,
+  "generic_antisymmetric_f_(contrast)": 0.1417767181530364,
+  "reading": "exact for the director's area-form reading of the field, by the dimension of S^2; the magnetic moment then has no E.B route and is the circulation of the charge, as the package states",
+  "fails_if": "a nonzero value above 1e-12 for a pullback f, or a zero for the generic contrast"
+ },
+ "V49_separate_invariances": {
+  "L_cert_internal_O(1,3)_max_rel_residual": 1.2579368933694462e-11,
+  "L_cert_spacetime_O(1,3)_max_rel_residual": 7.0306897924923e-16,
+  "ruleR_like_internal_only_max_rel_residual": 928.2307178066364,
+  "ruleR_like_spacetime_only_max_rel_residual": 1163.249759795396,
+  "ruleR_like_diagonal_max_rel_residual": 2.1829304469964904e-12,
+  "reading": "the certified action is invariant under the two groups separately (residuals at round-off); a term that contracts the record's u with d_mu is invariant only under the diagonal, which is where a fixed clock enters. This is a symmetry statement about the ACTION; the row's open item (a boosted defect measured in-sim) is a dynamics measurement and is not closed by it",
+  "fails_if": "either L_cert residual above 1e-10, or the rule-R-like term NOT breaking one of the two factors (both its single-factor residuals below 1e-10)"
+ },
+ "wall_s": 0.08
+}

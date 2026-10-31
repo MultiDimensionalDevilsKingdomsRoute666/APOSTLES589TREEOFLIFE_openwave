@@ -82,16 +82,31 @@ class Runner:
         if self._check_stateless:
             pipeline.enable_stateless_check()
 
-        # Seed any features provided by the caller (e.g. WCState).
-        if initial_features:
-            for f in initial_features:
-                ctx.data.set(f)
+        # Seed initial_features and expand them through MRO, so a
+        # feature passed as an instance satisfies a processor's
+        # requires without a matching external_provides entry. Same
+        # keying FeatureBag.set uses: the concrete type and every base
+        # class, excluding object.
+        initial = list(initial_features or [])
+        for f in initial:
+            ctx.data.set(f)
+
+        extra: set[type] = set()
+        for f in initial:
+            for cls in type(f).__mro__:
+                if cls is object:
+                    continue
+                extra.add(cls)
 
         meta: Mapping[str, Any] = {
             "run": run.name,
             "params": dict(params or {}),
             "output_dir": str(run.output_dir),
         }
+
+        # Build before opening sinks, so a validation failure does not
+        # leave half-written sink files behind.
+        pipeline.build(extra_provides=tuple(extra))
 
         opened: list[ILogSink] = []
         try:

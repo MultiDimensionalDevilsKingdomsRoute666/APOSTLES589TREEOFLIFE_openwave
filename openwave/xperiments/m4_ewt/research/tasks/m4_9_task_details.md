@@ -7,15 +7,20 @@ DONE (post-hoc)
 `Gravity: local metric phenomena` — foundational encoding derivation
 
 ## Objective
-Demonstrate how macroscopic metric encodings ($n_\gamma \propto \eta^{-1/2}$,
-$v_{\text{clock}} \propto \sqrt{\eta}$) map directly to microscopic 1D lattice
-dynamics under an assumed $1/r$ EMC pair potential ($n=1$) and axial lattice
-compression ($q=1$).
+Demonstrate how the macroscopic timelike encoding
+($v_{\text{clock}} \propto \sqrt{\eta}$) maps directly to microscopic 1D
+lattice dynamics under an assumed $1/r$ EMC pair potential ($n=1$) and
+axial lattice compression ($q=1$). The null-probe refractive index
+$n_\gamma = \eta^{-1}$ is the radial Schwarzschild factor
+$\sqrt{|g_{rr}/g_{00}|}$, taken from the manuscript's metric (v5.1.7,
+eq. (173)) as in M4.3 and M4.5; it is not $1/v_{\text{phys}}$, and this
+chain does not derive it.
 
 The required encodings are:
 
-- \(n_\gamma \propto \eta^{-1/2}\)
-- \(v_{\text{clock}} \propto \sqrt{\eta}\)
+- \(v_{\text{clock}} \propto \sqrt{\eta}\) (measured here, \(\beta = 0.5\))
+- \(n_\gamma = \eta^{-1}\) (the radial factor \(\sqrt{|g_{rr}/g_{00}|}\) from the
+  manuscript's metric, not derived here; manuscript v5.1.7)
 
 ## Method
 
@@ -40,9 +45,12 @@ All three are consistent with the expected values.
 ## Interpretation
 
 Given a $1/r$ EMC pair potential ($n=1$) and axial lattice compression ($q=1$),
-the physical wave speed scales as $v_{\text{phys}} \propto \eta^{n/(2q)} =
-\eta^{+1/2}$. The Schwarzschild encodings used in M4.3–M4.5 reflect this
-underlying microscopic power-law relation ($\beta = n/(2q)$).
+the physical (timelike) wave speed scales as $v_{\text{phys}} \propto
+\eta^{n/(2q)} = \eta^{+1/2}$; this is the clock exponent used in M4.4.
+The null-probe refractive index is not \(1/v_{\text{phys}}\). It is the radial
+Schwarzschild factor \(n_\gamma = \sqrt{|g_{rr}/g_{00}|} = \eta^{-1}\) from the
+manuscript's metric, the encoding M4.3 and M4.5 use, and this chain does not
+derive it.
 
 ## Artifacts
 
@@ -51,8 +59,8 @@ underlying microscopic power-law relation ($\beta = n/(2q)$).
 
 ## Reference
 
-Enhanced EWT manuscript, version 4.5.12:
-[DOI: 10.5281/zenodo.22140646](https://doi.org/10.5281/zenodo.22140646)
+Enhanced EWT manuscript, version 5.1.7:
+[DOI: 10.5281/zenodo.23559858](https://doi.org/10.5281/zenodo.23559858)
 
 Relevant section:
 

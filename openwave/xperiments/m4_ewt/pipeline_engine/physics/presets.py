@@ -26,6 +26,7 @@ from .seed import SeedMultiCenter
 from .stability import StabilityMetricsUpdate
 from .units import UnitSystem
 from .wc_types import WCState
+from .vacuum import VacuumProvider, VacuumStepProcessor
 
 
 def make_linear_wave_pipeline(
@@ -35,6 +36,7 @@ def make_linear_wave_pipeline(
     metric_threshold: float = 0.5,
     nonlinear_terms: tuple = (),
     extra_measure: tuple = (),
+    vacuum: VacuumProvider | None = None,
 ) -> Pipeline:
     """
     Build the standard linear-wave pipeline on a cube grid.
@@ -45,6 +47,7 @@ def make_linear_wave_pipeline(
         AllocateWaveField(grid, grid, grid, dx=1.0)
         SeedMultiCenter(radius=seed_radius)
         ClearAccelerationProcessor
+        VacuumStepProcessor          only when vacuum is given
         LaplacianProcessor
         ...nonlinear_terms
         LeapfrogProcessor
@@ -60,10 +63,13 @@ def make_linear_wave_pipeline(
                            "dirichlet", "periodic" or "reflecting"
         WCState            consumed by SeedMultiCenter
 
-    These are declared in external_provides, which the pipeline treats
-    as a promise, not a check: build-time validation passes, and a
-    caller that omits one of the three gets a KeyError at the first
-    require() inside that processor's process(). Not at build time.
+    These are declared in external_provides. Runner.run() also counts
+    every initial_features instance (and its base classes) as provided
+    at build time, so an instance satisfies validation with or without
+    the declaration. The declaration is what lets a caller that omits
+    one of the three still pass build-time validation; that caller gets
+    a KeyError at the first require() inside that processor's process().
+    Not at build time.
 
     The chain does not include a nonlinear term. nonlinear_terms
     accepts processors such as NonlinearCubic (order 15); they land
@@ -75,16 +81,39 @@ def make_linear_wave_pipeline(
     and one below 20 runs before it. Processors with equal orders keep
     the order in which they were added.
 
+    vacuum=None (the default) keeps the chain identical to the
+    pre-vacuum preset; every existing demo and test is unaffected.
+
+    vacuum=<instance> signals that the caller intends to run a vacuum
+    variant. The preset adds VacuumProvider to external_provides and
+    VacuumStepProcessor to the UPDATE stage. The instance itself is NOT
+    injected into initial_features by this function; the caller must
+    still pass it, e.g.:
+
+        vacuum = PeriodicVacuum()
+        pipeline = make_linear_wave_pipeline(..., vacuum=vacuum)
+        Runner(...).run(..., initial_features=[..., vacuum])
+
+    Passing vacuum= does not check the instance's capability flags.
+    A processor that needs supports_reflection=True is expected to
+    check them in its own setup() (see the VacuumProvider docstring).
+
     error_policy is FAIL_FAST: a pipeline with the wrong features is a
     configuration error, not a run-time event to tolerate.
     """
+    external = (UnitSystem, BoundaryCondition, WCState)
+    if vacuum is not None:
+        external = external + (VacuumProvider,)
+
     p = Pipeline(
         error_policy=ErrorPolicy.FAIL_FAST,
-        external_provides=(UnitSystem, BoundaryCondition, WCState),
+        external_provides=external,
     )
     p.add(AllocateWaveField(nx=grid, ny=grid, nz=grid, dx=1.0))
     p.add(SeedMultiCenter(radius=seed_radius))
     p.add(ClearAccelerationProcessor())
+    if vacuum is not None:
+        p.add(VacuumStepProcessor())
     p.add(LaplacianProcessor())
     for proc in nonlinear_terms:
         p.add(proc)

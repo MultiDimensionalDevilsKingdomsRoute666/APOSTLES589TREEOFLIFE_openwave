@@ -1,5 +1,10 @@
 # M4.5 - Shapiro Delay from the EMC Refractive Index
 
+> **Encoding update (2026-10-22, [PR #649](https://github.com/openwave-labs/openwave/pull/649)):** the findings use
+> \(n_\gamma = (1 - r_s/r)^{-1} = \eta^{-1}\); the round-trip delay stays \(239.014\,\mu\text{s}\)
+> and the relative difference is \(0.000020\%\). The method and result below record the
+> task as first merged.
+
 ## Status
 DONE (post-hoc)
 

@@ -261,3 +261,7 @@ dev_docs/checkpoints/
 # Live-monitor IPC scratch file: written continuously while a run is on,
 # read by the viewer process. Not an artifact.
 openwave/xperiments/*/data/_live_monitor_data.json
+
+# M4 K-sweep demo output (pipeline_engine/physics/_demo_k_sweep.py), regenerated on each run.
+# The file only: m2 and m5 track files in their model-root data/ folders.
+openwave/xperiments/m4_ewt/data/k_sweep_golden.json

@@ -12,9 +12,9 @@ gitignored-file inventory as papers are pulled down for tasks (filenames follow
 `YEAR - Author - Title`); **0 local files** held yet.
 
 Identifier policy per [`ONBOARDING_MODELS.md`](../../../../ONBOARDING_MODELS.md) section 3.4
-(never fabricate): the first 10 Zenodo DOIs below were machine-verified resolving on
-2026-07-21, and the 11th, the M8.1.2 subject paper, on 2026-09-09; the Euclid card's concept
-DOI, added beside its v1, resolved on 2026-10-14.
+(never fabricate): the ten Zenodo DOIs of the 2026-07-21 seeding were machine-verified
+resolving that day, the M8.1.2 subject paper's on 2026-09-09, and the Euclid card's concept
+DOI, added beside its v1, on 2026-10-14.
 SSRN blocks automated checks, so SSRN IDs are transcribed from the author's registry and
 marked `(author registry)`; treat them as author-attested until first use.
 

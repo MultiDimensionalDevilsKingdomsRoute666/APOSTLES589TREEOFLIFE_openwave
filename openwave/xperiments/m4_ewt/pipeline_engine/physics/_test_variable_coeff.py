@@ -423,6 +423,33 @@ def _leapfrog_naive_step(psi, psi_prev, psi_new, c2, nx, ny, nz, dx, dt2):
     _leapfrog(psi, psi_prev, psi_new, nx, ny, nz, dt2)
 
 
+def _measure_staggered_drift(step_fn, n_steps, N, dx, dt):
+    """
+    Run n_steps of step_fn on a fresh seed and return the maximum
+    relative excursion of the staggered invariant from its first value.
+
+    step_fn signature: (psi, psi_prev, psi_new, c2, nx, ny, nz, dx, dt2) -> None
+    Returns a non-negative float; 0.0 means the invariant was constant.
+    """
+    psi = ti.Vector.field(3, dtype=ti.f32, shape=(N, N, N))
+    psi_prev = ti.Vector.field(3, dtype=ti.f32, shape=(N, N, N))
+    psi_new = ti.Vector.field(3, dtype=ti.f32, shape=(N, N, N))
+    c2 = ti.field(dtype=ti.f32, shape=(N, N, N))
+
+    _seed_zero_boundary(psi, psi_prev, c2, N)
+
+    step_fn(psi, psi_prev, psi_new, c2, N, N, N, dx, dt * dt)
+    E0 = _staggered_energy(psi, psi_prev, c2, psi_new, N, dx, dt)
+    worst = 0.0
+    for _ in range(n_steps - 1):
+        step_fn(psi, psi_prev, psi_new, c2, N, N, N, dx, dt * dt)
+        E = _staggered_energy(psi, psi_prev, c2, psi_new, N, dx, dt)
+        d = abs(E - E0) / abs(E0)
+        if d > worst:
+            worst = d
+    return worst
+
+
 def _staggered_energy(psi, psi_prev, c2, scratch, N, dx, dt):
     """
     E_stag = 0.5 * ||(psi^{n+1} - psi^n)/dt||^2
@@ -560,6 +587,46 @@ def _seed_harmonic_long(
         v = ti.Vector([amp * ti.sin(kx * ti.cast(i, ti.f32)), 0.0, 0.0])
         psi[i, j, k] = v
         prev[i, j, k] = v
+
+
+def test_naive_form_discriminates_from_flux_form_by_ratio():
+    """
+    Same arena and step count for both arms. The naive-form drift
+    divided by the flux-form drift must exceed 10.
+
+    What this test catches that
+    test_naive_form_breaks_staggered_invariant does not: a wiring swap
+    that routes the naive-form step into the flux arm, or the flux-form
+    step into the naive arm. Both leave the naive absolute drift above
+    the other test's 5e-4 bar, so that test still passes; the ratio
+    here falls to about 1, so this test fails.
+
+    What this test does not catch: a mutation that scales both drifts
+    equally up or down. The ratio is invariant under a common factor.
+    The flux arm's absolute drift is pinned separately by
+    test_flux_form_conserves_staggered_invariant; the naive arm's by
+    test_naive_form_breaks_staggered_invariant.
+    """
+    _ti_init()
+
+    N = 32
+    dx = 1.0
+    dt = 0.01
+    n_steps = 50
+
+    naive_drift = _measure_staggered_drift(_leapfrog_naive_step, n_steps, N, dx, dt)
+    flux_drift = _measure_staggered_drift(_leapfrog_var_coeff_step, n_steps, N, dx, dt)
+
+    print(f"  naive form relative drift: {naive_drift:.3e}")
+    print(f"  flux form relative drift:  {flux_drift:.3e}")
+    ratio = naive_drift / flux_drift if flux_drift > 0.0 else float("inf")
+    print(f"  naive / flux ratio: {ratio:.1f}x")
+
+    assert ratio > 10.0, (
+        f"naive/flux ratio {ratio:.1f} below 10 "
+        f"(naive {naive_drift:.3e}, flux {flux_drift:.3e}); "
+        f"the naive form no longer discriminates from the flux form"
+    )
 
 
 def test_pipeline_runs_with_variable_coeff_chain():
@@ -772,6 +839,7 @@ def main() -> int:
         test_flux_form_conserves_staggered_invariant,
         test_naive_form_breaks_staggered_invariant,
         test_pipeline_runs_with_variable_coeff_chain,
+        test_naive_form_discriminates_from_flux_form_by_ratio,
         test_production_pipeline_vs_numpy,
         test_production_constant_laplacian_vs_numpy,
     ]

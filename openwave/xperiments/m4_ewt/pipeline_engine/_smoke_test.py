@@ -298,6 +298,90 @@ def test_setup_failure() -> tuple[bool, str]:
     return False, "expected RuntimeError, none raised"
 
 
+def test_initial_features_satisfy_base_class_requires() -> tuple[bool, str]:
+    """Regression: Runner.run counts every base class of an initial_features
+    instance as provided at build time, so a processor that requires a
+    base class two levels up builds with no external_provides entry; and
+    it re-validates on every run, so the same pipeline run again without
+    the instance fails at build."""
+
+    class BaseFeature:
+        pass
+
+    class MidFeature(BaseFeature):
+        pass
+
+    @dataclass
+    class ConcreteFeature(MidFeature):
+        label: str = "concrete"
+
+    class NeedsBase(BaseProcessor):
+        name = "NeedsBase"
+        stage = Stage.UPDATE
+        requires = (BaseFeature,)
+
+        def process(self, ctx: Context) -> None:
+            ctx.data.require(BaseFeature)
+
+    pipeline = Pipeline(error_policy=ErrorPolicy.FAIL_FAST).add(NeedsBase())
+    try:
+        ctx = Runner({}).run(
+            pipeline, name="mro_test", max_steps=3, initial_features=[ConcreteFeature()]
+        )
+    except BaseException as e:
+        return False, f"unexpected {type(e).__name__}: {e}"
+    if ctx.sim.step != 3 or ctx.diag.errors:
+        return False, f"step {ctx.sim.step}, errors {ctx.diag.errors}"
+    try:
+        Runner({}).run(pipeline, name="mro_rerun_test", max_steps=3, initial_features=[])
+    except PipelineError as e:
+        if "BaseFeature" not in str(e):
+            return False, f"wrong PipelineError on rerun: {e}"
+        return True, "base-class requires satisfied two levels up; rerun re-validated"
+    except BaseException as e:
+        return False, f"unexpected {type(e).__name__} on rerun: {e}"
+    return False, "rerun without the instance built; validation was not repeated"
+
+
+def test_build_failure_opens_no_sink() -> tuple[bool, str]:
+    """Regression: Runner.run validates the pipeline before opening any
+    sink, so a build failure leaves no sink opened."""
+
+    class Missing:
+        pass
+
+    class NeedsMissing(BaseProcessor):
+        name = "NeedsMissing"
+        stage = Stage.UPDATE
+        requires = (Missing,)
+
+        def process(self, ctx: Context) -> None:
+            pass
+
+    class RecordingSink(InMemorySink):
+        def __init__(self) -> None:
+            super().__init__()
+            self.opened = 0
+
+        def open(self, meta: Mapping[str, Any]) -> None:
+            self.opened += 1
+            super().open(meta)
+
+    sink = RecordingSink()
+    pipeline = Pipeline(error_policy=ErrorPolicy.FAIL_FAST).add(NeedsMissing())
+    try:
+        Runner({"session": sink}).run(pipeline, name="build_fail_test", max_steps=3)
+    except PipelineError as e:
+        if "Missing" not in str(e):
+            return False, f"wrong PipelineError: {e}"
+        if sink.opened:
+            return False, f"sink opened {sink.opened} time(s) before the build failed"
+        return True, "PipelineError raised before any sink opened"
+    except BaseException as e:
+        return False, f"unexpected {type(e).__name__}: {e}"
+    return False, "expected PipelineError, none raised"
+
+
 # ================================================================
 # Entry point
 # ================================================================
@@ -349,6 +433,20 @@ def main() -> None:
     # 6) Setup failure regression
     ok, msg = test_setup_failure()
     print("--- setup failure regression ---")
+    print(f"result: {'PASS' if ok else 'FAIL'} ({msg})")
+    assert ok, msg
+    print()
+
+    # 7) Base-class requires satisfied by initial_features
+    ok, msg = test_initial_features_satisfy_base_class_requires()
+    print("--- initial_features MRO regression ---")
+    print(f"result: {'PASS' if ok else 'FAIL'} ({msg})")
+    assert ok, msg
+    print()
+
+    # 8) Build failure opens no sink
+    ok, msg = test_build_failure_opens_no_sink()
+    print("--- build-before-sinks regression ---")
     print(f"result: {'PASS' if ok else 'FAIL'} ({msg})")
     assert ok, msg
     print()

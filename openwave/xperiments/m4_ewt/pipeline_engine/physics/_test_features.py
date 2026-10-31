@@ -178,6 +178,133 @@ def test_feature_bag_keys_stability_metrics_independently():
     assert StabilityMetrics is not WaveStats
 
 
+def test_trans_field_write_isolated_from_base_and_long():
+    """
+    Writing to PsiTransField.psi does not change PsiBaseField.psi or
+    PsiLongField.psi.
+
+    Mutation caught: AllocateWaveField.setup() assigns the same
+    underlying ti.Vector.field object to two of the three Psi*Field
+    features, so a write through one feature surfaces through the other.
+    """
+    import numpy as np
+
+    import taichi as ti
+
+    ti.init(arch=ti.cpu, log_level=ti.ERROR)
+
+    from openwave.xperiments.m4_ewt.pipeline_engine.pipeline import Pipeline
+    from openwave.xperiments.m4_ewt.pipeline_engine.runner import Runner
+    from openwave.xperiments.m4_ewt.pipeline_engine.sinks import InMemorySink
+    from openwave.xperiments.m4_ewt.pipeline_engine.physics.allocator import (
+        AllocateWaveField,
+    )
+
+    class AllocPipeline(Pipeline):
+        def __init__(self) -> None:
+            super().__init__()
+            self.add(AllocateWaveField(nx=4, ny=4, nz=4, dx=0.1))
+
+    runner = Runner({"session": InMemorySink()})
+    ctx = runner.run(
+        AllocPipeline(),
+        name="trans_isolation_test",
+        params={},
+        max_steps=0,
+        initial_features=[NaturalUnitSystem()],
+    )
+    assert not ctx.diag.errors, ctx.diag.errors
+
+    shape = (4, 4, 4, 3)
+    base_init = np.full(shape, 1.0, dtype=np.float32)
+    long_init = np.full(shape, 2.0, dtype=np.float32)
+    trans_new = np.full(shape, 3.0, dtype=np.float32)
+
+    ctx.data.require(PsiBaseField).psi.from_numpy(base_init)
+    ctx.data.require(PsiLongField).psi.from_numpy(long_init)
+    ctx.data.require(PsiTransField).psi.from_numpy(trans_new)
+
+    base_after = ctx.data.require(PsiBaseField).psi.to_numpy()
+    long_after = ctx.data.require(PsiLongField).psi.to_numpy()
+    trans_after = ctx.data.require(PsiTransField).psi.to_numpy()
+
+    assert np.allclose(
+        base_after, 1.0
+    ), f"PsiBase.psi changed by writing PsiTrans: max {base_after.max()}"
+    assert np.allclose(
+        long_after, 2.0
+    ), f"PsiLong.psi changed by writing PsiTrans: max {long_after.max()}"
+    assert np.allclose(
+        trans_after, 3.0
+    ), f"PsiTrans.psi wrong after write: max {trans_after.max()}"
+
+
+def test_emc_density_and_flux_fields_hold_distinct_arrays():
+    """
+    EMCDensityField.rho and EMCFluxField.flux are distinct scalar arrays;
+    writing one does not change the other.
+
+    Mutation caught: AllocateWaveField.setup() allocates one scalar
+    ti.field and assigns it to both features, so the second write
+    overwrites the first.
+
+    Note: test_feature_bag_scalar_fields_are_independent checks that the
+    two features are keyed separately in the FeatureBag. This test checks
+    that the underlying arrays are distinct objects, so that a write
+    through one does not surface through the other.
+    """
+    import numpy as np
+
+    import taichi as ti
+
+    ti.init(arch=ti.cpu, log_level=ti.ERROR)
+
+    from openwave.xperiments.m4_ewt.pipeline_engine.pipeline import Pipeline
+    from openwave.xperiments.m4_ewt.pipeline_engine.runner import Runner
+    from openwave.xperiments.m4_ewt.pipeline_engine.sinks import InMemorySink
+    from openwave.xperiments.m4_ewt.pipeline_engine.physics.allocator import (
+        AllocateWaveField,
+    )
+
+    class AllocPipeline(Pipeline):
+        def __init__(self) -> None:
+            super().__init__()
+            self.add(AllocateWaveField(nx=4, ny=4, nz=4, dx=0.1))
+
+    runner = Runner({"session": InMemorySink()})
+    ctx = runner.run(
+        AllocPipeline(),
+        name="emc_isolation_test",
+        params={},
+        max_steps=0,
+        initial_features=[NaturalUnitSystem()],
+    )
+    assert not ctx.diag.errors, ctx.diag.errors
+
+    shape = (4, 4, 4)
+    rho_arr = np.full(shape, 0.5, dtype=np.float32)
+    flux_arr = np.full(shape, 7.0, dtype=np.float32)
+
+    ctx.data.require(EMCDensityField).rho.from_numpy(rho_arr)
+    ctx.data.require(EMCFluxField).flux.from_numpy(flux_arr)
+
+    # Object identity: the two features must not share the same ti.field.
+    assert (
+        ctx.data.require(EMCDensityField).rho is not ctx.data.require(EMCFluxField).flux
+    ), "EMCDensityField.rho and EMCFluxField.flux are the same ti.field object"
+
+    # Content independence: writing flux must not surface through rho.
+    rho_after = ctx.data.require(EMCDensityField).rho.to_numpy()
+    flux_after = ctx.data.require(EMCFluxField).flux.to_numpy()
+
+    assert np.allclose(
+        rho_after, 0.5
+    ), f"EMCDensityField.rho changed by writing flux: max {rho_after.max()}"
+    assert np.allclose(
+        flux_after, 7.0
+    ), f"EMCFluxField.flux wrong after write: max {flux_after.max()}"
+
+
 # ---------------------------------------------------------------------------
 # Allocation (Taichi)
 # ---------------------------------------------------------------------------
@@ -241,6 +368,8 @@ def main() -> int:
         test_stability_metrics_wc_positions_not_shared,
         test_stability_metrics_is_not_a_field,
         test_feature_bag_keys_stability_metrics_independently,
+        test_trans_field_write_isolated_from_base_and_long,
+        test_emc_density_and_flux_fields_hold_distinct_arrays,
     ]
     passed = 0
     for t in tests:

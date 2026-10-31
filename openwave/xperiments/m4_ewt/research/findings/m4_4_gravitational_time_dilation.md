@@ -12,8 +12,8 @@ Gravity: local metric phenomena (gravitational time dilation component)
 The solar-limb gravitational redshift of a static clock from the EMC
 clock-speed encoding, checked against the exact Schwarzschild redshift
 factor. This covers the gravitational time dilation component only; the
-light-bending component is covered separately in M4.3, and Shapiro delay
-is not computed.
+light-bending component is covered separately in M4.3, and the Shapiro
+delay in M4.5.
 
 ## Mechanism
 A clock is a standing-wave soliton. Its period is the time for an

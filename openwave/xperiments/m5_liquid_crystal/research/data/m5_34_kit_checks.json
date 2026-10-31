@@ -1,0 +1,399 @@
+{
+ "versions": {
+  "python": "3.12.14",
+  "numpy": "2.5.3"
+ },
+ "i_clock_inertia_box_growth": {
+  "author_K_sphere_32pi_delta2[1+(1-delta)^2]_per_unit_radius": 13.48120239508452,
+  "our_M5.21.14_base_per_unit_radius": 13.4812,
+  "ratio_author_over_ours": 1.0000001776610776,
+  "our_M5.21.14_dressing_per_unit_radius": -19.6044,
+  "our_M5.21.14_net_per_unit_radius": -6.1232,
+  "R4_certified_lattice_ladder_h1.5": {
+   "L_48": {
+    "h": 1.5,
+    "kin_cert": 426.5070121483972,
+    "E_u_cert": 62.85174433147818
+   },
+   "L_72": {
+    "h": 1.5,
+    "kin_cert": 658.3066484693429,
+    "E_u_cert": 65.2832027374251
+   },
+   "L_96": {
+    "h": 1.5,
+    "kin_cert": 890.4417215490827,
+    "E_u_cert": 67.2125906214689
+   }
+  },
+  "measured_dkin_dL_per_unit_side": {
+   "48->72": 9.658318180039403,
+   "72->96": 9.672294711655823
+  },
+  "lattice_shell_sum_1_over_r2_between_cubes": {
+   "48->72": 184.15180250058575,
+   "72->96": 184.16538633603335
+  },
+  "continuum_cube_integral_per_unit_side": 7.6747567670206855,
+  "sphere_integral_per_unit_radius_4pi": 12.566370614359172,
+  "predicted_dkin_dL_from_c_t_x_shell_sum": {
+   "48->72": 8.231585571776183,
+   "72->96": 8.23219276922069
+  },
+  "measured_over_predicted": {
+   "48->72": 1.1733241543591661,
+   "72->96": 1.174935400907948
+  },
+  "reading": "the author's coefficient IS our M5.21.14 base coefficient (the undressed twist of the uniaxial exterior, same number to the printed digits); the certified-lattice ladder grows linearly with the box as that coefficient times the cube's 1/r^2 content (measured over predicted listed); what V11 does not carry is M5.21.14's finding that the first dressing term is extensive too and steeper, so the dressed bulk kin per unit radius is negative (net -6.12)",
+  "fails_if": "the two per-radius coefficients differ beyond the printed digits, or the lattice ladder is not linear in L, or measured/predicted is far from 1 without a stencil reason"
+ },
+ "ii_mu_identity_on_the_electron_id_instrument": {
+  "rows": {
+   "tilt_n24_b0.00": {
+    "n": 24,
+    "h": 0.5217391304347823,
+    "b": 0.0,
+    "cells_in_act": 7808,
+    "mu_instrument_(1/2 int x X (curl B - omega dE/dphi))": [
+     -7.367487338541892e-11,
+     5.1889151313838485e-11,
+     0.2209051260192842
+    ],
+    "|mu_instrument|": 0.2209051260192842,
+    "term_curl_B": [
+     -1.7032645088787162e-15,
+     -2.041570240823973e-15,
+     -1.7190205799656782e-15
+    ],
+    "term_displacement": [
+     -7.356967866341363e-11,
+     5.189727960270811e-11,
+     0.22090512601928325
+    ],
+    "int_B_dV_(localized identity target)": [
+     2.2900231887486795e-15,
+     -3.673399219391373e-16,
+     -4.944676212822592e-16
+    ],
+    "charge_e_=_sum_div_B_over_act_mask": 0.573115240581573,
+    "charge_e_full_interior": 12.543193278326157,
+    "flux_of_B_through_the_interior_faces": 13.231067002679191,
+    "4pi": 12.566370614359172,
+    "L_box": 6.0,
+    "dipole_p_=_sum_x_div_B": [
+     -5.764015466946565e-16,
+     2.293564779210031e-16,
+     7.653684951368553e-17
+    ],
+    "|p|/e": 1.0906372293824913e-15,
+    "pdot": [
+     -8.148737704987907e-14,
+     -3.2693499424093574e-13,
+     2.4289883556740937
+    ],
+    "mu_pred_=_p_x_pdot/(2e)": [
+     4.860315820630056e-16,
+     1.2214582216424025e-15,
+     1.8071016043306814e-28
+    ],
+    "|mu_pred|": 1.3146052205816348e-15,
+    "mu_dual_reading_(1/2 int x X (-curl E - omega dB/dphi))": [
+     1.5783760014447074e-14,
+     2.513161865677101e-14,
+     5.4142972672855613e-14
+    ],
+    "|mu_dual|": 6.17429091180243e-14,
+    "jmax": 1.0316593545117037,
+    "Emax": 0.5127104456468773
+   },
+   "tilt_n24_b0.13": {
+    "n": 24,
+    "h": 0.5217391304347823,
+    "b": 0.13,
+    "cells_in_act": 7808,
+    "mu_instrument_(1/2 int x X (curl B - omega dE/dphi))": [
+     8.173049645629726e-12,
+     7.891650019418621e-12,
+     0.22101799022592689
+    ],
+    "|mu_instrument|": 0.22101799022592689,
+    "term_curl_B": [
+     -1.7032645088787162e-15,
+     -2.041570240823973e-15,
+     -1.7190205799656782e-15
+    ],
+    "term_displacement": [
+     7.804958783327026e-12,
+     7.890569926717225e-12,
+     0.22101799022592977
+    ],
+    "int_B_dV_(localized identity target)": [
+     2.2900231887486795e-15,
+     -3.673399219391373e-16,
+     -4.944676212822592e-16
+    ],
+    "charge_e_=_sum_div_B_over_act_mask": 0.573115240581573,
+    "charge_e_full_interior": 12.543193278326157,
+    "flux_of_B_through_the_interior_faces": 13.231067002679191,
+    "4pi": 12.566370614359172,
+    "L_box": 6.0,
+    "dipole_p_=_sum_x_div_B": [
+     -5.764015466946565e-16,
+     2.293564779210031e-16,
+     7.653684951368553e-17
+    ],
+    "|p|/e": 1.0906372293824913e-15,
+    "pdot": [
+     5.057699143197896e-13,
+     -3.883122967580971e-13,
+     2.439150706713696
+    ],
+    "mu_pred_=_p_x_pdot/(2e)": [
+     4.880650309026137e-16,
+     1.2265685331840935e-15,
+     9.406677281493488e-29
+    ],
+    "|mu_pred|": 1.3201052386031002e-15,
+    "mu_dual_reading_(1/2 int x X (-curl E - omega dB/dphi))": [
+     8.622542455661088e-14,
+     -6.5849253394490504e-15,
+     1.8172362603776505e-14
+    ],
+    "|mu_dual|": 8.836526378785415e-14,
+    "jmax": 1.0319372032289802,
+    "Emax": 0.5151707293520543
+   },
+   "tilt_n32_b0.00": {
+    "n": 32,
+    "h": 0.38709677419354804,
+    "b": 0.0,
+    "cells_in_act": 21408,
+    "mu_instrument_(1/2 int x X (curl B - omega dE/dphi))": [
+     -2.0731545780878698e-12,
+     5.29111929323345e-12,
+     0.24839868354509506
+    ],
+    "|mu_instrument|": 0.24839868354509506,
+    "term_curl_B": [
+     5.5353605856436095e-15,
+     4.536056423964678e-15,
+     3.819687327328979e-15
+    ],
+    "term_displacement": [
+     -1.9672899474750027e-12,
+     5.230524482536383e-12,
+     0.2483986835450945
+    ],
+    "int_B_dV_(localized identity target)": [
+     1.251197795969776e-14,
+     7.360430951582389e-17,
+     1.3674402820506447e-16
+    ],
+    "charge_e_=_sum_div_B_over_act_mask": 0.3165412919941106,
+    "charge_e_full_interior": 12.554611209030151,
+    "flux_of_B_through_the_interior_faces": 13.047680061808023,
+    "4pi": 12.566370614359172,
+    "L_box": 6.0,
+    "dipole_p_=_sum_x_div_B": [
+     -8.762939247212802e-16,
+     -8.046933893954323e-17,
+     8.794674187993239e-17
+    ],
+    "|p|/e": 2.7938368814627148e-15,
+    "pdot": [
+     8.651717595086965e-13,
+     1.8973752740822403e-14,
+     1.6641559838317908
+    ],
+    "mu_pred_=_p_x_pdot/(2e)": [
+     -2.1152616625088301e-16,
+     2.303474799817857e-15,
+     8.370663897755533e-29
+    ],
+    "|mu_pred|": 2.3131665466206085e-15,
+    "mu_dual_reading_(1/2 int x X (-curl E - omega dB/dphi))": [
+     1.930696883291491e-14,
+     -1.9900815495873706e-14,
+     -4.272169204952632e-15
+    ],
+    "|mu_dual|": 2.8054463684620676e-14,
+    "jmax": 1.131367259632182,
+    "Emax": 0.5760073692725494
+   },
+   "tilt_n32_b0.13": {
+    "n": 32,
+    "h": 0.38709677419354804,
+    "b": 0.13,
+    "cells_in_act": 21408,
+    "mu_instrument_(1/2 int x X (curl B - omega dE/dphi))": [
+     -5.193620056527354e-11,
+     1.666958605657637e-11,
+     0.2485134395878451
+    ],
+    "|mu_instrument|": 0.2485134395878451,
+    "term_curl_B": [
+     5.5353605856436095e-15,
+     4.536056423964678e-15,
+     3.819687327328979e-15
+    ],
+    "term_displacement": [
+     -5.20172576758792e-11,
+     1.6645298546236397e-11,
+     0.24851343958783803
+    ],
+    "int_B_dV_(localized identity target)": [
+     1.251197795969776e-14,
+     7.360430951582389e-17,
+     1.3674402820506447e-16
+    ],
+    "charge_e_=_sum_div_B_over_act_mask": 0.3165412919941106,
+    "charge_e_full_interior": 12.554611209030151,
+    "flux_of_B_through_the_interior_faces": 13.047680061808023,
+    "4pi": 12.566370614359172,
+    "L_box": 6.0,
+    "dipole_p_=_sum_x_div_B": [
+     -8.762939247212802e-16,
+     -8.046933893954323e-17,
+     8.794674187993239e-17
+    ],
+    "|p|/e": 2.7938368814627148e-15,
+    "pdot": [
+     1.1266497484121744e-12,
+     -8.48278818961231e-14,
+     1.670246444961755
+    ],
+    "mu_pred_=_p_x_pdot/(2e)": [
+     -2.1230030756096077e-16,
+     2.311905033442892e-15,
+     2.6062147687630457e-28
+    ],
+    "|mu_pred|": 2.3216322500019376e-15,
+    "mu_dual_reading_(1/2 int x X (-curl E - omega dB/dphi))": [
+     -8.020417098749823e-15,
+     -1.0074074182016988e-14,
+     -8.249757662610303e-15
+    ],
+    "|mu_dual|": 1.5292892550282865e-14,
+    "jmax": 1.1315650674925044,
+    "Emax": 0.5790867111309308
+   },
+   "tilt_n48_b0.00": {
+    "n": 48,
+    "h": 0.25531914893617014,
+    "b": 0.0,
+    "cells_in_act": 83096,
+    "mu_instrument_(1/2 int x X (curl B - omega dE/dphi))": [
+     1.3088257657579437e-11,
+     3.1485057955813365e-11,
+     0.27708965354648185
+    ],
+    "|mu_instrument|": 0.27708965354648185,
+    "term_curl_B": [
+     5.743944373761747e-15,
+     6.793517128854454e-15,
+     6.841586087188388e-15
+    ],
+    "term_displacement": [
+     1.3401152316376598e-11,
+     3.1474359060011725e-11,
+     0.277089653546471
+    ],
+    "int_B_dV_(localized identity target)": [
+     5.531588402128343e-15,
+     3.579998476566719e-15,
+     3.186195612559591e-16
+    ],
+    "charge_e_=_sum_div_B_over_act_mask": 0.13100894336617344,
+    "charge_e_full_interior": 12.561625107293525,
+    "flux_of_B_through_the_interior_faces": 12.876078835485211,
+    "4pi": 12.566370614359172,
+    "L_box": 6.0,
+    "dipole_p_=_sum_x_div_B": [
+     -3.208821971943501e-17,
+     6.528700548838331e-17,
+     3.12519963037636e-17
+    ],
+    "|p|/e": 6.043506368270621e-16,
+    "pdot": [
+     1.476615251024608e-13,
+     -6.877197460892368e-14,
+     0.7033080245323302
+    ],
+    "mu_pred_=_p_x_pdot/(2e)": [
+     1.7524328369449384e-16,
+     8.613115197243418e-17,
+     -2.837061492519533e-29
+    ],
+    "|mu_pred|": 1.9526593102773305e-16,
+    "mu_dual_reading_(1/2 int x X (-curl E - omega dB/dphi))": [
+     -1.4430785698677912e-14,
+     2.7419008016450577e-14,
+     8.495734865059075e-15
+    ],
+    "|mu_dual|": 3.2128291074763506e-14,
+    "jmax": 1.1030042681202707,
+    "Emax": 0.6025837517512476
+   },
+   "tilt_n48_b0.13": {
+    "n": 48,
+    "h": 0.25531914893617014,
+    "b": 0.13,
+    "cells_in_act": 83096,
+    "mu_instrument_(1/2 int x X (curl B - omega dE/dphi))": [
+     1.693039975380739e-10,
+     1.4228033755552484e-10,
+     0.27720451139231816
+    ],
+    "|mu_instrument|": 0.27720451139231816,
+    "term_curl_B": [
+     5.743944373761747e-15,
+     6.793517128854454e-15,
+     6.841586087188388e-15
+    ],
+    "term_displacement": [
+     1.6989894022059662e-10,
+     1.4227877475913033e-10,
+     0.2772045113923107
+    ],
+    "int_B_dV_(localized identity target)": [
+     5.531588402128343e-15,
+     3.579998476566719e-15,
+     3.186195612559591e-16
+    ],
+    "charge_e_=_sum_div_B_over_act_mask": 0.13100894336617344,
+    "charge_e_full_interior": 12.561625107293525,
+    "flux_of_B_through_the_interior_faces": 12.876078835485211,
+    "4pi": 12.566370614359172,
+    "L_box": 6.0,
+    "dipole_p_=_sum_x_div_B": [
+     -3.208821971943501e-17,
+     6.528700548838331e-17,
+     3.12519963037636e-17
+    ],
+    "|p|/e": 6.043506368270621e-16,
+    "pdot": [
+     -9.945413898771866e-14,
+     -2.7646293867898337e-15,
+     0.7058099345568619
+    ],
+    "mu_pred_=_p_x_pdot/(2e)": [
+     1.758666846979064e-16,
+     8.643755028584289e-17,
+     2.5119563535229463e-29
+    ],
+    "|mu_pred|": 1.9596055951657833e-16,
+    "mu_dual_reading_(1/2 int x X (-curl E - omega dB/dphi))": [
+     -2.0161724259332316e-14,
+     1.6054749729841509e-15,
+     -4.8122185950586125e-15
+    ],
+    "|mu_dual|": 2.079014484809703e-14,
+    "jmax": 1.1031234618887718,
+    "Emax": 0.605886819367447
+   }
+  },
+  "reading": "the instrument's moment is the moment of the source current of the pullback field read with the radial 2-form as B; the hedgehog's charge sits at the centre (|p|/e listed), so the author's identity predicts |mu| = |p x pdot|/(2e) at the listed value; the curl-B term of the instrument's integral is a moment of a monopole field, which is not localized, so its value carries the box (the M5.8.2r ladder 0.221 / 0.248 / 0.277); the displacement term and the dual-reading moment are listed beside it",
+  "fails_if": "the instrument's |mu| equals |p x pdot|/(2e) within its own box scatter (then the readout is NOT a residue of zero), or |p|/e is not small for the centred hedgehog"
+ },
+ "wall_s": 2.3
+}
